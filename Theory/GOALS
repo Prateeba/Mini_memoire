@@ -1,0 +1,53 @@
+GOALS : 
+
+1) Implémenter un test de déterminisabilité 
+	
+	càd si un transducteur fonctionel = un transducteur déterministe 
+		a) A savoir ce que c'est un transducteur fonctionnel 
+			ok 
+			
+		b) dans un premier temps en crée ces dites transducteur à la 
+		   main 
+			encore à voir 
+
+		C) Trouver un moyen de remplacer ce hardcodage par après  
+	
+	Utiliser la twinning property pour pouvoir faire ça 
+		a) Bien comprendre la twinning property
+		b) Essayer de l'implémenter 
+
+
+Sibling states: Two states p, q are siblings if there exist two labels x and y 
+such that p and q can be reached from an initial state by path labeled with x 
+and there is a cycle at p and q both labeled with y.
+    
+Twins states: Two sibling states p and q are twins iff for any label 
+y: w[P(p,y,p)]=w(P[q,y,q])
+    
+Has twins property: An automaton has the twins property if any two sibling states 
+of this automaton are twins.
+
+Question pour demain : 
+
+1) Niveau implémentation, une fois avoir bien compris le twinning property, de faire 
+le teste sur un automate creer dans un prmeier temps à la main ? 
+
+2) Le but final ce serait de générer des automates aléatoirement et de faire le test 
+dessous c'est bien ça ? 
+	Alors comment il compte creer des automates aléatoirement ?
+		utiliser la librairie donner ? 
+
+3) Aucun problème si je modifie le code source du librairie en question pour pouvoir  
+rattacher la partie que j'ai codé ? 
+
+
+
+
+
+
+
+A faire : 
+	is_deterministic pour éléminer les candidats 
+	Twining property Test si oui, garder la partie TRIM 
+	Test de fonctionnalité  : qu'est ce qu'il fait ? si on lance avant  
+	Determinze test 
