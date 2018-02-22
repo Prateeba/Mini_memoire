@@ -1,0 +1,47 @@
+configuration:
+  # Package version.
+  version: @PACKAGE_VERSION@
+  url: @PACKAGE_URL@
+
+  # Running Python.
+  python: @PYTHON@
+  ipython: @IPYTHON@
+
+  # Running a C++ compilation.
+  ccache: @CCACHE@
+  cppflags: @VCSN_CPPFLAGS@
+  cxx: @VCSN_CXX@
+  cxxflags: @CXXFLAGS@
+  ldflags: @VCSN_LDFLAGS@
+
+  # Where our files are installed.
+  datadir: @DATADIR@
+  includedir: @INCLUDEDIR@
+  libdir: @LIBDIR@
+  pyexecdir: @PYEXECDIR@
+
+  # The vcsn libraries and precompiled contexts.
+  libs: -llal_char_b -llal_char_q -llal_char_z -lvcsn
+
+  # Verbosity level of debug messages.
+  verbose: 0
+
+dot:
+  styles: !StyleList
+    square:
+      node:
+        shape: square
+    default:
+      node:
+        shape: circle
+        style: rounded
+        width: 0.5
+      edge:
+        arrowhead: vee
+        arrowsize: .6
+    important:
+      inherits: square
+      node:
+        style: filled
+        fillcolor: red
+  default-style: default

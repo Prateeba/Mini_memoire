@@ -1,0 +1,54 @@
+#                                                -*- shell-script -*-
+# Test cases independant of both the weightset and the label kind.
+
+# Base cases.
+%identities: trivial
+a  => a
+\e => \e
+\z => \z
+a+b => a+b
+a.b == (a)(b)
+a* => a*
+
+# Precedence and associativity.
+(a+b)* => (a+b)*
+a*b* == (a*).(b*)
+a*+b* => a*+b*
+a+b* => a+b*
+a.b* == a.(b*)
+ab* == a(b*)
+aa* == a(a*)
+a** => a**
+(a+b)c+b == (a+b).c+b
+(a+\e)*+b => (a+\e)*+b
+\e+a => \e+a
+(a) => a
+(a+b)+c => (a+b)+c
+a+b+c => (a+b)+c
+a+(b+c) => a+(b+c)
+
+%identities: associative
+(a+b)+c => a+b+c
+a+(b+c) => a+b+c
+(a+b)+(c+d) => [a-d]
+
+# Not checking with `aaaa`, as in law that's a single word.
+a{2} => aa
+a{3} => aaa
+a{4} => aaaa
+a{5} => a{5}
+a{6} => a{6}
+[ab][ab] => (a+b){2}
+
+# Trivial identities, called T in Tools's documentation.
+\z*  => \e
+a+\z => a
+\z+a => a
+a\z  => \z
+\za  => \z
+a\e  => a
+\ea  => a
+
+%identities: linear
+(a+\e)*+b => b+(\e+a)*
+(a+\e) => \e+a

@@ -1,0 +1,20 @@
+digraph
+{
+  vcsn_context = "letterset<char_letters(a)>, b"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    F0
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0 [label = "0, 3, 6", shape = box]
+    1 [label = "1, 4", shape = box]
+  }
+  I0 -> 0
+  0 -> F0
+  0 -> 1 [label = "a"]
+  1 -> 0 [label = "a"]
+}

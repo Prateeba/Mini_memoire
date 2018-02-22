@@ -1,0 +1,17 @@
+digraph
+{
+  vcsn_context = "lal_char(01), z"
+  rankdir = LR
+  {
+    node [shape = point, width = 0]
+    I0
+    F0
+  }
+  {
+    node [shape = circle]
+    0
+  }
+  I0 -> 0
+  0 -> F0
+  0 -> 0 [label = "0, 1"]
+}

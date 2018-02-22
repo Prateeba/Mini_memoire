@@ -1,0 +1,375 @@
+#! /bin/sh
+
+set -e
+
+# ../../tests/tools/transpose.chk => tools/transpose
+me=${1#${srcdir}/}
+me=${me%.chk}
+
+# Make them absolute, as we chdir a lot.
+builddir=$(pwd)
+srcdir=$(cd $srcdir && pwd)
+top_srcdir=$srcdir
+test=$(cd $(dirname $1) && pwd)/$(basename $1)
+
+# Source directory where auxiliary files are stored.
+# ../../tests/tools/transpose.chk => /.../tests/tools/transpose.dir
+medir=$srcdir/$me.dir
+
+# Work directory where temporary files are stored.
+# ../../tests/tools/transpose.chk => tools/transpose.tmp
+metmp=$me.tmp
+
+# Number of the current test.
+number=0
+
+# Number of failures.
+nfailures=0
+
+
+# If there are environment variables that we wish to set, do it now.
+# For instance VCSN_ENV=LD_PRELOAD=libclang_rt.asan-x86_64.so`.  This
+# is especially useful on macOS with SIP enabled.
+#
+# Tests run by `vcsn run` do not need to install VCSN_ENV because it
+# does it itself.  Some tests, especially in demo/, are run directly
+# (and we don't want `vcsn run`, to make sure that our program can run
+# without it).  In that case, install VCSN_ENV by hand.
+vcsn_env ()
+{
+  if test x"$VCSN_ENV" != x; then
+    save_IFS=$IFS
+    IFS=';'
+    for v in $VCSN_ENV
+    do
+      eval "export $v"
+    done
+    IFS=$save_IFS
+  fi
+}
+
+
+## ------------- ##
+## TAP support.  ##
+## ------------- ##
+
+# tap STATUS COMMENT...
+# ---------------------
+tap ()
+{
+  local status
+  status=$1
+  shift
+  # Test number.
+  number=$(expr $number + 1)
+
+  case $# in
+   0) echo "$status $number";;
+   *) echo "$status $number # $*";;
+  esac
+}
+
+# tap_ok COMMENT...
+# -----------------
+tap_ok ()
+{
+  tap ok "$@"
+}
+
+# tap_not_ok COMMENT...
+# ---------------------
+tap_not_ok ()
+{
+  tap 'not ok' "$@"
+}
+
+# tap_skip COMMENT...
+tap_skip ()
+{
+  tap 'ok' "SKIP" "$@"
+}
+
+
+## ------------- ##
+## Log support.  ##
+## ------------- ##
+
+# stderr LINES
+# ------------
+stderr ()
+{
+  local i
+  for i
+  do
+    echo "$i"
+  done | sed -e "s,^,$me: ," >&2
+}
+
+
+# error EXIT MESSAGES
+# -------------------
+error ()
+{
+  local exit="$1"
+  shift
+  stderr "$@"
+  exit $exit
+}
+
+
+# fatal MESSAGES
+# --------------
+fatal ()
+{
+  error 1 "$@"
+}
+
+
+# rst_title TITLE
+# ---------------
+rst_title ()
+{
+  echo "$@" | sed 's/.*/   &   /;h;s/./=/g;p;x;p;g;p;s/.*//'
+}
+
+# rst_section_ LINER TITLE
+# ------------------------
+rst_section_ ()
+{
+  local liner="$1"
+  shift
+  echo "$@" | sed "p;s/./$liner/g;p;g"
+  echo
+}
+
+# rst_section TITLE
+# -----------------
+rst_section ()
+{
+  rst_section_ "=" "$@"
+}
+
+# rst_subsection TITLE
+# --------------------
+rst_subsection ()
+{
+  rst_section_ "-" "$@"
+}
+
+# rst_subsubsection TITLE
+# -----------------------
+rst_subsubsection ()
+{
+  rst_section_ "." "$@"
+}
+
+# rst_tab [FILES = stdin]
+# -----------------------
+rst_tab ()
+{
+  # We use "cat -v" so that we don't miss hidden characters, but
+  # also so Windows runs don't display with an empty line between
+  # one line.  They now display as "LINE^M".
+  cat -v "$@" | perl -pe 's/\^\[\[33/\x1B\[33/g;s/^/\t/'
+  echo
+}
+
+# rst_pre TITLE [FILE]
+# --------------------
+# FILE may be empty to denote stdin.
+rst_pre ()
+{
+  if test $# -eq 1 || test -s "$2"; then
+    echo "$1::"
+    echo
+    shift
+    rst_tab "$@"
+  fi
+}
+
+
+# rst_expect BASE [DIFF-FLAGS]
+# ----------------------------
+# Compare expected output with effective, actual, output.
+# Return 0 if success, otherwise 1.
+rst_expect ()
+{
+  local base=$1
+  shift
+  # Whether this test passed.
+  local res=0
+
+  test -f $base.exp ||
+    fatal "missing reference file: $base.exp"
+
+  rst_subsubsection "$me: $base"
+  # --strip-trailing-cr helps to fight \r.
+  if diff --strip-trailing-cr -u                              \
+            --label="Expected $base ($base.exp)"  $base.exp   \
+            --label="Effective $base ($base.eff)" $base.eff   \
+            "$@"                                              \
+            >$base.diff; then
+    # Dump something, it is really surprising in the logs to see
+    # nothing.
+    rst_pre "Expected (and effective) $base for $me" $base.exp
+  else
+    rst_pre "Expected $base for $me"    $base.exp
+    rst_pre "Effective $base for $me"   $base.eff
+    rst_pre "Diff on $base for $me"     $base.diff
+    res=1
+  fi
+  return $res
+}
+
+
+## ------- ##
+## Check.  ##
+## ------- ##
+
+# run [OPTION...] EXPECTED-EXIT-STATUS EXPECTED-OUTPUT PROG [PROG-OPTIONS]
+# ------------------------------------------------------------------------
+#
+# OPTION:
+#
+# - '-I' 'RE', ignore lines matching RE in the diffs.
+#
+# If EXPECTED-OUTPUT is
+#
+# - '-' then use stdin of this command as expected output.
+#
+# - 'out.exp', then use the content of that file as expected output,
+#    otherwise EXPECTED-OUTPUT is the expected output.
+#
+# - '-f' 'FILE', then compare againt FILE as expected result.
+#
+# - 'stdout', then don't check the output, but leave it in the file
+#   named "stdout".
+#
+# - 'ignore', then don't check, nor report, the output.
+#
+# $builddir will prepended to PROG, unless PROG is '-PROG'.
+run ()
+{
+  while true
+  do
+    case $1 in
+      (-I) diff_opts="$diff_opts $1 $2"
+           shift 2;;
+      (*)  break;;
+    esac
+  done
+
+  # Expected exit status.
+  local sta_exp="$1"
+  shift
+  # Expected output.
+  local out_exp="$1"
+  shift
+
+  # Remove the previous out.exp, in case it's readonly.
+  case $out_exp in
+    ('') rm -f out.exp; : >out.exp;;
+    (-) rm -f out.exp; cat >out.exp;;
+    (out.exp|stdout);;
+    (-f) rm -f out.exp; cp "$1" out.exp; shift;;
+    (*)
+    rm -f out.exp
+    cat >out.exp <<EOF
+$out_exp
+EOF
+    ;;
+  esac
+  # program to run
+  local prog="$1"
+  shift
+
+  case $prog in
+    (-*) prog=${prog#-};;
+    (*)  prog=$builddir/$prog;;
+  esac
+  local fail=false
+  # Effective exit status.
+  local sta_eff=0
+  # Subshell: catch messages from the shell, such as "Abort trap".
+  ($PREPROG $prog "$@") >out.eff 2>err.eff \
+    || sta_eff=$?
+  {
+    cat <<EOF
+command
+  $PREPROG $prog $@
+
+EOF
+    # Is the exit status correct?
+    if test $sta_eff -eq $sta_exp; then
+      cat <<EOF
+status
+  $sta_eff
+
+EOF
+    else
+      cat <<EOF
+status (FAIL)
+  expected:  $sta_exp
+  effective: $sta_eff
+
+EOF
+      fail=true
+    fi
+
+    # Stdout.
+    case $out_exp in
+      (ignore)
+        rst_pre "Standard output" out.eff
+        rst_pre "Standard error" err.eff
+        ;;
+      (*)
+        case $out_exp in
+          (stdout)
+          # Produce nice logs (with the following rst_expect).
+          cp out.eff out.exp
+          # Prepare stdout.
+          cp out.eff stdout
+          ;;
+        esac
+        rst_pre "Standard error" err.eff
+        rst_expect out $diff_opts || fail=true
+        ;;
+    esac
+  } >stdout.tmp
+  if $fail; then
+    prefix="FAIL: "
+    test -n "$BASH_VERSION" \
+      && prefix="${BASH_SOURCE[1]}:${BASH_LINENO[1]}:$prefix"
+    tap_not_ok
+    : $((nfailures += 1))
+  else
+    prefix=
+    tap_ok
+  fi
+  rst_subsection "${prefix}Test $number: $@"
+  cat stdout.tmp
+}
+
+# cleanup
+# -------
+# Remove the temp dir and exit, preserving the exit status.
+cleanup ()
+{
+  local status=$?
+  case $DEBUG:$nfailures in
+    '':0) cd $builddir
+          rm -rf $metmp;;
+  esac
+  # Issue the final test plan
+  echo "1..$number"
+  exit $status
+}
+trap cleanup 0
+trap 'exit 1' 1 2 13 15
+rm -rf $metmp
+mkdir $metmp
+cd $metmp
+
+. "$test"
+
+exit 0

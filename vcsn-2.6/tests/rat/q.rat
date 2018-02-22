@@ -1,0 +1,99 @@
+%context: q
+%include: common-weights.rat
+
+%identities: associative
+<2>a == (<2>a)
+a<2> == (a<2>)
+<2>a<3> == (<2>a)<3>
+<1>a<2>b<3> => a<6>b
+<2><3>a* == <2><3>(a*)
+a<3>b => a<3>b
+(<2>a) => <2>a
+<3>(a<2>) == (<3>(a<2>))
+<3>(<2>a<1>) == <3>((<2>a)<1>)
+<2><3>a<1> == (<2>(<3>a))<1>
+a<2><3> == (a<2>)<3>
+a<1><2>b == a(<1>(<2>b))
+<1>a* == <1>(a*)
+<1>a == a<1>
+<1>a == a
+<2>(a)<3>(b) == (<2>a)(<3>b)
+<2>(a)<3>(b) => <2>a<3>b
+a*<2> => a*<2>
+
+%labels: letters
+<3>(ab) => <3>(ab)
+<3>ab => <3>ab
+<2><3>ab => <6>ab
+<2>ab<3>* => <2>a(<3>b)*
+%labels: words
+<3>ab => <3>(ab)
+<3>abc => <3>(abc)
+<3>(abc) => <3>(abc)
+<2><3>ab => <6>(ab)
+<2>ab<3>* => <2>a(<3>b)*
+
+%labels: letters
+# Check "linear": ACI
+%identities: linear
+# Check computations on Q.
+\e+\e     => <2>\e
+<2><3>a   => <6>a
+<2>a<3>   => <6>a
+<2>(a)<3> => <6>a
+<2>(a<3>) => <6>a
+(<2>a)<3> => <6>a
+a<2><3>   => <6>a
+
+<0><2>a == <1>\z
+<1>\z => \z
+
+a<2> => <2>a
+a*<2> => <2>a*
+a*<2> => <2>a*
+<2>a<3>b => <6>(ab)
+
+a+a => <2>a
+a+<-1>a => \z
+a+a == <2>a
+b+a => a+b
+a+b+a+b => <2>a+<2>b
+
+(a+<-1>b)+(b+<-1>a) => \z
+
+# Make sure we don't create sums of one element only.  If we did, we
+# would get 'a(<2>b)' since the "add" <2>b has lower precedence than
+# the product.
+a(b+b) => <2>(ab)
+a(b+b) == <2>ab
+(a+a)b => <2>(ab)
+(a+a)b == <2>ab
+(a+a)(b+b) == <4>ab
+
+# Check series: add distributivity.
+%identities: distributive
+a(c+b)(f+e) => abe+abf+ace+acf
+<2>[abc] => <2>a+<2>b+<2>c
+[ab]{2} => aa+ab+ba+bb
+(<2>a){2} => <4>(aa)
+(ab)<2> => <2>(ab)
+<2>(ab+<3>ab+<2>aa)<5> => <20>(aa)+<40>(ab)
+
+%labels: words
+(<2>a)(<2>a) => <4>(aa)
+# Be sure that we get a product of two labels, not a single word,
+(<2>a)(<2>a) == <4>((a)(a))
+<3>abcd == <3>(abcd)
+<3>(abcd) => <3>(abcd)
+
+%identities: none
+ab => ab
+
+%identities: agressive
+a** => a**
+
+
+# Local Variables:
+# mode: shell-script
+# coding: utf-8
+# End:

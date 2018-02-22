@@ -1,0 +1,195 @@
+# -*- shell-script -*-
+
+%context: qr
+%include: common-weights.rat
+
+# Check the alphabets.
+<j>a => <j>a
+<i>x ! 1.4: {abcdefgh}: invalid letter: x\n! <i>x\n!    ^\n!   while reading expression: "<i>x"
+<x>a ! 1.1-3: 1.1: {ijklmn}: invalid letter: x\n! x\n! ^\n! <x>a\n! ^^^\n!   while reading expression: "<x>a"
+a<x> ! 1.2-4: 1.1: {ijklmn}: invalid letter: x\n! x\n! ^\n! a<x>\n!  ^^^\n!   while reading expression: "a<x>"
+
+# Check associativities.
+%labels: letters
+<i>b<j>d<i> => <i>b<ji>d
+(<i>b<j>d)<i> => (<i>b<j>d)<i>
+<i>bb<j>dd<i> => <i>bb<j>d<i>d
+(<i>bb<j>dd)<i> => (<i>bb<j>dd)<i>
+<i>b.b<j>d.d<i> => <i>bb<j>d<i>d
+(<i>ab*<j>ab*)<k> => (<i>ab*<j>ab*)<k>
+%labels: words
+(<i>bb<j>dd)<i> => (<i>(bb)<j>(dd))<i>
+<i>bb<j>dd<i> => <i>(bb)<j>d<i>d
+%labels: letters
+
+# Check the ?, *, and + quantifiers.
+(<i>a)? => \e+<i>a
+(<i>a){?} => \e+<i>a
+(<i>a)* => (<i>a)*
+(<i>a){*} => (<i>a)*
+(<i>a){+} => <i>a(<i>a)*
+
+# Check the "{min, max}" quantifier.
+\z{0} => \e
+\z{2} => \z
+\e{0} => \e
+\e{2} => \e
+
+(<i>a){0} => \e
+(<i>a){1} => <i>a
+(<i>a){2} => (<i>a){2}
+(<i>a){5} => (<i>a){5}
+
+(<i>a){1,0} ! 1.1-11: invalid exponents: 1, 0\n! (<i>a){1,0}\n! ^^^^^^^^^^^\n!   while reading expression: "(<i>a){1,0}"
+(<i>a){0,0} == (<i>a){0}
+(<i>a){1,1} == (<i>a){1}
+(<i>a){2,2} == (<i>a){2}
+(<i>a){5,5} == (<i>a){5}
+
+(<i>a){0,1} => \e+<i>a
+(<i>a){0,2} => \e+<i>a+(<i>a){2}
+(<i>a){0,3} => \e+<i>a+(<i>a){2}+(<i>a){3}
+
+(<i>a){,1} == (<i>a){0,1}
+(<i>a){,2} == (<i>a){0,2}
+(<i>a){,3} == (<i>a){0,3}
+
+(<i>a){1,2} => <i>a(\e+<i>a)
+(<i>a){1,3} => <i>a(\e+<i>a+(<i>a){2})
+
+(<i>a){2,5} => (<i>a){2}(\e+<i>a+(<i>a){2}+(<i>a){3})
+
+(<i>a){0,} => (<i>a)*
+(<i>a){1,} => <i>a(<i>a)*
+(<i>a){4,} => (<i>a){4}(<i>a)*
+
+
+
+
+# Trivial identities: T_K in TAF-Kit's documentation.
+<\z>a => \z
+a<\z> => \z
+<j>\z => \z
+\z<j> => \z
+<\e>a => a
+a<\e> => a
+
+# Trivial identities: A_K in TAF-Kit's documentation.
+<i><j>a => <ij>a
+<i>a<j> => <ij>a
+a<i><j> => <ij>a
+(<i>(a.b))<j> => <i>(ab)<j>
+
+# Trivial identities: U_K in TAF-Kit's documentation.
+\e<i> => <i>\e
+ab(<i>\e) => a<i>b
+(<i>\e)(ab) => <i>(ab)
+
+# Trivial identities: C_{at} in TAF-Kit's documentation.
+\e<i> => <i>\e
+a<i> => <i>a
+
+# "Trivial identities": conjunction.
+\z&<i>\e => \z
+<i>\e&\z => \z
+
+\z&<i>a => \z
+<i>a&\z => \z
+
+\z{c} & <i>a => <i>a
+<i>a & \z{c} => <i>a
+
+<i>\e&<j>\e => <ij>\e
+<i>\e&<j>a => \z
+<i>a&<j>\e => \z
+<i>a&<j>a => <ij>a
+
+# Trivial identities: infiltrate.
+\z&:<j>\e => \z
+<j>\e&:\z => \z
+
+\z&:<j>a => \z
+<j>a&:\z => \z
+
+\e&:<j>a => <j>a
+<j>a&:\e => <j>a
+<i>\e&:<j>\e => <i>\e&:<j>\e
+<i>\e&:<j>a => <i>\e&:<j>a
+<i>a&:<j>\e => <i>a&:<j>\e
+<i>a&:<j>a => <i>a&:<j>a
+
+# Trivial identities: shuffle.
+\z:<j>\e => \z
+<j>\e:\z => \z
+
+\z:<j>a => \z
+<j>a:\z => \z
+
+\e:<j>a => <j>a
+<j>a:\e => <j>a
+<i>\e:<j>\e => <i>\e:<j>\e
+<i>\e:<j>a => <i>\e:<j>a
+<i>a:<j>\e => <i>a:<j>\e
+<i>a:<j>a => <i>a:<j>a
+
+# Trivial identities: transpose.
+%labels: letters
+\e{T} => \e
+\z{T} => \z
+a{T} => a
+(abc){T} => (abc){T}
+
+%labels: words
+\e{T} => \e
+\z{T} => \z
+a{T} => a
+(abc){T} => cba
+
+# Trivial identities: quotient
+%labels: letters
+\z{\}a => \z
+a{/}\z => \z
+
+# Complement: same precedence/behavior as *.
+%labels: letters
+<i>a{c} => <i>a{c}
+<i>(a+b){c} => <i>(a+b){c}
+
+<i>a+<j>b{c} => <i>a+<j>b{c}
+(<i>a+<j>b){c} => (<i>a+<j>b){c}
+
+<i>(a*).<j>(b*){c} => <i>a*<j>b*{c}
+(<i>(a*).<j>(b*)){c} => (<i>a*<j>b*){c}
+
+# Complement as a prefix operator.  Lower precedence that concatenation.
+!ab => (ab){c}
+!a+b => a{c}+b
+!a* => a*{c}
+
+# "Trivial identities": complement.
+(<i>a){c} => a{c}
+(<i>(a+b)){c} => (a+b){c}
+(<i>a)*{c}{c} => (<i>a)*{c}{c}
+
+%labels: words
+\z&<j>ac => \z
+<j>ab&\z => \z
+
+<i>\e&<j>(ac) => \z
+<i>(ab)&<j>\e => \z
+<i>(ab)&<j>(ab) => <ij>(ab)
+<i>(ab)&<j>(ac) => \z
+
+%labels: letters
+
+# Transpose.
+(<ij>ab){t} == b<ji>a
+
+# Preference.
+<i>a<+<j>b => <i>a+a{c}&<j>b
+
+# Difference.
+<i>a%(<j>b)* == (<i>a)%((<j>b)*)
+
+# More complex computations.
+<j><i>a<\z>+<i>a<\e> => <i>a

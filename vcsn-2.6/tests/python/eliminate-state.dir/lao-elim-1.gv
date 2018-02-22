@@ -1,0 +1,19 @@
+digraph
+{
+  vcsn_context = "lao, expressionset<letterset<char_letters(abc)>, b>"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    F2
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0
+    2
+  }
+  I0 -> 0
+  0 -> 2 [label = "<ab*c>"]
+  2 -> F2
+}

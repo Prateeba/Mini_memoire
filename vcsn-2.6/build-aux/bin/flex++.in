@@ -1,0 +1,174 @@
+#! /bin/sh
+##
+## flex++.in: This file is part of build-aux.
+## Copyright (C) 2008-2010, 2012, Gostai S.A.S.
+##
+## This software is provided "as is" without warranty of any kind,
+## either expressed or implied, including but not limited to the
+## implied warranties of fitness for a particular purpose.
+##
+## See the LICENSE file for more information.
+##
+
+# Exit status.
+status=0
+
+# Any tool failure is a failure of the script.
+set -e
+
+me=$(basename $0)
+
+stderr ()
+{
+  local i
+  for i
+  do
+    echo "$i"
+  done | sed >&2 -e "s/^/$me: /"
+}
+
+fatal ()
+{
+  stderr "$@"
+  exit 1
+}
+
+: ${FLEX='@FLEX@'}
+
+if test "x$FLEX" = x; then
+   fatal "$FLEX is empty: configure probably did not find it." \
+         "install Flex and rerun configure."
+fi
+
+if ! $FLEX --version >/dev/null 2>&1; then
+   fatal "cannot run '$FLEX --version'." \
+         "check that Flex is properly installed."
+fi
+
+
+# flex++ INPUT OUTPUT OPTIONS
+# ---------------------------
+
+me=$(basename $0)
+move_if_change='@abs_srcdir@/move-if-change'
+
+# First, make sure Flex is recent enough (2.5.35 at least).  For
+# instance Flex 2.3.33 has a problem with REJECT and produces a
+# scanner that does not compile.
+case $FLEX in
+  (no) fatal "Flex is needed";;
+esac
+
+version=$($FLEX --version | perl -pe 's/.*? ([\d.]+)$/$1/')
+case $version in
+  (1.*|2.[0-4].*|2.5.[0-2]*|2.5.3[0-4])
+    fatal "Flex >= 2.5.35 is needed, have $version";;
+esac
+
+input=$1
+input_base=$(basename "$input")
+shift
+output=$1
+shift
+srcdir=$1
+shift
+
+output_base=$(basename "$output")
+output_base_noext=$(echo "$output_base" | sed -e 's/\.[^.]*//')
+output_dir=$(dirname "$output")
+output_noext=$output_dir/$output_base_noext
+output_log=$output_noext.log
+output_header=$output_noext.hh
+output_version_header=$output_noext-version.hh
+
+options="$@"
+
+set +e
+$FLEX -+ -o"$output".tmp $options "$input" 2>$output_log
+status=$?
+set -e
+
+# Normalize locations of Flex diagnostics:
+# "../../../src/parser/utoken.l", line 605: warning, rule cannot be matched
+# Warnings are errors.
+perl >&2 -p                                     \
+    -e 's/^"(.*)", line (\d+):/$1:$2:/;'        \
+    -e 's/warning, //;'				\
+     $output_log
+
+if test -s $output_log; then
+  rm -f $output_log
+  exit $status
+else
+  rm -f $output_log
+fi
+
+# Address a number of shortcomings, and portability issues.  See
+# comments below.
+perl -pi -e "
+BEGIN
+{
+  \$output = '$output';
+  \$output_header = '$output_header';
+  \$srcdir = '$srcdir';
+}" \
+ -e '
+  # Paste the pragma bits which will save us from stupid warnings.
+  #
+  # Cannot use a print in a BEGIN here, stdout is not set up.
+  if ($. == 1)
+  {
+     $_ = <<EOF . $_;
+// Added by flex++.
+#pragma GCC diagnostic ignored "-Wsign-compare"
+// Check Clang first, as it does not support -Wzero... but it
+// defines __GNUC__.
+#if defined __clang__
+# pragma clang diagnostic ignored "-Wdeprecated"
+# pragma clang diagnostic ignored "-Wnull-conversion"
+#elif defined __GNUC__
+# pragma GCC diagnostic ignored "-Wsuggest-attribute=const"
+# pragma GCC diagnostic ignored "-Wsuggest-attribute=noreturn"
+# pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
+# pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#endif
+
+EOF
+  }
+
+  # Use "output.hh" as header.
+  s{<FlexLexer\.h>}{<$output_header>}g;
+
+  # Use "output" in synclines, not output.tmp.
+  s{\Q$output.tmp\E}{$output}g;
+
+  # Disable the declarations of yyalloc, yyrealloc and yyfree
+  # declarations, which are not in YY_FLEX_NAMESPACE, while the
+  # implementations are.
+  s{(^void \*yy(re)?alloc.*;)}{// $1}g;
+  s{(^void yyfree.*;)}{// $1}g;
+
+  # Work around Apple Flex not using the same interface as stock Flex
+  # regarding yyFlexLexer::LexerInput and yyFlexLexer::LexerOutput.
+  s{size_t(.*)LexerInput\((.*)size_t}{int$1LexerInput($2int};
+  s{void(.*)LexerOutput\((.*)size_t}{void$1LexerOutput($2int};
+
+  # We do not want to use the "register" keyword, which is withdrawn
+  # from C++17 but used by Flex before 2.6.
+  s{\bregister (char\b|int\b|YY_|yy_)}{$1}g;
+
+  # Do not keep an open coded absolute directory.
+  s{\Q$srcdir/\E}{}g;
+' "$output.tmp"
+## For some reason, on Windows perl does not remove the back up file.
+rm -f "$output.bak"
+
+# Extract the version information.
+perl -ne '/#define YY_FLEX_\w+_VERSION/ && print'       \
+     <$output.tmp                                       \
+     >$output_version_header
+
+# Atomic validation of the whole process.
+mv $output.tmp $output
+
+exit $status

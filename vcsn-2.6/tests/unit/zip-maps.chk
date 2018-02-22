@@ -1,0 +1,6 @@
+#! /bin/sh
+
+run 0 - tests/unit/zip-maps <<EOF
+2:(20, 2.22, deux)
+3:(30, 3.3, three)
+EOF

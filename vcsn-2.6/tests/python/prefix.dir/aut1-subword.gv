@@ -1,0 +1,24 @@
+digraph
+{
+  vcsn_context = "nullableset<letterset<char_letters(abc)>>, z"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    F3
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0
+    1
+    2
+    3
+  }
+  I0 -> 0
+  0 -> 1 [label = "<3>\\e, <3>a"]
+  1 -> 2 [label = "<5>\\e, <5>b"]
+  2 -> 2 [label = "<7>\\e, <7>a"]
+  2 -> 3 [label = "<4>\\e, <4>c"]
+  3 -> F3 [label = "<11>"]
+}

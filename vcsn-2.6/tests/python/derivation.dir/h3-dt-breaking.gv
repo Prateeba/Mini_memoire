@@ -1,0 +1,27 @@
+digraph
+{
+  vcsn_context = "letterset<char_letters(abcd)>, b"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    F4
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0 [label = "a(b+c+d)", shape = box]
+    1 [label = "b", shape = box]
+    2 [label = "c", shape = box]
+    3 [label = "d", shape = box]
+    4 [label = "\\e", shape = box]
+  }
+  I0 -> 0
+  0 -> 1 [label = "a"]
+  0 -> 2 [label = "a"]
+  0 -> 3 [label = "a"]
+  1 -> 4 [label = "b"]
+  2 -> 4 [label = "c"]
+  3 -> 4 [label = "d"]
+  4 -> F4
+}

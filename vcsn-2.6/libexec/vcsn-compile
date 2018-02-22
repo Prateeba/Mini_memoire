@@ -1,0 +1,258 @@
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import argparse
+import os
+import os.path
+import re
+import subprocess
+import sys
+import time
+import warnings
+
+from vcsn_cxx import configuration
+from vcsn_tools.demangle import demangle, pretty_plugin
+
+me = sys.argv[0]
+
+# Allow the use of log in parse_args.
+args = {'verbose': 0}
+
+def parse_args():
+    p = argparse.ArgumentParser(description='''Compile Vcsn programs
+                                               or libraries.''')
+    p.add_argument('vars', nargs='*',
+                   help='''variable assignments such
+                   as `CXX=g++`, or `CXXFLAGS+=-g`, or `CXXFLAGS-=-O3`.''')
+    p.add_argument('input', help='source file to compile')
+    p.add_argument('-v', '--verbose', help='be verbose',
+                   action='count',
+                   default=int(configuration('configuration.verbose')))
+    p.add_argument('-q', '--quiet',
+                   help='hide warnings (including compiler warnings)',
+                   action='store_true')
+    p.add_argument('-c', '--color', dest='color', action='store',
+                   default='auto',
+                   choices=['auto', 'always', 'never'],
+                   help='whether to use colors in the output')
+    p.add_argument('-p', '--plain', action='store_true',
+                   help='disable all extra features (color and demangle)')
+    p.add_argument('-f', '--force', action='store_true',
+                   help='force build even if not needed')
+    p.add_argument('-d', '--debug', action='store_true',
+                   default='VCSN_DEBUG' in os.environ,
+                   help='''do not remove object file (needed to
+                   debug in C++)''')
+    p.add_argument('-shared',
+                   help='create a shared lib instead of an executable',
+                   action='store_true')
+
+    # Parse the arguments, and complete the 'args' object with the value
+    # from the configuration (cxx, cxxflags, etc.).
+    args = p.parse_args().__dict__.copy()
+
+    # List of configuration keys coming from autoconf.
+    config = ['ccache', 'cppflags', 'cxx', 'cxxflags',
+              'datadir', 'includedir', 'ipython', 'ldflags',
+              'libdir', 'libs', 'pyexecdir', 'python', 'verbose', 'version',]
+    for k in config:
+        if not k in args:
+            args[k] = configuration('configuration.'+k)
+    if 'VCSN_FORCE' in os.environ:
+        args['force'] = os.environ['VCSN_FORCE']
+
+    for v in args['vars']:
+        # Process VAR=VAL, VAR+=VAL, VAR-=VAL.
+        m = re.match(r'(\w+)([-+]?=)(.*)', v)
+        if not m:
+            print(me + ': invalid argument:', v, file=sys.stderr)
+            sys.exit(1)
+        var = m.group(1).lower()
+        op  = m.group(2)
+        val = m.group(3)
+        if op == '=':
+            args[var] = val
+        elif op == '+=':
+            args[var] += ' ' + val
+        elif op == '-=':
+            args[var] = args[var].replace(val, '')
+
+    if 3 <= args['verbose']:
+        print('args:', file=sys.stderr)
+        for k in sorted(args):
+            print('  {}: {}'.format(k, args[k]), file=sys.stderr)
+        sys.stderr.flush()
+
+    # Strip extension.
+    base, ext = os.path.splitext(args['input'])
+    if ext not in ['.C', '.cc', '.cpp', '.cxx', '.c++']:
+        log('warning: unexpected extension: "{}" in {}'
+            .format(ext, args['input']))
+
+    args['base'] = base
+    # Beware of concurrency issues: insert pid in the name to avoid problem.
+    args['pid'] = str(os.getpid())
+    args['tmp'] = args['base'] + '.' + args['pid']
+
+    # Obey --quiet.
+    if args['quiet']:
+        warnings.filterwarnings('ignore', 'you should install')
+
+    return args
+
+
+def log(*msg, level=0):
+    if level <= args['verbose']:
+        print(me + ":", *msg, file=sys.stderr, flush=True)
+
+
+def fmt(s, **kwargs):
+    '''Substitute the value in args.'''
+    # Can be nicer once we require Python 3.5.
+    args.update(kwargs)
+    return s.format_map(args)
+
+
+def build_signature():
+    '''A string that describes the build we are making: compiler, options,
+    etc.'''
+    return fmt('{cxx} {cppflags} {cxxflags} {ldflags}').strip()
+
+
+def notify():
+    '''Notify the user that a compilation was finished.'''
+    title, message = pretty_plugin(args['base'])
+    # For some reason, the some first characters (such as open paren
+    # or bracket) must be escaped.  Fortunately, a leading backlash
+    # suffices.
+    cmd = ('(terminal-notifier -title "\\{title}" -message "\\{message}"'
+           ' -appIcon "{datadir}/figs/vcsn.png") 2>/dev/null')
+    os.system(fmt(cmd, title=title, message=message))
+
+
+def run(cmd):
+    cmd = fmt(cmd)
+    log('run:', cmd, level=2)
+    try:
+        p = subprocess.Popen(cmd, shell=True,
+                             stdin=subprocess.DEVNULL,
+                             stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        retcode = p.wait()
+    except OSError as e:
+        log('execution failed:', e)
+        sys.exit(1)
+    if out:
+        out = out.decode('utf-8')
+        print(out)
+    if err and (retcode or not args['quiet']):
+        err = err.decode('utf-8')
+        if not args['plain']:
+            err = demangle(err, color=args['color'])
+        print(err, file=sys.stderr, flush=True)
+    if retcode:
+        if retcode < 0:
+            log('child was terminated by signal', -retcode)
+        else:
+            log('child returned', retcode)
+        sys.exit(retcode)
+
+def need_compiling():
+    log('checking whether compilation is needed', level=2)
+    if args['force']:
+        log('compilation needed: --force was used', level=2)
+        return True
+
+    try:
+        # Check that the build parameters didn't change.
+        with open(args['output']+'.cmd') as f:
+            cmd = f.read().strip()
+            if build_signature() != cmd:
+                log('compilation needed: command signature changed\n'
+                    '   from: {}\n'
+                    '     to: {}'
+                    .format(cmd, build_signature()), level=2)
+                return True
+
+        with open(args['deps']) as f:
+            deps = f.read()
+        output = None
+
+        # Read the files names in the dependency file.
+        #
+        # Be ready to accept some escaped characters (e.g., the
+        # spaces, and we do have spaces in the plugin names), but also
+        # colons when they come by two as in `std::string`.
+        #
+        # This is not supported by Make, but we don't care (so far):
+        # we don't use make.
+        for m in re.finditer(r'([^ \\\n:]|\\.|::)+', deps):
+            # Escaped characters.
+            file = re.sub(r'\\(.)', r'\1', m.group(0))
+            # The first file is the output.
+            if output is None:
+                if file != args['output']:
+                    raise RuntimeError('unexpected target in dependency file\n'
+                                       '  unexpected: {}\n'
+                                       '    expected: {}'
+                                       .format(file, args['output']))
+                output = file
+                output_mtime = os.path.getmtime(output)
+            elif os.path.getmtime(file) > output_mtime:
+                def date(mtime):
+                    return time.strftime('%F %T', time.localtime(mtime))
+                log('compilation needed: dependency is more recent than output\n'
+                    '      output: {}: {}\n'
+                    '  dependency: {}: {}'
+                    .format(date(output_mtime),           output,
+                            date(os.path.getmtime(file)), file),
+                    level=2)
+                return True
+        log('compilation not needed', level=2)
+        return False
+    except (os.error, RuntimeError) as err:
+        # If the dependency file doesn't exist or a file was deleted,
+        # we need to recompile anyways.
+        log('compilation needed: an error was raised: {}' .format(err), level=2)
+        return True
+
+
+def clean():
+    '''Upon success, remove the .o file, it is large (10x compared to
+    the *.so on erebus using clang) and not required. However the
+    debug symbols are in there, so when debugging, leave them!'''
+    if not args['debug']:
+        run("rm -f '{tmp}.o'")
+
+# Main.
+args = parse_args()
+# The output.
+args['output'] = args['base'] + ('.so' if args['shared'] else '')
+# The deps file.
+args['deps'] = fmt('{output}.d')
+
+if not need_compiling():
+    exit(0)
+
+# Save build signature.
+with open(args['output']+'.cmd', 'w') as f:
+    print(build_signature(), file=f)
+
+if args['shared']:
+    run("LC_ALL=C {ccache} {cxx} {cppflags} {cxxflags} -fPIC -c -o '{tmp}.o'"
+        " -MMD -MF '{deps}' -MQ '{output}'"
+        " '{input}'")
+    run("LC_ALL=C {cxx} {cxxflags} {ldflags} -fPIC {libs} -shared -o '{tmp}.so'"
+        " '{tmp}.o'")
+    run("mv -f '{tmp}.so' '{output}'")
+    clean()
+    notify()
+else:
+    # Exploit ccache: use separate compilation and then linking
+    # instead of a single compiler invocation.
+    run("LC_ALL=C {ccache} {cxx} {cppflags} {cxxflags} -c -o '{tmp}.o'"
+        " -MMD -MF '{deps}' -MQ '{output}'"
+        " '{input}'")
+    run("LC_ALL=C {cxx} {cxxflags} {ldflags} {libs} -o '{tmp}' '{tmp}.o'")
+    run("mv -f '{tmp}' '{output}'")
+    clean()

@@ -1,0 +1,22 @@
+%context: q
+
+# Check that we also support UTF-8.  It's handy with copy-pasting from
+# pretty-printed in UTF-8.
+∅  == \z
+ε  == \e
+⟨2⟩a == <2>a
+!a == a{c}
+¬a == a{c}
+aᶜ == a{c}
+aᵗ == a{T}
+# Yes, this is a different asterisk.  This is the one which is emited
+# when copying from a LaTeX document.
+a∗ == a*
+a⁰¹⁰²⁸ == a{1028}
+a⁰ == \e
+a¹ == a
+
+# Local Variables:
+# mode: shell-script
+# coding: utf-8
+# End:

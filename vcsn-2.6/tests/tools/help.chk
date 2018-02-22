@@ -1,0 +1,196 @@
+#! /bin/sh
+
+
+vcsn="$builddir/tests/bin/vcsn"
+
+check ()
+{
+  run 0 - tests/bin/vcsn $@
+}
+
+# Make sure it works when there are underscores in the function name.
+check derived-term --help <<EOF
+usage: vcsn derived-term [OPTIONS...] [ARGS...]
+
+Available versions:
+  EXP:expression [ALGO="auto":string] -> automaton
+    The derived-term automaton of EXP.
+    Parameters:
+      EXP    the input expression
+      ALGO   how the derived terms are computed:
+         - "auto"                  alias for "expansion"
+         - "derivation"            compute by derivation
+         - "breaking_derivation"   compute by breaking derivation
+         - "expansion"             compute by expansion
+         - "breaking_expansion"    compute by breaking expansion
+
+Try 'vcsn tools --help' for more information.
+EOF
+
+# The return type is prettyfied: from `size_t` to `number`.
+check num-components --help <<EOF
+usage: vcsn num-components [OPTIONS...] [ARGS...]
+
+Available versions:
+  AUT:automaton -> number
+    The number of strongly connected components.
+
+Try 'vcsn tools --help' for more information.
+EOF
+
+
+check evaluate -h <<EOF
+usage: vcsn evaluate [OPTIONS...] [ARGS...]
+
+Available versions:
+  AUT:automaton L:word -> weight
+    Evaluate L on AUT.
+
+  AUT:automaton P:polynomial -> weight
+    Evaluate P on AUT.
+
+Try 'vcsn tools --help' for more information.
+EOF
+
+
+check multiply --help <<EOF
+usage: vcsn multiply [OPTIONS...] [ARGS...]
+
+Available versions:
+  AUT:automaton MIN:number [MAX=-2:number] [ALGO="auto":string] -> automaton
+    Repeated multiplication (concatenation) of an automaton with itself.
+    Parameters:
+      AUT  the automaton.
+      MIN  the minimum number.  If -1, denotes 0.
+      MAX  the maximum number.
+           If -1, denotes infinity, using star.
+           If -2, denotes the same value as min.
+      ALGO  how to compute the result
+        - "standard"    AUT is standard,
+                        build a standard automaton.
+        - "general"     no requirement on AUT,
+                        but add spontaneous transitions.
+        - "auto"        "standard" if AUT is standard,
+                        "general" otherwise.
+
+  E:expression MIN:number [MAX=-2:number] -> expression
+    Repeated multiplication (concatenation) of an expression with itself.
+    Parameters:
+      E    the expression.
+      MIN  the minimum number.  If -1, denotes 0.
+      MAX  the maximum number.
+           If -1, denotes infinity, using star.
+           If -2, denotes the same value as min.
+
+  E:weight MIN:number [MAX=-2:number] -> weight
+    Repeated multiplication of a weight with itself.
+    Parameters:
+      E    the weight.
+      MIN  the minimum number.  If -1, denotes 0.
+      MAX  the maximum number.
+           If -1, denotes infinity, using star.
+           If -2, denotes the same value as min.
+
+  L:label NUM:number -> label
+    Repeated multiplication of a label with itself.
+    Parameters:
+      L    the label.
+      NUM  the exponent.
+
+  LHS:automaton RHS:automaton [ALGO="auto":string] -> automaton
+    Multiply (concatenate) two automata.
+    Parameters:
+      LHS   an automaton.
+      RHS   another one.
+      ALGO  how to compute the result
+        - "standard"    both LHS and RHS are standard,
+                        build a standard automaton.
+        - "general"     no requirement on LHS and and RHS,
+                        but add spontaneous transitions.
+        - "auto"        "standard" if both automata are standard,
+                        "general" otherwise.
+
+  LHS:expression RHS:expression -> expression
+    Multiply (concatenate) two expressions.
+
+  LHS:label RHS:label -> label
+    Multiply (concatenate) two labels.
+
+  LHS:polynomial RHS:polynomial -> polynomial
+    Multiply two polynomials.
+
+  LHS:weight RHS:weight -> weight
+    Multiply two weights.
+
+Try 'vcsn tools --help' for more information.
+EOF
+
+
+
+check minimize -h <<EOF
+usage: vcsn minimize [OPTIONS...] [ARGS...]
+
+Available versions:
+  AUT:automaton [ALGO="auto":string] -> automaton
+    The minimized automaton.
+    Parameters:
+      AUT       the automaton to minimize
+      ALGO      the specific algorithm to use
+    Preconditions:
+       AUT must be LAL.
+       AUT must be deterministic.
+
+Try 'vcsn tools --help' for more information.
+EOF
+
+check proper -h <<EOF
+usage: vcsn proper [OPTIONS...] [ARGS...]
+
+Available versions:
+  AUT:automaton -> automaton
+    An equivalent automaton without spontaneous transitions.
+    Parameters:
+      AUT    the automaton in which to remove them
+
+Try 'vcsn tools --help' for more information.
+EOF
+
+check rweight -h <<EOF
+usage: vcsn rweight [OPTIONS...] [ARGS...]
+
+Available versions:
+  AUT:automaton W:weight [ALGO="auto":string] -> automaton
+    The right-mult automaton with W as weight.
+    Parameters:
+      AUT   the input automaton.
+      W     the weight to right-multiply
+      ALGO  how to compute the result.
+            In most cases, "standard" and "general" have
+            equal results.  The only difference in when
+            when W is null, in which case "general"
+            produces an empty automaton, while "standard"
+            produces an automaton with a single state, which
+            is initial (and, of course, no final states).
+        - "standard"    AUT is standard,
+                        build a standard automaton.
+        - "general"     no requirement on AUT,
+                        but add spontaneous transitions.
+        - "auto"        "standard" if AUT is standard,
+                        "general" otherwise.
+
+  EXP:expression W:weight -> expression
+    The right-multiplication of an expression with W as weight.
+
+  P:polynomial W:weight -> polynomial
+    The right-multiplication of a polynomial with W as weight.
+
+Try 'vcsn tools --help' for more information.
+EOF
+
+
+# An unknown algorithm.
+run 1 - -"$builddir/tests/bin/vcsn tools foobarbaz" </dev/null
+mv err.eff error-message
+run 0 - -cat error-message <<EOF
+error: unknown algorithm: foobarbaz
+EOF

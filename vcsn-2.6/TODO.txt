@@ -1,0 +1,767 @@
+* Bison
+** Generation of position/location.hh
+We need to be able to specify the destination directory.  Actually,
+it could be useful to be able to generate just them.
+
+** Explicit default ctor
+This is troublesome: we can't just `location loc = {}` in formals.
+
+* Exercises
+** subword, prefix, suffix, factor
+Provide the same routines for expressions.
+
+** Levenshtein automata
+Suggested by ADL.
+
+http://blog.notdot.net/2010/07/Damn-Cool-Algorithms-Levenshtein-Automata
+
+http://en.wikipedia.org/wiki/Levenshtein_automata
+
+* Documentation
+** Doxygen
+The Doxygen style documentation is way too poor.  Aim at completion.
+
+** Documentation notebooks
+They should also include complexity information.
+
+** IPython
+We should have a means to open the documentation page of a given function.
+Something similar to IPython's "?" shortcut.
+
+* Build
+** -fsanitize=address
+Try that on the BF.
+
+It works well at least with clang 3.5 on OS X.  To get good error messages,
+run dsymutil on all the *.dylib, something like
+
+  find _build/35d -name '*.dylib' | xargs -n 1 dsymutil
+
+and run the tests with $ASAN_SYMBOLIZER_PATH defined, something like
+
+  ASAN_SYMBOLIZER_PATH=$(which llvm-symbolizer-mp-3.5) 35d check
+
+(of course, adjust the version number, here MacPorts 3.5).
+
+For some reason, Libtool strips this flag when linking python/vcsn-cxx.so.
+To force it (which is needed), use -Wc,-fsanitize=address when linking it.
+
+Well, actually it works fine on OS X, but on GNU/Linux (ArchLinux), Tools
+works properly, but vcsn under Python fails at start:
+
+    [forge@prague 37d]$ ./tests/bin/vcsn python -c 'import vcsn'
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/home/forge/teamcity-agent/work/a0185dad9234e013/python/vcsn/__init__.py", line 5, in <module>
+        from vcsn_cxx import (automaton, context, expansion, expression, label,
+    ImportError: /home/forge/teamcity-agent/work/a0185dad9234e013/build/37d/lib/.libs/libvcsn.so.0: undefined symbol: __asan_option_detect_stack_use_after_return
+
+I tried many different ways to link vcsn-cxx.so, but it does not work.
+Maybe we cannot use asan just for a DSO?  Anyway, using LD_PRELOAD, I
+managed to get it work:
+
+    [forge@prague 37d]$ LD_PRELOAD=/usr/lib/clang/3.7.0/lib/linux/libclang_rt.asan-x86_64.so ./tests/bin/vcsn python -c 'import vcsn'
+
+but then there are tons of errors about leaks coming for instance from
+Boost.Python.  Let's forget about this and focus on hard errors:
+
+    [forge@prague 37d]$ ASAN_OPTIONS=detect_leaks=false LD_PRELOAD=/usr/lib/clang/3.7.0/lib/linux/libclang_rt.asan-x86_64.so ./tests/bin/vcsn python -c 'import vcsn; vcsn.B.expression("a").automaton()'
+    [forge@prague 37d]$
+
+Then it works, but it's extraordinarily slow (can subprocesses, such as the
+compiler, get ASAN'd too?).  So this should be reserved to some well-chosen
+nightly build.
+
+* Expression
+** copy, project, etc.
+The recurring function should move its return value.
+
+* Tests
+** check-rat
+Check the precedences, for instance between the products.
+
+** operations on automata
+Use expressions as weights to check multiplication order.  As in checks for
+standard(exp).  We should use fewer contexts, to speed up our development.
+Unfortunately we then have a problem: are-equivalent no longer applies, so
+it's not so clear what should be done.
+
+** operations on weights
+Check +, etc.
+
+** conjunction
+Check standard, thompson.  Check the trivial identities.  What should be the
+definition of the B (breaking/splitting) operator?  I have taken a
+definition which is modeled after the one of concatenation (on order "not to
+break too much") rather that something like expand.  What are the expected
+features of the right definition?
+
+** proper
+Check the case where we do not want to eliminate states.  Actually check
+that "a.proper(False).accessible() == a.proper()".
+
+** proper: accessible part
+This fails:
+
+import vcsn
+c = vcsn.context('lan_char, seriesset<lal_char, q>')
+a = c.expression('<x>a*&<y>b*').derived_term()
+a.proper()
+
+because we create spontaneous loops.  But there are not co-accessible!
+
+A simpler test case:
+
+  %%automaton a
+  context = "lan_char, q"
+  1 -> 1 \e
+
+  a.proper()
+
+Maybe this is not a bug, but something that should be clarified in the
+documentation.  And expression.automaton() should probably trim the result
+to avoid this pitfall.
+
+** synchronize
+We need more tests.  In particular something that checks:
+
+    Author: Valentin Tolmer <valentin.tolmer@gmail.com>
+    Date:   Mon Jul 20 12:20:30 2015 +0200
+
+    synchronize: fix final weight
+
+    * vcsn/algos/synchronize.hh: Here.
+
+* Bugs
+** subprograms
+We don't kill our children when we are killed.  For instance, if the user
+asked for the graphical rendering of a huge automaton, and decides to kill
+vcsn realizing her error, the dot process will continue to waste cpu.
+
+** lift
+When we lift a single tape from a lat<lal, lal>, we produce a single-tape
+labelset and a single-tape weightset.  This is uselessly heavy on the system.
+That's why we have weird parens in the result:
+
+    0 -> 1 [label = "<<2>(d)>a|gh"]
+
+since d is written (d) because it's actually a one-tuple!
+
+When we lift all the tapes from a tupleset, it should be exactly the same
+code as the default lift with no arguments.  For instance we should get a
+lao.
+
+** Incorrect expressionset
+The expression_automaton builds its own expressionset, so it loses the one
+from the caller, which is the one which knows the identities to use!
+
+As a matter of fact, we need to revise the propagation of the identities
+everywhere.
+
+** expressions: insufficiently parenthetized in LAW
+We display (a)(b) exactly like (ab): no parens at all.  We can't tell the
+difference bw a word and a product of several one-letter labels.
+
+** make_fresh_automaton
+There are many places where we build mutable_automaton's either via
+make_mutable_automaton, or via make_shared_ptr.  This is probably wrong
+everywhere, and should rather be make_fresh_automaton.
+
+Audit everywhere, and see what we can do to avoid that kind of error.
+
+** expression::copy
+The implementation by-passes the expressionset when building the new
+expression; for instance in the case of sum, the list of operands is copied
+by hand instead of using the expressionset.  As a result, an expression
+"a+b+a", when "converted" to a series, gives "a+b+a" instead of "a+b".
+
+** shortest
+Loops forever:
+
+  $ a = vcsn.Z.expression('a*+<-1>a*').standard()
+  $ a.shortest()
+
+We can check that we reach the same state, but can we have periodic
+behaviors?
+
+It also loops when we have a sink state:
+
+  $ vcsn.B.expression('a').standard().complete().shortest(2)
+
+** is-valid(automaton)
+In the case of RW, check that the expression is valid.
+
+** debug compilation mode
+crange should not feature size and empty if !VCSN_DEBUG.
+
+* Improvements
+** are-equivalent
+V1 was calling letterize and proper, so it was more general than we are now.
+This should be fixed.  One question is whether proper should do something
+when the automaton is already proper.  We have a problem, though, when the
+output type is not the same as the input type (e.g., LAN -> LAL).  Maybe
+proper_here should do that.  But then, what should are-equivalent do?
+Always call proper, even if the automaton is already proper?
+
+FWIW, V1 was really performing proper when proper is called, it does not
+check whether is_proper first.  However are-equivalent actually uses
+a.realtime() = a.letterize().proper(), and a.realtime() checks first if the
+automaton is not already realtime.
+
+Update: now we do call realtime (which includes proper).  We should also use
+synchronize: currently we can't compare a lan x lan with a lal x lal, even
+if the former does not have (\e, \e) transitions.  Once we do, remove the
+calls to "normalize" in tests/python/efsm.py:check.
+
+** are-equivalent
+We cannot compare Z-automaton.is_equivalent(B-automaton), because the
+B-automaton does not support -1 * aut.  However we must perform these
+operations on the joined weightset, so adjust that.  This should also solve
+non-commutativity: as is, (a, b) can work, but not (b, a).
+
+But anyway: does it really mean something to compare a B-automaton with a Z
+one?
+
+** efsm (SP)
+When passing a LAW, maybe we should letterize it transparently?  Currently,
+we treat it as if it were lan<string> instead of law<char>.
+
+** eliminate-state
+Support several arguments.
+
+** info
+The size of the expression is badly defined.  For instance 'a{10}' says it
+has a single prod.  By the way, it should be call multiplication, not prod.
+But it is also useful to know that there is a single node.  So it would be
+useful to have two pieces of information: the number of AST nodes, and the
+theoretical size.  Both should be displayed and computed in a single
+traversal.
+
+** minimize: moore
+I have extremely weird performances regressions:
+
+  v score-compare --only v2b.3-{599-g773e66b,640-gceb9785,641-gec01365,642-g842cccf}
+  2.72  2.73  3.01  3.01  a.minimize("moore")  # a = std([a-k]{2000})
+
+(these commits are about synchronizing_word!) and then a bunch of suspicious
+measures:
+
+  v score-compare --only moore v2b.3-67*
+  2.68  3.87  2.67  3.95  4.32  4.05  3.17  a.minimize("moore")  # a = std([a-k]{2000})
+
+Currently the score is rather 3.23.  Why this regression?  Track it, and fix
+it.
+
+Actually, I have tracked it down, and it appears to be a mirage.  Or rather,
+when I run again the benchs of the previous commits, the loss of performance
+propagates backward!  So I guess the problem is actually due to a
+compiler/libc++ update that degraded this algorithm (or quite surprisingly
+enough, no other).
+
+In other words, I'd say we should no longer bother about this.
+
+** minimize: fuse signature and weighted
+Those two should really be the same algorithm, it's the signatures that
+change.  And rather than having two implementations, we should have a single
+implementation of the algorithm, but better data structures for signatures.
+
+** normalize
+I'm a bit lost in polynomialset::normalize: how come in
+
+import vcsn
+e = vcsn.context('lal_char, polynomialset<law_char, q>').expression('((<<2>x>a)*+(<<4>xx>aa)*){c}')
+e
+for i in range(10):
+    print(e.derivation("a" * (i+1)))
+
+it manages to factor out the '<2>x' bits?  Reading the code, I fail to see
+where the common 'xx' are removed.
+
+** rat: parse
+
+v score-compare --only 'b.expression\(e\)' +scores/36s/v2.0-0931-gd70d722  \
+  +scores/36s/v2.0-0935-g9a73853 +scores/36s/v2.0-0936-g2ff169c            \
+  +scores/36s/v2.0-0937-g8c95f56 +scores/36s/v2.0-0938-ga3bd7e0            \
+  +scores/36s/v2.0-0939-g2e248c7 +scores/36s/v2.0-0941-gcd42b27            \
+  +scores/36s/v2.0-0997-g3c33417 +scores/36s/v2.0-1038-g5be85cb
+
+ 0.60  1.04  1.06  0.98  0.97  1.04  1.02  1.30  1.13 b.expression(e)      # e = "(\e+a)" * 500, 100x
+
+So we have a large performance regression between v2.0-0931-gd70d722 and
++scores/36s/v2.0-0935-g9a73853, which is known:
+82ea6c309694f982d340ae71b2322e35b3347fdd moves to using dyn:: to assemble
+the expression.  The only means I see to avoid this is having a real LL
+parser which, this time, would not be on top of dyn::, but on static directly.
+
+The other regression (1.30) is due to the introduction of | and dyn::focus
+being called repeatedly.  The last one, 1.13, shows that we recovered, at
+least partially, from this.  Can't we do better?
+
+** rat: associativity
+It is quite by accident that (with trivial identities) abc is read
+right-associative.  I believe this is the right choice, as it makes a huge
+difference on derived-term, though most other algorithms don't care.
+
+But then we have two inconsistencies: power generates something which is
+left-associative, and a.b.c is left-associative too.
+
+Fix this.  Ask other members of the project what they think about that
+(left- vs. right- associativity).
+
+** product: is_idempotent
+We don't need to insplit in the case of idempotent semirings, not just in
+the case of B.
+
+** products: a function on top of all the products?
+See tests/python/to-expansion.py:prod.  Maybe this function could be useful
+in our API.
+
+Also, it would be nice to have variadic versions of these products for
+expressions, just as we have it for automata.
+
+** scc
+Dijkstra is often more efficient than Tarjan, so we should have an
+implementation too.  See
+http://www.cs.princeton.edu/courses/archive/fall09/cos521/Handouts/pathbaseddepthfirst.pdf
+for what seems to be the state of the art.
+
+The condensation automaton should not be built by traversing the whole set
+of transitions of the input automaton again: the process of computing the
+SCC already discovers the sccs via the condensation, so rather, we should
+keep this information somewhere.
+
+Our algorithms compute the scc as vectors, but return them as const&, so we
+have to duplicate them, although it would better to return as std::move, as
+we don't need to keep this in the functor.
+
+** sort
+Commit ff43b0f introduced a 2x time penalty on the sort bench:
+
+  v score-compare --only sort v2.0-{482-gb6dfc12,483-gff43b0f}
+  0.89  1.69  a.sort() # a = std([a-e]?{700})
+
+this is because the core of sort is a loop calling new_transition_copy,
+which before did not check that the letter was in the alphabet, and now it
+does.  In this case, it is guaranteed to be, so it is uselessly costly.
+
+On the other hand, the commit after d8d4852cc738a845bd8da3b0904b63658610124c
+restored much better performances by using VCSN_REQUIRE instead of require.
+Check if there is still performances to gain without this VCSN_REQUIRE.
+
+** trie
+We want to be able to load directly from a file.  Are there any possible
+optimization when the input is (mostly) sorted?  Actually, when the input is
+a polynomial we are sure it is properly sorted according to our own order.
+
+* Cleanup
+** automaton_t members in decorators
+In most cases it's reasonable to use const shared_pointer (which is to say
+const automaton_t) in decorators.  Check that we actually add the const
+qualifier.
+
+* Benchmarks
+** determinization
+Experiment determinization on (a^p)*+(a^q)*+(a^r)*, with p, q, r primes.
+Possible name: "Chrobak" (reference to Marek Chrobak), "cycles", "gears".
+
+** determinization
+Introduce aaaaa+aaaab+...+bbbbb for length n.
+
+** eps-removal
+(1+a)^n
+
+* Refactoring
+** Clang 3.5 and C++14 limitations
+Clang 3.5 and before, while supporting quite well C++14, dies when it tries
+to emit debug symbols for functions with deduced return type.  So we must
+generate explicit return types, which in turn, forbids the use of lambda
+declared inside the functions.  So mutable_automaton and filter_automaton
+are littered with tons of simple functors that should be converted to simple
+lambdas as soon as Clang 3.6 (hopefully...) is wide-spread enough.
+
+Look for "workaround" in these files, and possibly for other predicates.
+
+Also, remove mismatch from misc/algorithm.hh, and restore the proper check
+about it in configure.ac.
+
+** G++ 4.9 and C++14 limitations
+Uniform initialization is badly supported, so we have useless ctors to
+please GCC (e.g., see minimize-signature), and also places where we use
+parens instead of braces.  At some point, we want to rule out 4.9.
+
+** Boost
+Boost.Optional 1.56 moves from opt.get_value_or to opt.value_or.  However,
+moving to C++17 should suffice: use std::optional.
+
+** Copy
+There are numerous opportunities for an improved copy.  For instance when
+computing the square automaton (see has_twins_property), we would like to
+call copy with a lambda that transforms the weights: \w.w -> (w, 1) and
+likewise for the other tape.  If we can do that on-the-fly, then the
+remainder can benefit from it too.
+
+** Beware of our use of subprocess
+I think my code is really wrong.
+http://stackoverflow.com/questions/6341451/piping-together-several-subprocesses
+
+** join and meet are messy
+The current implementation has too many short coming.
+
+- join should work with automata mixed with weights
+  currently we explicitly state that the result is a mutable_automaton,
+  it could be something different.
+
+- join should code commutativity once for all
+
+- join should code variadicity once for all
+
+- join is spread all over the place
+  There are common bits in context.hh and others in algos/conjunction.hh.
+
+
+See vcsn/experiments.git/join, there is something there which could be a
+good start.
+
+Actually, join has already been modernized.  Meet was not though.
+
+** copy
+We need a more robust copy function that can promote to a supertype.
+See the hairy code and comment in
+
+      /// Bridge.
+      template <typename WeightSet, typename Aut>
+      automaton
+      lweight(const weight& weight, const automaton& aut)
+
+** Use Boost.Format to support multiple formats
+We have loads of code that open-code the output format.  This is
+wrong.  We should rather have format strings such as
+
+        "%s/%s" vs. "\\frac{%s}{%s}"
+
+and use these formats strings.  Instead of passing a format name, we would
+actually pass a "format" object whose members are Boost.Formats.  It would
+then be much easier to customize the pretty-printers.
+
+Alternatively, we could also use a collection of functions/lambdas.  More
+generic, and "more portable".  Note, however, that Boost.Format is
+header-only.  A mixture of both might be the best: where they suffice,
+format _are_ superior.
+
+** Eliminate rat::exp
+Getting rid of this will allow rat::node to use single inheritance.
+
+** polynomialset
+It seems that monomials would be a useful abstraction.  Actually, they are
+so useful, that they should be used in the automata transitions.
+
+We need to hide the map, and expose a polynomial_t type:
+
+    /// Construction from a list of monomials.
+    ///
+    /// Even without this constructor we can write:
+    ///
+    /// polynomialset{{l1, w1}, {l2, w2}}
+    ///
+    /// However, it is the laws of a map that apply, not those of a
+    /// polynomial.  In particular (i) if a label is zero, then the
+    /// polynomial will contains such a monomial (which is forbidden),
+    /// and (ii) if l1 and l2 are equal, the resulting weight will be
+    /// w2 instead of w1+w2.
+    polynomial(std::initializer_list<monomial_t> init)
+    {
+      polynomial res;
+      for (const auto& m: init)
+        res.add_weight(m);
+      return res;
+    }
+
+likewise with assignments.  The problem came from derivation with
+conjunction:
+
+      virtual void
+      visit(const hadam_t& e)
+      {
+        e.head()->accept(*this);
+        auto res = expression(res_);
+        for (auto v: e.tail())
+          {
+            v->accept(*this);
+            res = rs_.hadam(res, expression(res_));
+          }
+        res_ = {{res, ws_.one()}};
+        apply_weights(e);
+      }
+
+here, res _can_ be \z, in which case we build a polynomial (\z -> 1), which
+is forbidden (this should be the empty polynomial).
+
+* Optimizations
+** Simplify contexts
+Remove useless stacks of lat, lan, etc.
+
+** accessible etc.
+The extraction of the accessible subautomaton currently requires several
+traversals of the automaton, although one would suffice.  This is because it
+is factored a lot, using vcsn::copy for instance.
+
+Keep it factored, but for instance, introduce a vcsn::copy that walks only
+the accessible parts.
+
+** ambiguous_word
+We are clearly traversing the automaton too many times: once to find a pair
+of "ambiguous states", then another time to compute an ambiguous word.  If
+speed were an issue, we should do it another way.
+
+In particular, it might be a good idea to use a distance map to ensure that
+we found (one of) the shortest ambiguous word.
+
+** bool is true
+In automata, false never appears for both b and f2.  mutable_automaton takes
+care them of not storing them, as the only possible value is "true".
+However, we don't do that everywhere: do it for expressions, polynomials,
+etc.  If monomials get proper support, and are used in mutable_automaton,
+then that should follow naturally.
+
+Working on this for polynomials should also help fusing the two
+determinization algorithms.
+
+** derivation
+We could provide a faster implementation of derivation wrt to a word by
+implementing a recursion directly on the word, rather than repeating the
+derivation by a letter and performing the recursion on the letters.  See
+proposition 3 in "Derivatives of rational expressions with multiplicity" JS
++ SL.
+
+** difference
+We don't need the rhs to be complete, it suffices to adjust product to
+generate a pseudo sink state each time we exit the RHS.  And of course to
+change the accepting states to be the non-accepting states of the rhs.
+
+This would avoid the completion of the rhs, which might add many many
+transitions.
+
+** evaluate
+Vectors of weights indexed by states are bad structures to iterate upon.
+For one thing, it iterates on *all* the states, even those that are not yet
+activated.
+
+We don't need to work on states that are not part of the computation.  This
+shows in the "if (!ws_.is_zero(v1[s]))" in the code.  On the other hand, it
+is probably efficient when the number of (concurrently) visited states is
+"dense", which is the case of the bench case used in score.
+
+So maybe we should change this bench case and rather focus on the more
+common case where the number of "active" states is "sparse".
+
+We should also consider using transition_maps instead of iterating over
+all_out(s, l), which is known to be slow.
+
+Alternatively, we might just keep a polynomial of the currently activated
+states.  Then each new letter would actually correspond to building a new
+polynomial by multiplying each source state by its transition function.
+
+Consider for instance a modified de Bruijn with 3 states, and the word aaa.
+
+     a, b
+     / \
+     \ /  <2>a     a, b
+  --> 0 ------> 1 ------> 2 -->
+
+We would start with <1>0, and the outgoing polynomial of 0 for a is <1>0 +
+<2>1, so a gives "<1>0 + <2>1".
+
+Now with the next 'a', we compute the outgoing polynomial for 1: <1>2,
+hence the result is <1>0 ==> <1>0 + <2>1
+                  + <2>1 ==> <1>2
+                  = <1>0 + <2>1 + <1>2
+
+etc.
+
+This would also make trivial to stop before the end when the current
+polynomial is null.  It should also benefit from a careful implementation of
+polynomials, especially for Booleans.  In fact, for some case the Booleans
+should even be dynamic_bitsets, giving probably maximum speed.
+
+** power
+There are better means to compute the power in some cases, see
+http://en.wikipedia.org/wiki/Addition-chain_exponentiation
+Also, because the algo is written recursively, we are calling
+accessible too often (on products, which are accessible, of course).
+
+** shortest
+Check that the data structures are really the best possible.  map guarantees
+that if there are no deletions, references and iterators remain valid.  So
+we should store references or iterators in the working queue, instead of
+duplicating the monomials.
+
+** standard
+Converting an expression with ? into standard automaton is incredibly
+expensive:
+
+  In [47]: e = vcsn.context('lal_char(a-e), z').expression("[a-e]{700}")
+
+  In [48]: %timeit e.standard()
+  100 loops, best of 3: 4.07 ms per loop
+
+  In [49]: e = vcsn.context('lal_char(a-e), z').expression("[a-e]?{700}")
+
+  In [50]: %timeit e.standard()
+  1 loops, best of 3: 11.2 s per loop
+
+The impact on 'vcsn score' is terrible: we use many such automata in
+benches, i.e., we build many of these guys, and they terribly slow down
+`vcsn score` in pure set up.
+
+We should probably rewrite expression.standard, using the more traditional
+approach (with positions).  cachegrind can probably help too.
+
+I have tried several things to speed it up, but none of them really works.
+The core issue is really that we build a monster: 6'119'750 transitions for
+the latter, and 17'480 for the former.  The ratio, 355, is still smaller
+than that of timings: 2750.
+
+* dyn::
+** Implement implicit conversions
+So that, for instance, we can run is-deterministic on a proper lan.
+
+** product
+Change product signature to take a vector<const automaton&> instead of a
+vector<automaton>.
+
+** Automata contexts
+We should be ready to instantiate some "automata contexts".  For instance
+when working with determinized_automaton, most routines we need (print,
+info, etc.) are not available, and we have to wait way too long for a
+result.  So when instantiating an algorithm creating a given automaton type,
+we should get a minimal set of routine compiled.
+
+** Fewer automata types
+Do we really need both determinized_automaton and partition_automaton?  I
+think both should actually be "subset_automaton", with the possibility of
+being weighted_subset_automaton.  Of course, a lazy determinized_automaton
+would exist, but as a derived class from weighted_subset_automaton.  Very
+much like we already have between tuple_automaton and product_automaton.
+
+Having fewer decorated types will cause fewer compilations.
+
+** Hotness
+Maybe we should compile with -O0 by default, count the number of calls, and
+decide for a -O3 recompilation if needed.  Actually, profile guided
+optimizations could even be experimented.
+
+** static_cast
+Check what we get if we replace the dynamic_cast in the dyn::wrappers by a
+static_cast in the case of optimized implementation (say, NDEBUG).
+
+* I/O
+** fado
+I/O with words.  See the way they also _name_ states, for instance, read the
+dl4.fado as generated below.
+
+  $ vcsn ladybird -O fado 4 | \
+    python -c "from FAdo import fa
+  nfa = fa.readFromFile('/dev/stdin')[0]
+  dfa = nfa.toDFA()
+  fa.saveToFile('dl4.fado', dfa)"
+
+** Grail
+We should also be able to read Grail+ files.
+
+** Forlan
+See http://alleystoughton.us/forlan/.  In
+http://alleystoughton.us/forlan/book.pdf, page 121:
+
+  {states}
+  A, B, C
+  {start state}
+  A
+  {accepting states}
+  A, C
+  {transitions}
+  A, 1 -> A; B, 11 -> B; C, 111 -> C;
+  A, 0 -> B; A, 2 -> B;
+  A, 0 -> C; A, 2 -> C;
+  B, 0 -> C; B, 2 -> C
+
+  Transitions that only differ in their right-hand states can be merged into
+  single transition families. E.g., we can merge A, 0 -> B and A, 0 -> C into
+  the transition family A, 0 -> B | C.
+
+Note that "\e" is denoted "%".
+
+** Vaucanson 1
+We can easily read simple V1 automata thanks to its dot format.  However, we
+must pay attention to more complex cases (e.g., rich weightsets).
+
+However we cannot easily feed V1 with automata from V2.  This is troublesome
+for benches.  However, we can probably work out something simple by using
+the "edit-automaton" input of V1: we generate a script that builds the
+automaton.
+
+** XML
+At some point, someone should really work on the XML formalism.
+
+* More algorithms
+** determinization
+Look for other implementations (cf. "Five determinization algorithms").  And
+pay attention to the case of large alphabets.
+
+** minimization
+Implement more minimization algorithms (Hopcroft, Revuz, Brzozowski...).
+Work for trim automata.
+
+We need generalizations of minimization for weighted automata.  See Tools
+1 and quotient.
+
+** "check" algorithm
+There should be a means to check that the invariants are verified.  A
+separate algorithm would do.  In particular check the alphabet, that
+the special letter labels the initial and final transitions etc.
+
+* edit-automaton
+Currently it converts the \e in initial/final labels to the special-letter.
+Is this what we want?
+
+* vcsn/alphabets/char.cc
+  char_letters::special_letter(...) is protected and
+  set_alpha<T>::add_letter(...) (in file vcsn/alphabets/setalpha.hh)
+  need it.
+
+* mutable_automaton::set_transition
+We should find a means to forbid transition from pre to post.  This was the
+case initially, but it is troublesome to-expression.  Maybe it should be
+enforced only in non labels_are_unit case.
+
+* Readings
+About dyn/static bridge:
+
+http://www.lrde.epita.fr/dload/papers/gcse00-yrw/olena.html
+ls ~theo/pub/*ouil*
+
+LocalWords:  subword Levenshtein automata ADL semirings Doxygen IPython Wc
+LocalWords:  IPython's mult lweight rweight fsanitize dsymutil dylib xargs ASAN
+LocalWords:  SYMBOLIZER llvm symbolizer MacPorts Libtool ArchLinux TAF vcsn
+LocalWords:  Traceback cxx ImportError asan DSO LD PRELOAD subprocesses lan
+LocalWords:  ASAN'd precedences thompson seriesset lal Tolmer cpu labelset
+LocalWords:  weightset parens gh tuple tupleset lao expressionset bw ptr RW
+LocalWords:  parenthetized crange letterize FWIW realtime aut commutativity
+LocalWords:  MathJax Stackoverflow SVG efsm AST semantical moore gceb gec
+LocalWords:  cccf benchs libc polynomialset aa ce ddfb Alexandre Duret Lutz
+LocalWords:  cls weakref setattr gd ae fdd dyn associativity abc lazyness
+LocalWords:  insplit insplitting API variadic scc Tarjan sccs const functor
+LocalWords:  gb dfc gff trie determinization Chrobak Marek aaaaa aaaab eps
+LocalWords:  bbbbb Refactoring functors ctors GCC subprocess variadicity hh
+LocalWords:  algos supertype typename WeightSet frac monomials monomial ws
+LocalWords:  init hadam namespace Optimizations subautomaton bool wrt JS SL
+LocalWords:  subexpression rhs de Bruijn aaa Booleans bitsets algo timeit
+LocalWords:  cachegrind determinized optimizations NDEBUG fado dl FAdo nfa
+LocalWords:  readFromFile dfa toDFA Forlan Vaucanson weightsets Hopcroft
+LocalWords:  Revuz Brzozowski invariants pre theo ouil utf ispell american
+
+Local Variables:
+coding: utf-8
+fill-column: 76
+ispell-dictionary: "american"
+mode: outline
+End:

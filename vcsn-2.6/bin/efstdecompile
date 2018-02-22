@@ -1,0 +1,139 @@
+#! /bin/sh
+
+# Convert a binary OpenFST file into an efsm textual file.
+me=$(basename "$0")
+medir=$(mktemp -d "/tmp/$me.XXXXXX") || exit 1
+
+error ()
+{
+  echo "$me: $*" >&2
+  exit 1
+}
+
+# Handle our options.
+while true
+do
+  case $1 in
+    (--symbols)  usyms=$2 ; shift 2;;
+    (--isymbols) uisyms=$2; shift 2;;
+    (--osymbols) uosyms=$2; shift 2;;
+    (*) break;;
+  esac
+done
+
+: ${uisyms=$usyms}
+: ${uosyms=$usyms}
+
+# If the binary fst file does not "know" where its symbol tables are,
+# the users can provide them to it via --[io]symbols.  With or without
+# this option, --save_[io]symbols does what we want.
+test -z "$uisyms" || fstprint_opts="$fstprint_opts --isymbols=$uisyms"
+test -z "$uosyms" || fstprint_opts="$fstprint_opts --osymbols=$uosyms"
+
+# We are going to read the input several times.  Be sure to save it,
+# in case it were stdin.
+input=$medir/a.fst
+cat "$@" >$input
+
+isyms=$medir/isymbols.txt
+osyms=$medir/osymbols.txt
+trans=$medir/transitions.fsm
+
+# Is this an acceptor?
+#
+# fstprint features an "acceptor" y/n field.  Unfortunately it merely
+# checks whether the input and output symbols are always equal (so
+# it's unrelated to the --acceptor flag of fstcompile), and this check
+# is performed on the symbol numbers only, not even checking if the
+# symbol tables actually match (i.e., "(a,x)*" will actually be
+# considered an "acceptor" if a and x are both numbered 1).
+#
+# Therefore check that transitions have equal symbol numbers and that
+# symbol tables are equal.
+fstprint $fstprint_opts                 \
+         --save_isymbols=$isyms         \
+         --save_osymbols=$osyms $input > $trans ||
+  error "fstprint failed"
+
+# If fstprint did not provide the symbols tables, use the ones from
+# the user.
+test -f $isyms || isyms=$uisyms
+test -f $osyms || osyms=$uosyms
+
+# If it turns out to be an acceptor, print it again with --acceptor.
+# See the above comment to understand the cmp call.
+if fstinfo $input | grep -q '^acceptor  *y$' && cmp "$isyms" "$osyms"; then
+  acceptor=true
+  fstprint $fstprint_opts                 \
+           --acceptor                     \
+           --save_isymbols=$isyms $input > $trans ||
+    error "fstprint failed"
+else
+  acceptor=false
+fi
+
+# Extract the weightset.
+arc_type=$(fstinfo $input | sed -n '/^arc type[\t ]*/{s///;p;q;}')
+
+# Use $(sort...) to sort symbols by number, not by value.
+if $acceptor; then
+  cat <<EOF
+#! /bin/sh
+
+me=\$(basename "\$0")
+medir=\$(mktemp -d "/tmp/\$me.XXXXXX") || exit 1
+
+arc_type=$arc_type
+
+cat >\$medir/symbols.txt <<\EOFSM
+$(sort -n -k2 $isyms)
+EOFSM
+
+cat >\$medir/transitions.fsm <<\EOFSM
+$(cat $trans)
+EOFSM
+
+fstcompile --acceptor \\
+  --arc_type=\$arc_type \\
+  --keep_isymbols --isymbols=\$medir/symbols.txt \\
+  --keep_osymbols --osymbols=\$medir/symbols.txt \\
+  \$medir/transitions.fsm "\$@"
+sta=\$?
+
+rm -rf \$medir
+exit \$sta
+EOF
+else
+  cat <<EOF
+#! /bin/sh
+
+me=\$(basename "\$0")
+medir=\$(mktemp -d "/tmp/\$me.XXXXXX") || exit 1
+
+arc_type=$arc_type
+
+cat >\$medir/isymbols.txt <<\EOFSM
+$(sort -n -k2 $isyms)
+EOFSM
+
+cat >\$medir/osymbols.txt <<\EOFSM
+$(sort -n -k2 $osyms)
+EOFSM
+
+cat >\$medir/transitions.fsm <<\EOFSM
+$(cat $trans)
+EOFSM
+
+fstcompile \\
+  --arc_type=\$arc_type \\
+  --keep_isymbols --isymbols=\$medir/isymbols.txt \\
+  --keep_osymbols --osymbols=\$medir/osymbols.txt \\
+  \$medir/transitions.fsm "\$@"
+sta=\$?
+
+rm -rf \$medir
+exit \$sta
+EOF
+fi
+
+rm -rf $medir

@@ -1,0 +1,12 @@
+context = nullableset<letterset<char_letters(abcdefghijklmnopqrstuvwxyz)>>, z
+$ -> 0
+0 -> 1 \e
+1 -> 2 <2>\e
+2 -> 3 [a-di-lz]
+3 -> 4 <2>[a-di-lz]
+4 -> 5 <2>[a-di-lz], e
+5 -> 6 \e, [a-di-lz]
+6 -> 7 <2>\e, <2>[a-di-lz]
+7 -> 8 <2>\e, <3>[a-di-lz]
+8 -> 9 <2>\e, <3>[a-di-lz], e
+9 -> $

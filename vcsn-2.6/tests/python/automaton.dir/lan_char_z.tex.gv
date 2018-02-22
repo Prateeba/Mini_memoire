@@ -1,0 +1,30 @@
+digraph
+{
+  vcsn_context = "nullableset<letterset<char_letters(abcdefghijklmnopqrstuvwxyz)>>, z"
+  rankdir = LR
+  edge [texmode = math, lblstyle = auto]
+  d2toptions = "--format tikz --tikzedgelabels --graphstyle=automaton --crop --nominsize --autosize"
+  d2tdocpreamble = "    \usepackage{amssymb}    \usetikzlibrary{arrows.meta, automata, bending}    \tikzstyle{automaton}=[shorten >=1pt, pos=.4, >={Stealth[bend,round]}, initial text=]    \tikzstyle{named}=[rectangle, rounded corners]    \tikzstyle{initial}=[initial by arrow]    \tikzstyle{accepting}=[accepting by arrow]  "
+  {
+    node [texmode = math, style = state]
+    0 [style = "state, initial"]
+    1 []
+    2 []
+    3 []
+    4 []
+    5 []
+    6 []
+    7 []
+    8 []
+    9 [style = "state, accepting"]
+  }
+  0 -> 1 [label = "\\varepsilon"]
+  1 -> 2 [label = "\\left\\langle 2\\right\\rangle \\varepsilon"]
+  2 -> 3 [label = "[a\\textrm{-}di\\textrm{-}lz]"]
+  3 -> 4 [label = "\\left\\langle 2\\right\\rangle [a\\textrm{-}di\\textrm{-}lz]"]
+  4 -> 5 [label = "\\left\\langle 2\\right\\rangle [a\\textrm{-}di\\textrm{-}lz], e"]
+  5 -> 6 [label = "\\varepsilon, [a\\textrm{-}di\\textrm{-}lz]"]
+  6 -> 7 [label = "\\left\\langle 2\\right\\rangle \\varepsilon, \\left\\langle 2\\right\\rangle [a\\textrm{-}di\\textrm{-}lz]"]
+  7 -> 8 [label = "\\left\\langle 2\\right\\rangle \\varepsilon, \\left\\langle 3\\right\\rangle [a\\textrm{-}di\\textrm{-}lz]"]
+  8 -> 9 [label = "\\left\\langle 2\\right\\rangle \\varepsilon, \\left\\langle 3\\right\\rangle [a\\textrm{-}di\\textrm{-}lz], e"]
+}

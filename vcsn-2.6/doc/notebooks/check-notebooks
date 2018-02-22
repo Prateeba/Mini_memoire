@@ -1,0 +1,49 @@
+#! /usr/bin/env python
+
+# Make sure that we advertize all the documentation we wrote.
+
+import os
+import re
+
+nbdir = os.environ['nbdir']
+
+def referenced(nb):
+    '''A set of all the notebook that are referenced to from
+    this one.'''
+    return set(re.findall(r'(\w+\.\w+\.ipynb)',
+                          open(nbdir + '/' + nb).read()))
+
+# All the documentation notebooks (<type>.<function>.ipynb) that
+# exist.
+existing = set([f
+                for f in os.listdir(path=nbdir)
+                if re.match(r'(\w+\.\w+)\.ipynb$', f)])
+
+
+
+# Make sure that all the existing documentation about algorithms is in
+# Algorithm.ipynb.
+nb_referenced = referenced('Algorithms.ipynb')
+
+status = 0
+dre = nb_referenced - existing
+if dre:
+    print("error: referenced, not existing:", dre)
+    status = 1
+der = existing - nb_referenced
+if der:
+    print("error: existing, not referenced:", der)
+    status = 1
+
+
+# Check that the notebooks we reference to, exist.
+#
+# We are not ready for this yet, so just warnings, for the time being.
+for nb in existing:
+    diff = referenced(nb) - existing
+    if diff:
+        # Not yet an error.
+        print("warning: {} references {} which does not exist"
+              .format(nb, diff))
+        # status = 1
+exit(status)

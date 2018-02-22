@@ -1,0 +1,21 @@
+#! /bin/sh
+
+run 0 '' -vcsn standard -C 'lal_char(01), z' -Ee '(0+1)*1(<2>0+<2>1)*' -o bin.gv
+run 0 '' -vcsn standard -C 'lal_char(01), z' -Ee '(0+1)*0'             -o even.gv
+
+# check INPUT OUTPUT
+# ------------------
+# If INPUT is an even binary number, check that OUTPUT is its value.
+# Otherwise OUTPUT is 0.
+check ()
+{
+  run 0 "$2, $2" tests/demo/prod-eval bin.gv even.gv $1
+}
+
+vcsn_env
+check '0' '0'
+check '1' '0'
+check '10' '2'
+check '1110' '14'
+check '101010' '42'
+check '101011' '0'

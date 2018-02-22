@@ -1,0 +1,29 @@
+#! /bin/sh
+
+# Do not run IPython under Valgrind.
+unset PREPROG
+
+# Look for an IPython for Python 3.
+test='import sys
+if sys.version_info.major < 3:
+    raise ValueError("IPython not running Python 3: ", sys.version_info)'
+for i in "ipython$PYTHON_VERSION" ipython3 ipython
+do
+    if ("$i" -c "$test"); then
+        ipython=$i
+        echo "using ipython=$ipython"
+        break
+    fi
+done
+
+if test x"$ipython" = x; then
+    tap_skip "cannot find IPython for Python 3"
+    exit 0
+fi
+
+# We used to run a script which imports vcsn, but upon failure, we
+# lost every single bit of log, so there was no way to get an error
+# message.  Using `-m` fixes the issue.  Yet, we don't run `-m vcsn`
+# because it does not have a __main__.
+echo 'import vcsn' >load-vcsn.py
+run 0 ignore -vcsn run $ipython -m load-vcsn

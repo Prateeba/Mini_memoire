@@ -1,0 +1,405 @@
+#! /usr/bin/env python
+
+import argparse
+import copy
+import json
+import re
+import string
+import sys
+import textwrap
+
+# FIXME: Duplicate with odyn-gen.
+class Indent(str):
+    '''
+    An indenting string, to be used with str.format.
+    See http://stackoverflow.com/questions/37501228.
+    '''
+
+    indent_format_spec = re.compile(r'i([0-9]+)')
+
+    def __format__(self, format_spec):
+        matches = self.indent_format_spec.search(format_spec)
+        if matches:
+            level = int(matches.group(1))
+            first, sep, text = textwrap.dedent(self).strip().partition('\n')
+            return first + sep + textwrap.indent(text, ' ' * level)
+        else:
+            return super(Indent, self).__format__(format_spec)
+
+
+# Template to generate the first part of a command call.
+fun_def = string.Template('''
+      {"$command",
+       {{$types},
+        $declaration,
+        [](const auto& args, const dyn::context& ctx)
+        {
+$body
+        }}},
+''')
+
+# Template to generate the last part of a command call that returns a
+# value.
+fun_body_return =\
+'''$conversions
+          std::cout << dyn::$dynfun($args);'''
+
+# Template to generate the last part of a command call that returns
+# void.
+fun_body_void =\
+'''$conversions
+          dyn::$dynfun($args);'''
+
+conversions_indent = '          '
+
+fun_doc_def = '''
+      {{"{command}",
+       {{{declaration},
+        {doc:i8}
+       }}}},
+'''
+
+def escape(s):
+    res = re.sub(r'([\\"])', r'\\\1', s)
+    res = re.sub('\n', r'\\n"\n"', res)
+    return res
+
+def fun_def_template(fun):
+    body = fun_body_void if fun['result'] == 'void' else fun_body_return
+    return string.Template(fun_def.safe_substitute(body=body))
+
+
+def ignore(fun, why):
+    '''Report that we don't process this case.'''
+    fun.update(why=why)
+    print('tools-gen: info: {why}: {dynfun}({formals}) -> {result}'
+          .format_map(fun), file=sys.stderr)
+
+# These types are not supported by tools yet, meaning that
+# any function using them as parameter types will be ignored
+# when generating the bindings and won't be callable from
+# tools.
+# FIXME: Add support for some of these types.
+unsupported_types = [
+    'direction',
+    'expansion',
+    'letter_class_t',
+    'std::istream',
+    'std::ostream',
+    'std::vector<automaton>',
+    'std::vector<context>',
+    'std::vector<expansion>',
+    'std::vector<expression>',
+    'std::vector<polynomial>',
+    'std::vector<unsigned>',
+    ]
+
+
+def gen_function_doc_decl(fun, formals):
+    '''Generate the documentation entry of an algorithm
+       from its formals parameters. Called once per algorithm
+       even when optional arguments are involved.'''
+
+    declaration = gen_doc_sig(fun, formals)
+
+    return fun_doc_def.format(
+            command=fun['command'],
+            declaration=declaration,
+            doc=Indent(format_function_doc(fun, formals)))
+
+
+def clean(res):
+    'Clean a type for documentation.'
+    # We don't want to see these types in the documentation.
+    # This dictionnary map them to the name used instead.
+    ugly_types = {
+        'boost::optional<unsigned>': 'number',
+        'int': 'number',
+        'size_t': 'number',
+        'unsigned': 'number',
+    }
+
+    if res[:5] in ['dyn::', 'std::']:
+        res = res[5:]
+    res = ugly_types.get(res, res)
+    return res
+
+
+def gen_doc_sig(fun, formals, gen_defaults=True):
+    '''Generate a function signature for use
+       in help and error messages.'''
+    formals_def = []
+
+    # Clean input arguments.
+    for f in formals:
+        f_def = {}
+        f_def['arg'] = f['arg'].upper()
+
+        if f['class'] == 'context':
+            continue
+
+        f_def['type'] = clean(f['class'])
+
+        if f['class'].startswith("boost::optional"):
+            f_def['default'] = ""
+        elif f['default'] is None:
+            f_def['default'] = None
+        else:
+            f_def['default'] = '='+f['default']
+
+        format_string = '{arg}:{type}' if f_def['default'] is None or not gen_defaults \
+                        else '[{arg}{default}:{type}]'
+        formals_def.append(format_string.format(arg=f_def['arg'],
+            default=f_def['default'],
+            type=f_def['type']).lstrip())
+
+    # Clean the output argument.
+    result = clean(fun['result'])
+    # Documentation string.
+    return  '"  {formals} -> {result}"' \
+                    .format(formals=escape(' '.join(formals_def)),
+                            result=result)
+
+
+def format_function_doc(fun, formals):
+    res = []
+    doc = fun['doc']
+    res = fun['doc']['desc']
+
+    # Indent all lines but the first.
+    res = [res[0]] + ['  ' + l for l in res[1:]]
+
+    def is_supported(name):
+        for formal in formals:
+            if formal['arg'] == name:
+                if formal['class'] == 'context':
+                    return False
+                return True
+        return False
+
+    # Filter for unsupported parameters.
+    doc['params'] = [p for p in doc['params'] if is_supported(p['name'])]
+    # Reconstruct the parameter list to make it look like other fields.
+    doc['params'] = [[r'\param ' + p['name'].upper()
+            + p['desc'][0]] + p['desc'][1:]
+            for p in doc['params']]
+    # Flatten it.
+    doc['params'] = sum(doc['params'], [])
+
+    def process_block(block, name, mark, indent=False):
+        if block != []:
+            is_after_dash = False
+            for i, line in enumerate(block):
+                # If line is indented, remove some indent
+                # to keep it aligned even after \param or \pre
+                # are removed. Once we start seeing lists, we don't
+                # do that anymore.
+                if indent and line.lstrip() != '':
+                    if line.lstrip()[0] == '-':
+                        is_after_dash = True
+                    if line[:len(name)+2] == ' ' * (len(name)+2) and not is_after_dash:
+                        line = line[len(name)+2:]
+                block[i] = '    '+line.replace('\\{} '.format(name), '')
+            block.insert(0, '  ' + mark)
+
+    process_block(doc['params'], 'param', 'Parameters:', indent=True)
+    process_block(doc['pre'], 'pre', 'Preconditions:')
+    process_block(doc['returns'], 'returns', 'Return value:')
+
+    res += doc['params'] + doc['pre'] + doc['returns']
+
+    # Remove \a and uppercase argument name.
+    res = ['  ' + re.sub(r'\\a (\S*)', lambda m: m.group(1).upper(), l) for l in res]
+
+    res = [l for l in res if l.strip() != '']
+
+    return '"{}"'.format(escape('\n'.join(res)))
+
+def process_function(fun):
+    '''Process a function in `dyn/algo.hh`.'''
+    if fun['dynfun'].startswith('make_'):
+        ignore(fun, "constructor function")
+        return
+
+    formals = fun['formals']
+    fun['command'] = fun['dynfun'].replace('_', '-')
+
+    decl = gen_function_decl(fun, formals)
+    algos.append(decl)
+
+    doc_decl = ""
+    if decl != "":
+        doc_decl = gen_function_doc_decl(fun, formals)
+
+    # Generate the function without its default arguments too.
+    while formals and formals[-1]['default'] is not None:
+        formals.pop()
+        decl = gen_function_decl(fun, formals)
+        algos.append(decl)
+        if decl != "" and doc_decl == "":
+            doc_decl = gen_function_doc_decl(fun, formals)
+
+    algos_doc.append(doc_decl)
+
+
+def type_enum(cls):
+    'Turn a class name into its type_enum.'
+    res = clean(cls)
+    if res in ['bool', 'float']:
+        return res + '_'
+    return res
+
+
+def gen_function_decl(fun, formals):
+    '''Generate the binding of an algorithm from its declaration
+        and its parameters and return it (as a string).'''
+    conversions = []
+    types = []
+    args = []
+    removed_args = 0
+
+    # Copy formals to avoid interfering with the documentation generation.
+    formals = copy.deepcopy(formals)
+
+    # Construct the function declaration for documentation.
+    declaration = gen_doc_sig(fun, formals, gen_defaults=False)
+
+    # Clean the input arguments.
+    for i, formal in enumerate(formals):
+        i = i - removed_args
+        if formal['class'] in unsupported_types:
+            ignore(fun, "unsupported type: {}".format(formal['class']))
+            return ''
+
+        # We don't match on the context, and don't require it
+        # as an argument in tools.
+        if formal['class'] == "context":
+            if formal['default'] is None:
+                args.append('ctx')
+                removed_args += 1
+                continue
+            else:
+                ignore(fun, "`context` member function")
+                return ''
+
+        # dyn::word isn't really a type, it's just
+        # an indication for us to use a word context.
+        if formal['class'] == 'word':
+            formal['class'] = 'label'
+            formal['context'] = 'make_word_context(ctx)'
+        else:
+            formal['context'] = 'ctx'
+
+        formal['type_enum'] = type_enum(formal['class'])
+
+        # Qualify dyn types to avoid possible conflicts.
+        if formal['class'] in dyn_types:
+            formal['class'] = 'dyn::' + formal['class']
+
+        # Convert the argument from a string to
+        # the actual type for the function call.
+        conversions.append(conversions_indent+
+                           "auto a{i} = convert<{type}>(args[{i}], {ctx});"
+                           .format(type=formal['class'],
+                                   ctx=formal['context'],
+                                   i=i))
+
+        args.append('a{}'.format(i))
+        types.append('type::'+formal['type_enum'])
+
+    return fun_def_template(fun).substitute(
+            dynfun=fun['dynfun'],
+            command=fun['command'],
+            declaration=declaration,
+            conversions='\n'.join(conversions),
+            types=', '.join(types),
+            args=(', ').join(args))
+
+# The list of generated bindings.
+algos = []
+algos_doc = []
+
+
+# The list of dyn types, loaded from JSON.
+dyn_types = ['identities']
+
+def add_cat(algos):
+    for t in dyn_types:
+        if t == 'context':
+            continue
+        algos.append({
+                'dynfun': 'cat',
+                'formals': [
+                    {
+                        'arg': 'arg',
+                        'class': t,
+                        'const': 'const',
+                        'default': None,
+                        'type': 'const {}&'.format(t),
+                    }],
+                'result': '{}'.format(t),
+                'doc': {
+                    'desc': ['Return its argument.'],
+                    'params': [],
+                    'pre': [],
+                    'returns':[]
+                    }
+                })
+
+def process_json(fn):
+    '''Read the Json file `fn`.'''
+    with open(fn, mode='r') as f:
+        json_ = json.load(f)
+        dyn_types.extend(json_['dyn_types'])
+        add_cat(json_['algos'])
+        json_['algos'].sort(key=lambda d: d['dynfun'])
+        for fun in json_['algos']:
+            process_function(fun)
+
+def output(header):
+    '''Generate the implementation of Tools C++ bindings.'''
+    res = string.Template( r'''// Generated, do not edit by hand.
+
+#include <initializer_list>
+#include <iostream>
+#include <map>
+
+#include <vcsn/dyn/algos.hh>
+
+#include "$header"
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
+namespace vcsn
+{
+  namespace tools
+  {
+    const std::multimap<std::string, algo> algos
+    {$algos    };
+
+    const std::multimap<std::string, algo_doc> algos_doc
+    {$algos_doc    };
+  }
+}''')
+
+    return res.substitute(header=header,
+                          algos=''.join(algos),
+                          algos_doc=''.join(algos_doc))
+
+
+def get_args():
+    p = argparse.ArgumentParser(description='Generate tools functions',
+                                formatter_class=argparse.RawDescriptionHelpFormatter,
+                                epilog='''
+        Read `dyn/algos.hh` and generate its functions in C++,
+        to be used by the tools CLI interface.''')
+    opt = p.add_argument
+    opt('--output', type=argparse.FileType('w'), default='-',
+        help='implementation file to generate')
+    opt('--header', help='location of vcsn-tools.hh')
+    opt('input', type=str, default=None, help='JSON file to process')
+    return p.parse_args()
+
+args = get_args()
+process_json(args.input)
+print(output(args.header), file=args.output)

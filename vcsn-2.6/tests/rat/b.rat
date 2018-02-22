@@ -1,0 +1,77 @@
+# -*- shell-script -*-
+
+%context: b
+%include: common-weights.rat
+
+# Check letters classes in input.
+[a] => a
+[ac] => a+c
+[abcd] => [a-d]
+[dcba] => [a-d]
+[abcdabcd] => [a-d]
+[badcabcd] => [a-d]
+[a-a] => a
+[a-b] => a+b
+[a-bc-d] => [a-d]
+
+[b-a] ! 1.1-5: RatE[{abcdefgh}* -> B](associative): invalid letter interval: b-a\n! [b-a]\n! ^^^^^\n!   while reading expression: "[b-a]"
+[]    ! 1.1-2: invalid empty letter class\n! []\n! ^^\n!   while reading expression: "[]"
+a|x   ! 1.2: too many tapes\n! a|x\n!  ^\n!   while reading expression: "a|x"
+a{x}  ! 1.2: unexpected character: {\n! a{x}\n!  ^\n!   while reading expression: "a{x}"
+}a{   ! 1.1: unexpected character: }\n! }a{\n! ^\n!   while reading expression: "}a{"
+]a[   ! 1.1: syntax error, unexpected ]\n! ]a[\n! ^\n!   while reading expression: "]a["
+>a<   ! 1.1: unexpected character: >\n! >a<\n! ^\n!   while reading expression: ">a<"
+⟩a⟨   ! 1.1-3: unexpected character: ⟩\n! ⟩a⟨\n! ^^^\n!   while reading expression: "\xe2\x9f\xa9a\xe2\x9f\xa8"
+
+[^] => [^]
+[^] == [a-h]
+[^a] == [^a]
+[^a] == [b-h]
+[^a-bgh] => [c-f]
+[^a-cgh] => d+e+f
+[^a-bd-h] => c
+[^b-a] ! 1.1-6: invalid letter interval: b-a\n! [^b-a]\n! ^^^^^^\n!   while reading expression: "[^b-a]"
+[^a-h] ! 1.1-6: invalid empty letter class\n! [^a-h]\n! ^^^^^^\n!   while reading expression: "[^a-h]"
+
+%identities: associative
+a+a+a => a+a+a
+a+a+a+a => a+a+a+a
+a+a+a+a+[b-h] => a+a+a+[^]
+[a-h]* => [^]*
+[^a] => [^a]
+[^ab] => [^ab]
+[^abc] => [d-h]
+[^abcd] => [e-h]
+# Only if the letters are sorted, strictly.
+[bcdefg]+h => [^a]
+[bcdefg]+h+h => [^a]+h
+h+[bcdefg] => h+[^ah]
+a** => a**
+a*{T} => a*{T}
+
+# Computations in B.
+%identities: linear
+\e+\e    => \e
+
+a{c}{c}  => a
+
+# Check classes in output.
+a+a+a => a
+a+a+a+a => a
+a+a+a+a+[b-h] => [^]
+[a-h]* => [^]*
+[^a] => [^a]
+[^ab] => [^ab]
+[^abc] => [d-h]
+[^abcd] => [e-h]
+[bcdefg]+h => [^a]
+[bcdefg]+h+h => [^a]
+h+[bcdefg] => [^a]
+
+%identities: none
+[ab] => a+b
+[^abc] => (((d+e)+f)+g)+h
+
+%identities: agressive
+a** => a*
+a*{T} => a*
