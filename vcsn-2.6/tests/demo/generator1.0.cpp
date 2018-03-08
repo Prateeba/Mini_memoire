@@ -34,59 +34,53 @@ auto random_generator(int num_states, int num_initial_states, int num_final_stat
 
 }
 
-void generator(int num_states, int num_initial_states, int num_final_states) {
+void generator(int num_states, int num_initial_states, int num_final_states, int num_example, int bound, int good_example_counter) {
 	/* Generate a transducer, test if it is deterministic : 
 		if yes : 
 			Re generate another transducer 
 		if No : 
 			Test if the transducer is functional and is determinisable 
 	*/
-
 	auto res = random_generator(num_states, num_initial_states, num_final_states) ;  
-	int good_example_counter = 0 ;  
-	if (good_example_counter >= 5) {
-		return ;  
+	//int good_example_counter = 0 ; 
+
+	if (num_example >= bound) {
+		std::cout << good_example_counter ;  
 	}
 
-	else {
 
-		if (is_deterministic(res)) {   
-			generator(num_states, num_initial_states, num_final_states) ;  
-			//res = random_generator(num_states, num_initial_states, num_final_states) ;
-		}
+	else if ( !(is_deterministic(res)) &&  is_functional(res) ) {  
+		print(res) ; 
+		generator(num_states, num_initial_states, num_final_states, num_example+1, bound, good_example_counter+1) ;
+	}
 			
-		else {  
-			if (!(is_cycle_ambiguous(res))){
-
-				if ( is_functional(res) && has_twins_property(res) ) {
-					good_example_counter ++ ; 
-					print(res) ; 
-				}
-
-				else {
-					generator(num_states, num_initial_states, num_final_states) ; 
-					//res = random_generator(num_states, num_initial_states, num_final_states) ;
+		
+	else {
+		generator(num_states, num_initial_states, num_final_states, num_example+1, bound, good_example_counter) ;
 				
-				}
-			}		
-		}
 	}
-} 
+					
+}
+		
  
 
 int main(int argc, char *argv[]) {
 
-
-	int count_loop = 1000 ; 
-	int counter = 0 ; 
-	
-	while (counter < count_loop) {
-		/* num_states, num_initial_states, num_final_states */
-		generator(atoi(argv[1]), atoi(argv[2]), atoi(argv[3])) ;
-		counter ++ ; 
+	if (argc < 4) {
+		std::cout << "Missing arguments " ;  
 	}
 
-	return 0 ;  
+	/*int count_loop = 1000 ; 
+	int counter = 0 ;  */ 
+	
+	
+	/* num_states, num_initial_states, num_final_states */
+	generator(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), 0, atoi(argv[4]), 0) ;
+	
+
+	
+
+	return 0 ; 
 	
 } 
 
