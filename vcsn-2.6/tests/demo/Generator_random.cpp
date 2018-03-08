@@ -17,16 +17,17 @@
 #include <vcsn/dyn/context.hh>
 #include <vcsn/dyn/algos.hh>
 #include <vcsn/misc/irange.hh>
-
+#include <vcsn/algos/info.hh>
 #include <vcsn/algos/is-functional.hh>
 #include <vcsn/algos/has-twins-property.hh>
 
 using namespace vcsn ; 
 
 /* TODO : 
-        1) Enlarge context 
+        1) Enlarge context : DONE 
         2) Choose initial and finals 
-        3) Verify that it does what the teacher asked */ 
+        3) Have just one label per transition 
+        4) Verify that it does what the teacher asked : DONE */ 
 
 int uni_rand() {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
@@ -37,7 +38,7 @@ int uni_rand() {
 }
 
 template <typename Ctx>
-mutable_automaton<Ctx> random_automaton(const Ctx& ctx, unsigned num_states, float density = 0.1,
+mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
                                         unsigned num_initial = 1, unsigned num_final = 1,
                                         unsigned max_labels = 1,float loop_chance = 0.0, const std::string& weights = "") {
 
@@ -48,7 +49,7 @@ mutable_automaton<Ctx> random_automaton(const Ctx& ctx, unsigned num_states, flo
 
     
     auto& gen = make_random_engine();
-    // Weight
+    // Weight -> no weight here 
     const auto& ws = *ctx.weightset();
     auto random_weight = [&weights, &ws]() {
         return weights.empty() ? ws.one() : vcsn::random_weight(ws, weights);
@@ -65,25 +66,28 @@ mutable_automaton<Ctx> random_automaton(const Ctx& ctx, unsigned num_states, flo
         states.emplace_back(res->new_state());
     }
 
-    // Connect states with transitions 
     require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
 
     for (unsigned i: detail::irange(num_states)){
+    	/* go through pair of states, if the transition between the pair respect the given 
+    	property -> keep transition else ignore */ 
+
+    	auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
+        temp_aut = res ;
         for (unsigned j: detail::irange(num_states)){
             
             int temp = uni_rand() ; 
+            std::cout << temp ;
             if (temp <= floor(density*1000)) {
 
-                /* Either add by default then remove if doesnt respect the required property 
-                    Or make a copy of the automaton every time  */ 
-                res->add_transition(states[i], states[j], random_label(ls, gen), random_weight()) ; 
-
-                if ( !(is_cycle_ambiguous(res)) ){
+            	temp_aut->add_transition(states[i], states[j], random_label(ls, gen), random_weight()) ;  
+                
+                if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) ){ 
+                	res->add_transition(states[i], states[j], random_label(ls, gen), random_weight()) ;  
                     
-                    if ( !(is_functional(res)) && !(has_twins_property(res)) ) {
-                        res->del_transition(states[i], states[j], random_label(ls, gen)) ; 
-                    }
-
+                }
+                else {
+                	temp_aut->del_transition(states[i], states[j], random_label(ls, gen))  ;  
                 }
             
             }
@@ -91,7 +95,6 @@ mutable_automaton<Ctx> random_automaton(const Ctx& ctx, unsigned num_states, flo
     }
     
     return res ; 
-
 
 }
 auto create_context() {
@@ -107,17 +110,16 @@ auto create_context() {
     // No parameter for the weightset, as it's just B.
     auto ctx = context_t{ls};
     return ctx  ; 
-}
-
-
+} 
 
 
 int main() {
 
     auto res = create_context() ; 
-    auto aut = random_automaton(res, 10, 0.1, 1, 1) ; 
+    auto aut = random_aut(res, 5, 0.1, 1, 1) ; 
 
     vcsn::dot(aut, std::cout) << '\n';
+    
 
     return 0 ; 
 }
