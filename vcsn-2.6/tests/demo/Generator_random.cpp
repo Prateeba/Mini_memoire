@@ -18,6 +18,7 @@
 #include <vcsn/dyn/algos.hh>
 #include <vcsn/misc/irange.hh>
 #include <vcsn/algos/info.hh>
+#include <vcsn/algos/is-deterministic.hh>
 #include <vcsn/algos/is-functional.hh>
 #include <vcsn/algos/has-twins-property.hh>
 
@@ -25,17 +26,61 @@ using namespace vcsn ;
 
 /* TODO : 
         1) Enlarge context : DONE 
-        2) Choose initial and finals 
+        2) Choose initial and finals : DONE 
         3) Have just one label per transition 
         4) Verify that it does what the teacher asked : DONE */ 
 
-int uni_rand() {
+int uni_rand(int max) {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> dis(1, 1000);
+    std::uniform_int_distribution<> dis(1, max);
  
     return dis(gen) ;
 }
+
+bool in_state_list(auto states_list, auto state, int num_states) {
+    int i = 0 ; 
+    bool found = false ; 
+
+    while(i < states_list.size() && !found) {
+        if (states_list[i] == state) {
+            found = true ; 
+        }
+        i++ ; 
+    } 
+    return found ; 
+} 
+
+template <typename Ctx>
+auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states, unsigned num_s) {
+    /* */ 
+	using automaton_t = mutable_automaton<Ctx>;
+    using state_t = state_t_of<automaton_t>;
+
+    auto states = std::vector<state_t>{}; 
+    int counter = num_s  ;  
+    
+    while (counter > 0) {
+        /* Tant qu'on n'a pas encore le nombre d'état Initiaux demandé */
+
+        int i = 0 ; 
+        while (i < num_states && states.size() < num_s) {
+
+            int temp = uni_rand(2) ;
+           
+            if (temp == 1 && !(in_state_list(states, states_list[i], num_states))) {
+                states.emplace_back(states_list[i]);
+
+                counter --   ; 
+            }
+        i++ ; 
+
+        }
+
+    }
+    return states ; 
+}
+
 
 template <typename Ctx>
 mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
@@ -47,6 +92,7 @@ mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float den
     using state_t = state_t_of<automaton_t>;
     auto res = make_shared_ptr<automaton_t>(ctx);
 
+    auto final_res = make_shared_ptr<automaton_t>(ctx);  
     
     auto& gen = make_random_engine();
     // Weight -> no weight here 
@@ -66,6 +112,18 @@ mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float den
         states.emplace_back(res->new_state());
     }
 
+    // Choose and assign Initial States  
+    std::vector<state_t> initial_states =  choose_initial_final(ctx, states, num_states, num_initial) ; 
+    for (unsigned i: detail::irange(initial_states.size())){
+        res->set_initial(initial_states[i]) ;     
+    }
+    
+    // Choose and assign Final States  
+    std::vector<state_t> final_states =  choose_initial_final(ctx, states, num_states, num_final) ; 
+    for (unsigned i: detail::irange(final_states.size())){
+        res->set_final(final_states[i]) ;     
+    }
+
     require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
 
     for (unsigned i: detail::irange(num_states)){
@@ -76,8 +134,8 @@ mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float den
         temp_aut = res ;
         for (unsigned j: detail::irange(num_states)){
             
-            int temp = uni_rand() ; 
-            std::cout << temp ;
+            int temp = uni_rand(1000) ; 
+            //std::cout << temp ;
             if (temp <= floor(density*1000)) {
 
             	temp_aut->add_transition(states[i], states[j], random_label(ls, gen), random_weight()) ;  
@@ -93,9 +151,17 @@ mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float den
             }
         }
     }
-    
-    return res ; 
 
+    if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res))) {
+        std::cout << "OK" << "\n" ; 
+        final_res = res   ; 
+    }
+
+    else {
+        std::cout << "DID NOT FIND A GOOD EXAMPLE" << "\n" ; 
+    }
+
+    return final_res ;  
 }
 auto create_context() {
     using alphabet_t = set_alphabet<char_letters>;   // Basic alphabet type.
@@ -116,7 +182,7 @@ auto create_context() {
 int main() {
 
     auto res = create_context() ; 
-    auto aut = random_aut(res, 5, 0.1, 1, 1) ; 
+    auto aut = random_aut(res, 10, 0.1, 2, 3) ; 
 
     vcsn::dot(aut, std::cout) << '\n';
     
