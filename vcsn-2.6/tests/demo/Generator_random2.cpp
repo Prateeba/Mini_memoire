@@ -1,5 +1,6 @@
 #include <iostream> //std::cout
 #include <vector>
+#include <ratio>
 
 #include <vcsn/alphabets/char.hh> // type of letter
 #include <vcsn/alphabets/setalpha.hh> // alphabet
@@ -32,10 +33,10 @@ auto random_generator(int num_states, int num_initial_states, int num_final_stat
 
 int main() {
 
+	std::cout << "Heloo" ; 
 	auto res = random_generator(6,3,2) ;
-
-	auto transitions = res->vcsn::detail::mutable_automaton_impl::all_transitions() ; 
-	//print(res) ;  
+	auto transitions = all_transitions(res) ;  
+ 
 	
 } 
 

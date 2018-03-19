@@ -21,6 +21,7 @@
 #include <vcsn/algos/is-deterministic.hh>
 #include <vcsn/algos/is-functional.hh>
 #include <vcsn/algos/has-twins-property.hh>
+#include <vcsn/algos/accessible.hh>
 
 using namespace vcsn ; 
 
@@ -82,8 +83,8 @@ auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states,
 }
 
 
-template <typename Ctx>
-mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
+template <typename Ctx> /* mutable_automaton<Ctx> */ 
+int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
                                         unsigned num_initial = 1, unsigned num_final = 1,
                                         unsigned max_labels = 1,float loop_chance = 0.0, const std::string& weights = "") {
 
@@ -126,6 +127,7 @@ mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float den
 
     require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
 
+    int counter_good = 0 ; 
     for (unsigned i: detail::irange(num_states)){
     	/* go through pair of states, if the transition between the pair respect the given 
     	property -> keep transition else ignore */ 
@@ -152,40 +154,63 @@ mutable_automaton<Ctx> random_aut(const Ctx& ctx, unsigned num_states, float den
         }
     }
 
-    if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res))) {
+    //(is_trim(res))
+    if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res)) ) {
         std::cout << "OK" << "\n" ; 
+        counter_good += 1 ; 
+
         final_res = res   ; 
+        vcsn::dot(final_res, std::cout) << '\n';
     }
 
-    else {
-        std::cout << "DID NOT FIND A GOOD EXAMPLE" << "\n" ; 
-    }
-
-    return final_res ;  
+    //return final_res ;  
+    return counter_good ; 
 }
 auto create_context() {
-    using alphabet_t = set_alphabet<char_letters>;   // Basic alphabet type.
-    using letterset_t = letterset<alphabet_t>;       // Letterset (single-tape labelset).
-    auto ls1 = letterset_t{'a'};     
-    auto ls2 = letterset_t{'b'};                 // Create the letterset.
-    using labelset_t = tupleset<letterset_t, letterset_t>; // Labelset (double-tape).
-    auto ls = labelset_t{ls1, ls2};                  // Create the double-tape labelset.
-    using context_t = context<labelset_t, b>;        // Context of the automaton: lat<lal_char, lal_char>, b.
-    
+    using namespace vcsn;
+
+    // Basic alphabet type.
+    using alphabet_t = set_alphabet<char_letters>;
+
+    // Letterset (single-tape labelset).
+    using letterset_t = letterset<alphabet_t>;
+
+    // Create the letterset.
+    auto ls1 = letterset_t{'a', 'b', 'c'};
+
+    // Labelset (double-tape).
+    using labelset_t = tupleset<letterset_t, letterset_t>;
+
+    // Create the double-tape labelset.
+    const auto ls = labelset_t{ls1, ls1};
+
+    // Context of the automaton: lat<lal_char, lal_char>, b.
+    using context_t = context<labelset_t, b>;
+
     // Create the context from the labelset.
     // No parameter for the weightset, as it's just B.
-    auto ctx = context_t{ls};
+    const auto ctx = context_t{ls};
     return ctx  ; 
 } 
 
 
 int main() {
 
+    int i = 0 ; 
+    int max  = 1000 ; 
+    int count = 0 ; 
+
     auto res = create_context() ; 
-    auto aut = random_aut(res, 10, 0.1, 2, 3) ; 
 
-    vcsn::dot(aut, std::cout) << '\n';
+    while (i < max) {
+        count += random_aut(res, 20, 0.1, 2, 3) ; 
+        i += 1 ; 
+    }
+
+    std::cout << "Number of good example : "<< count << "\n" ; 
+    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ; 
+
+
     
-
     return 0 ; 
 }
