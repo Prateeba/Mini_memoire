@@ -32,6 +32,7 @@ using namespace vcsn ;
         4) Verify that it does what the teacher asked : DONE */ 
 
 int uni_rand(int max) {
+    /* return a random  number between 1 and max */ 
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_int_distribution<> dis(1, max);
@@ -40,6 +41,7 @@ int uni_rand(int max) {
 }
 
 bool in_state_list(auto states_list, auto state, int num_states) {
+    /* Check if a state has already been visited  */ 
     int i = 0 ; 
     bool found = false ; 
 
@@ -54,16 +56,15 @@ bool in_state_list(auto states_list, auto state, int num_states) {
 
 template <typename Ctx>
 auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states, unsigned num_s) {
-    /* */ 
-	using automaton_t = mutable_automaton<Ctx>;
+    /* Choose randomly the Initial and Final states */ 
+	
+    using automaton_t = mutable_automaton<Ctx>;
     using state_t = state_t_of<automaton_t>;
 
     auto states = std::vector<state_t>{}; 
     int counter = num_s  ;  
     
     while (counter > 0) {
-        /* Tant qu'on n'a pas encore le nombre d'état Initiaux demandé */
-
         int i = 0 ; 
         while (i < num_states && states.size() < num_s) {
 
@@ -77,7 +78,6 @@ auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states,
         i++ ; 
 
         }
-
     }
     return states ; 
 }
@@ -86,14 +86,12 @@ auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states,
 template <typename Ctx> /* mutable_automaton<Ctx> */ 
 int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
                                         unsigned num_initial = 1, unsigned num_final = 1,
-                                        unsigned max_labels = 1,float loop_chance = 0.0, const std::string& weights = "") {
+                                        unsigned max_labels = 1, const std::string& weights = "") {
 
     using detail::irange;
     using automaton_t = mutable_automaton<Ctx>;
     using state_t = state_t_of<automaton_t>;
     auto res = make_shared_ptr<automaton_t>(ctx);
-
-    auto final_res = make_shared_ptr<automaton_t>(ctx);  
     
     auto& gen = make_random_engine();
     // Weight -> no weight here 
@@ -125,6 +123,7 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
         res->set_final(final_states[i]) ;     
     }
 
+    // User to input the density of adding a transition
     require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
 
     int counter_good = 0 ; 
@@ -159,8 +158,7 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
         std::cout << "OK" << "\n" ; 
         counter_good += 1 ; 
 
-        final_res = res   ; 
-        vcsn::dot(final_res, std::cout) << '\n';
+        vcsn::dot(res, std::cout) << '\n';
     }
 
     //return final_res ;  
@@ -197,7 +195,7 @@ auto create_context() {
 int main() {
 
     int i = 0 ; 
-    int max  = 1000 ; 
+    int max  = 10000 ; 
     int count = 0 ; 
 
     auto res = create_context() ; 
@@ -209,8 +207,6 @@ int main() {
 
     std::cout << "Number of good example : "<< count << "\n" ; 
     std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ; 
-
-
     
     return 0 ; 
 }

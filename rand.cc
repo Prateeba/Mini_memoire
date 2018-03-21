@@ -27,7 +27,6 @@ int main()
   // Create the double-tape labelset.
   const auto ls = labelset_t{ls1, ls1};
 
-
   // Context of the automaton: lat<lal_char, lal_char>, b.
   using context_t = context<labelset_t, b>;
 
