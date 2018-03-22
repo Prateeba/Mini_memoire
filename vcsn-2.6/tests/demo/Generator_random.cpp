@@ -195,13 +195,13 @@ auto create_context() {
 int main() {
 
     int i = 0 ; 
-    int max  = 10000 ; 
+    int max  = 1000 ; 
     int count = 0 ; 
 
     auto res = create_context() ; 
 
     while (i < max) {
-        count += random_aut(res, 20, 0.1, 2, 3) ; 
+        count += random_aut(res, 6, 0.1, 1, 2) ; 
         i += 1 ; 
     }
 

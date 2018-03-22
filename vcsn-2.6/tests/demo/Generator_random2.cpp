@@ -57,24 +57,34 @@ int random_generator(int num_states, int num_initial_states, int num_final_state
 	auto res = random_automaton(ctx, num_states, 1, num_initial_states, num_final_states, 1) ; 
 	
 	/*Create a temporary copy of the automata/transducer */ 
-	//auto temp_aut = copy(res) ;
+	auto temp_aut = copy(res) ;
 
 	/* Get all transitions of the automata */ 
 	auto t_list = all_transitions(res) ; 
-	int size_transition =  t_list.size() ;  
+	int size_transition =  t_list.size() ; 
 
 	/* Create a random transition selector */ 
 	auto select = make_random_selector(make_random_engine());
   	
   	int counter_good = 0 ; 
   	/* Pruning */
-  	while ( !(is_cycle_ambiguous(res)) && !(is_functional(res)) && !(has_twins_property(res)) && size_transition > 0 ){ 
-  		auto t = select(t_list);
-  		res->del_transition(t) ;
+  	while (size_transition > 0 ){ 
   		
-  		std::cout << size_transition << "\n" ; 
+  		/* Choose a random transition */ 
+  		auto t = select(all_transitions(temp_aut));
+  		temp_aut->del_transition(t) ;
+  		
+  		/* Test if T - t respect the properties  */ 
+  		if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) ) {
+  			res->del_transition(t) ;
+  			// Normally suppose to return the automaton at this point  
+  			break ; 
+  		}
 
-    	
+  		else {
+  			t = select(all_transitions(temp_aut)); 
+  			size_transition = all_transitions(temp_aut).size() ;    			
+  		}
     } 
 
     /* Returns only non deterministic good example */ 
@@ -96,7 +106,7 @@ int main() {
     int count = 0 ; 
 
 	while (i < max) {
-        count += random_generator(20,3,4) ;  
+        count += random_generator(6,1,2) ;  
         i += 1 ; 
     }
 
