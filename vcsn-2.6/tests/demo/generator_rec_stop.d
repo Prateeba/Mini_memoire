@@ -1,1 +1,0 @@
-generator_rec_stop: generator_rec_stop.cpp

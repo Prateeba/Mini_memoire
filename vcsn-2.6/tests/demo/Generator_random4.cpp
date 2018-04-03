@@ -22,6 +22,10 @@
 #include <vcsn/algos/accessible.hh>
 
 
+/* ALGO DESCRIPTION 
+	Genère un automate random bien fournit, 
+	ensuite on boucle tant qu'on a pas autant d'état utile qu'on 
+	veut on enlève les transitions  */ 
 
 using namespace vcsn;
 auto create_context() {
@@ -50,56 +54,54 @@ auto create_context() {
 	return ctx  ; 
 } 
 
-int random_generator(int num_states, int num_initial_states, int num_final_states, int index) {
+int random_generator(int num_states, int num_initial_states, int num_final_states) {
 	/* Uses the random automata generator of vaucanson */
 
 	/* Create a context */ 
 	auto ctx = create_context() ; 
 	
 	/* Generate a near complete automata/transducer */ 
-	auto res = random_automaton(ctx, num_states, 1, num_initial_states, num_final_states, 1) ; 
-	
+	auto res = random_automaton(ctx, num_states, 0.1, num_initial_states, num_final_states, 1) ; 
 
+	std::cout << "Automata generated " << "\n" ; 
+	
 	/* Get all transitions of the automata */ 
 	auto t_list = all_transitions(res) ; 
-	int size_transition =  t_list.size() ; 
+
+	/* Get the number of all the transitions */ 
+	int size_transition =  t_list.size() ;
+
+	/* Get the number of useful states of the random generator generated*/ 
+	int initial_num_useful_states = num_useful_states(res) ; 
 
 	/* Create a random transition selector */ 
 	auto select = make_random_selector(make_random_engine());
 	
 	int counter_good = 0 ; 
 	/* Pruning */
-	while (size_transition > 0 ){ 
+	while (size_transition > 0){ 
 		
 		/* Choose a random transition */ 
 		auto t = select(all_transitions(res));
 		
 		/* Test if T - t respect the properties  */ 
-		if ( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res))) {
+		if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) && initial_num_useful_states == num_states) {
 			// Normally suppose to return the automaton at this point  
 			break ; 
 		}
 
 		else {
-			res->del_transition(t) ;
-			t = select(all_transitions(res)); 
-			size_transition = all_transitions(res).size() ;    			
+			std::cout << "Pruning :( " << "\n" ; 
+			res->del_transition(t) ; 
+			size_transition -- ;   
+			std::cout << "Transitions left : " << size_transition << "\n" ;  			
 		}
 	} 
 
 	/* Returns only non deterministic good example */ 
-	if ( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) && !(is_deterministic(res)) ) {
+	if ( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) && !(is_deterministic(res)) && initial_num_useful_states == num_states) {
 		counter_good += 1 ; 
 
-		/* std::ofstream myfile;
-		std::stringstream ss;
-		ss << "./Results2/" << "file" << std::to_string(index) << ".txt" ; 
-		std::string s = ss.str();
-		
-		myfile.open(s);
-		myfile << vcsn::dot(res, std::cerr) << '\n';
-		myfile.close(); */ 
-		//info(trim(res)) ;   
 	  	vcsn::dot(res, std::cout) << '\n';
 	}
 
@@ -109,18 +111,19 @@ int random_generator(int num_states, int num_initial_states, int num_final_state
 
 
 int main() {
-	int i = 0 ; 
-	int max  = 1000 ; 
-	int count = 0 ; 
-	while (i < max) {
-		std::cout << i << "\n" ; 
-		count += random_generator(20,13,15,i) ;  
-		i += 1 ; 
-	}
 
-	std::cout << "Number of good example : "<< count << "\n" ; 
-	std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;
-	
+	int i = 0 ; 
+    int max  = 10 ; 
+    int count = 0 ; 
+
+    while (i < max) {
+        count += random_generator(300, 33, 37) ; 
+        i += 1 ; 
+    }
+
+    std::cout << "Number of good example : "<< count << "\n" ; 
+    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ; 
+
 	return 0 ;
 } 
 

@@ -1,1 +1,0 @@
-Generator_random: Generator_random.cpp
