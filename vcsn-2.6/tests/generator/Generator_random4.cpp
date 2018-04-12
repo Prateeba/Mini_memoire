@@ -117,7 +117,7 @@ int main() {
     int count = 0 ; 
 
     while (i < max) {
-        count += random_generator(300, 33, 37) ; 
+        count += random_generator(100, 33, 37) ; 
         i += 1 ; 
     }
 
