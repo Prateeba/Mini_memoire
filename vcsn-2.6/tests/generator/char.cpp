@@ -1,6 +1,8 @@
 #include <random>
 #include <iostream>
  
+/* rm $(ls -I "*.cpp" ) */ 
+
 int main()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
