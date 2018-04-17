@@ -154,6 +154,15 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
         }
     }
 
+    std::cout << "INFO REAL RES :" << "\n" ;
+    std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
+    std::cout << is_functional(res) << "\n" ;
+    if (!(is_cycle_ambiguous(res)) ) {
+        std::cout << has_twins_property(res) << "\n" ;
+    }
+    std::cout << !(is_deterministic(res)) << "\n" ;
+
+
     //(is_trim(res))
     if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res)) ) {
         counter_good += 1 ; 
@@ -195,13 +204,13 @@ auto create_context() {
 int main() {
 
     int i = 0 ; 
-    int max  = 1000 ; 
+    int max  = 10 ; 
     int count = 0 ; 
 
     auto res = create_context() ; 
 
     while (i < max) {
-        count += random_aut(res, 100, 0.1, 1, 2) ; 
+        count += random_aut(res, 5, 0.1, 1, 2) ; 
         i += 1 ; 
     }
 

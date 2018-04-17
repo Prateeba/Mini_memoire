@@ -24,19 +24,13 @@
 #include <vcsn/algos/has-twins-property.hh>
 #include <vcsn/algos/accessible.hh>
 
-using namespace vcsn ;
+using namespace vcsn ; 
 
-/* Creer le contexte 
-   Creer l'automate 
-   lui rajouter autant de states que num states 
-   tirer deux states au hasard et tirer un label au hasard, les connecter si ça respecte la propritée
-   Boucle tant que num states n'est pas atteint */
-
-/* ALGO DESCRIPTION 
-	Tant qu'on a pas autant d'état utiles qu'on veut on : 
-		-tire 2 états au hasard
-		-si en lui rajoutant un transition, ça continue à respecter la 
-		propriété demander, on garde, sinon on enlève */ 
+/* TODO : 
+        1) Enlarge context : DONE 
+        2) Choose initial and finals : DONE 
+        3) Have just one label per transition 
+        4) Verify that it does what the teacher asked : DONE */ 
 
 int uni_rand(int max) {
     /* return a random  number between 1 and max */ 
@@ -90,38 +84,10 @@ auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states,
 }
 
 
-auto create_context() {
-    using namespace vcsn;
-
-    // Basic alphabet type.
-    using alphabet_t = set_alphabet<char_letters>;
-
-    // Letterset (single-tape labelset).
-    using letterset_t = letterset<alphabet_t>;
-
-    // Create the letterset.
-    auto ls1 = letterset_t{'a', 'b', 'c'};
-
-    // Labelset (double-tape).
-    using labelset_t = tupleset<letterset_t, letterset_t>;
-
-    // Create the double-tape labelset.
-    const auto ls = labelset_t{ls1, ls1};
-
-    // Context of the automaton: lat<lal_char, lal_char>, b.
-    using context_t = context<labelset_t, b>;
-
-    // Create the context from the labelset.
-    // No parameter for the weightset, as it's just B.
-    const auto ctx = context_t{ls};
-    return ctx  ; 
-} 
-
 template <typename Ctx> /* mutable_automaton<Ctx> */ 
-int random_aut(const Ctx& ctx, unsigned num_states,float density = 0.1, unsigned num_initial = 1, unsigned num_final = 1,
+int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
+                                        unsigned num_initial = 1, unsigned num_final = 1,
                                         unsigned max_labels = 1, const std::string& weights = "") {
-
-	require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]"); 
 
     using detail::irange;
     using automaton_t = mutable_automaton<Ctx>;
@@ -158,68 +124,103 @@ int random_aut(const Ctx& ctx, unsigned num_states,float density = 0.1, unsigned
         res->set_final(final_states[i]) ;     
     }
 
-    int counter_good = 0 ; 
-    auto select = make_random_selector(make_random_engine());
-    
+    // User to input the density of adding a transition
+    require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
+
+    auto select = make_random_selector(make_random_engine()); 
     int initial_num_useful_states = 0  ;
     auto all_states = res->all_states() ; 
+    int counter_good = 0 ; 
 
 
-    while (initial_num_useful_states < num_states ){
-    	
-    	state_t random_state1 = select(all_states) ;
-    	state_t random_state2 = select(all_states) ; 
+    while (initial_num_useful_states < num_states ){ 
+
+        state_t random_state1 = select(all_states) ;
+        state_t random_state2 = select(all_states) ;
 
     	auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
         temp_aut = res ;
-
+            
         int temp = uni_rand(1000) ; 
-    	if (temp <= floor(density*1000)) {
+        //std::cout << temp ;
+        if (temp <= floor(density*1000)) {
 
             temp_aut->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ;  
                 
-            if ( !(is_cycle_ambiguous(temp_aut)) && is_functional(temp_aut) && has_twins_property(temp_aut) && !(is_deterministic(temp_aut)) ){ 
-               	res->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ;
-               	std::cout << "Adding transition in real automata !! " << "\n" ;   
+            if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) ){ 
+                res->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ;  
                     
             }
             else {
                 temp_aut->del_transition(random_state1, random_state2, random_label(ls, gen))  ;  
-            }
-            
-       	}
+            }    
+        }
 
-    	std::cout << "initial_num_useful_states : " << initial_num_useful_states << "\n" ; 
-    	std::cout << "num_states : " << num_states << "\n" ; 
-	    initial_num_useful_states = num_useful_states(res) ;
-    } 
+        initial_num_useful_states = num_useful_states(res) ;
+    }
 
-    std::cout << "initial_num_useful_states END : " << num_useful_states(res) << "\n" ; 
-
-	std::cout << "INFO REAL RES :" << "\n" ;
-	std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
-	std::cout << is_functional(res) << "\n" ;
+    /*std::cout << "INFO REAL RES :" << "\n" ;
+    std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
+    std::cout << is_functional(res) << "\n" ;
     if (!(is_cycle_ambiguous(res)))  {
         std::cout << has_twins_property(res) << "\n" ;
     }
-	
-	std::cout << !(is_deterministic(res)) << "\n" ;
+    std::cout << !(is_deterministic(res)) << "\n" ; */
 
-
-    if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res)  && !(is_deterministic(res)) && num_useful_states(res) == num_states) {
+    if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
         counter_good += 1 ; 
+        
         vcsn::dot(res, std::cout) << '\n';
-    	std::cout << " ---------- INFO ----------" << "\n" ; 
-        info(res) ;
     }
-  
+
+    //return final_res ;  
     return counter_good ; 
+}
+auto create_context() {
+    using namespace vcsn;
+
+    // Basic alphabet type.
+    using alphabet_t = set_alphabet<char_letters>;
+
+    // Letterset (single-tape labelset).
+    using letterset_t = letterset<alphabet_t>;
+
+    // Create the letterset.
+    auto ls1 = letterset_t{'a', 'b', 'c'};
+
+    // Labelset (double-tape).
+    using labelset_t = tupleset<letterset_t, letterset_t>;
+
+    // Create the double-tape labelset.
+    const auto ls = labelset_t{ls1, ls1};
+
+    // Context of the automaton: lat<lal_char, lal_char>, b.
+    using context_t = context<labelset_t, b>;
+
+    // Create the context from the labelset.
+    // No parameter for the weightset, as it's just B.
+    const auto ctx = context_t{ls};
+    return ctx  ; 
 } 
+
 
 int main() {
 
+    int i = 0 ; 
+    int max  = 100 ; 
+    int count = 0 ; 
+
     auto res = create_context() ; 
-    random_aut(res, 3, 1, 1, 1) ; 
-   
+
+    while (i < max) {
+        std::cout << "COUNTER : " << i << "\n" ; 
+        count += random_aut(res, 10, 0.1, 1, 1) ; 
+        i += 1 ; 
+    }
+
+    std::cout << "Number of good example : "<< count << "\n" ; 
+    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  
+         
+    
     return 0 ; 
 }
