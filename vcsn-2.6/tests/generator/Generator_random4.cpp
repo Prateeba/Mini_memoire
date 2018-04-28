@@ -105,6 +105,7 @@ int random_generator(int num_states, int num_initial_states, int num_final_state
 	if ( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) && !(is_deterministic(res)) && initial_num_useful_states == num_states) {
 		counter_good += 1 ;
 	  	vcsn::dot(res, std::cout) << '\n';
+	  	info(res) ; 
 	}
 
 	return counter_good ;

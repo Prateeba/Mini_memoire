@@ -58,7 +58,7 @@ bool in_state_list(auto states_list, auto state, int num_states) {
 template <typename Ctx>
 auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states, unsigned num_s) {
     /* Choose randomly the Initial and Final states */ 
-	
+    
     using automaton_t = mutable_automaton<Ctx>;
     using state_t = state_t_of<automaton_t>;
 
@@ -133,9 +133,9 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
     bool found = false ; 
 
     while (initial_num_useful_states < num_states && !found ){ 
-    	
+        
         state_t random_state1 = select(states) ;
-    	
+        
         auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
         temp_aut = res ;
         for (unsigned j: detail::irange(num_states)){
@@ -144,31 +144,37 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
             //std::cout << temp ;
             if (temp <= floor(density*1000)) {
 
-            	temp_aut->add_transition(random_state1, states[j], random_label(ls, gen), random_weight()) ;  
+                temp_aut->add_transition(random_state1, states[j], random_label(ls, gen), random_weight()) ;  
                 
                 if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) && !(is_deterministic(temp_aut)) ){ 
-                	res->add_transition(random_state1, states[j], random_label(ls, gen), random_weight()) ;  
+                    res->add_transition(random_state1, states[j], random_label(ls, gen), random_weight()) ;  
                     
                 }
                 else {
-                	temp_aut->del_transition(random_state1, states[j], random_label(ls, gen))  ;  
+                    temp_aut->del_transition(random_state1, states[j], random_label(ls, gen))  ;  
                 }
             
             }
         }
 
-        if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) &&  !(is_deterministic(res)) ) {
+        if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res)) ) {
             found = true ; 
             counter_good += 1 ; 
-            
             vcsn::dot(res, std::cout) << '\n';
-            info(res) ; 
+            info(res) ;
         }
 
 
         initial_num_useful_states = num_useful_states(res) ;
     }
 
+    /*std::cout << "INFO REAL RES :" << "\n" ;
+    std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
+    std::cout << is_functional(res) << "\n" ;
+    if (!(is_cycle_ambiguous(res)) ) {
+        std::cout << has_twins_property(res) << "\n" ;
+    }
+    std::cout << !(is_deterministic(res)) << "\n" ; */ 
  
     return counter_good ; 
 }
@@ -201,9 +207,20 @@ auto create_context() {
 
 
 int main() {
+
+    /*int i = 0 ; 
+    int max  = 10 ; 
+    int count = 0 ; 
+    auto res = create_context() ; 
+    while (i < max) {
+        count += random_aut(res, 100, 0.1, 15, 13) ; 
+        i += 1 ; 
+    }
+    std::cout << "Number of good example : "<< count << "\n" ; 
+    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ; */ 
     
     auto res = create_context() ; 
-    random_aut(res, 3000, 0.1, 355, 263) ;     
+    random_aut(res, 1000, 0.1, 355, 263) ;     
 
     return 0 ; 
 }
