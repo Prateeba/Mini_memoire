@@ -24,6 +24,9 @@
 #include <vcsn/algos/has-twins-property.hh>
 #include <vcsn/algos/accessible.hh>
 
+
+/*  dot -Tpng res5states.dot -o res5states.png */ 
+
 using namespace vcsn ; 
 
 /* TODO : 
@@ -140,7 +143,7 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
         temp_aut = res ;
         for (unsigned j: detail::irange(num_states)){
             
-            int temp = uni_rand(1000) ; 
+            int temp = uni_rand(2) ; 
             //std::cout << temp ;
             if (temp <= floor(density*1000)) {
 
@@ -162,19 +165,23 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
             counter_good += 1 ; 
             vcsn::dot(res, std::cout) << '\n';
             info(res) ;
+            std::cout << "INFO REAL RES :" << "\n" ;
+            std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
+            std::cout << is_functional(res) << "\n" ;
+            if (!(is_cycle_ambiguous(res)) ) {
+            std::cout << has_twins_property(res) << "\n" ;
+            }
+            std::cout << !(is_deterministic(res)) << "\n" ; 
+
+            std::cout << "Stripping " << "\n" ; 
+            vcsn::dot(strip(res), std::cout) << '\n';
         }
 
 
         initial_num_useful_states = num_useful_states(res) ;
     }
 
-    /*std::cout << "INFO REAL RES :" << "\n" ;
-    std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
-    std::cout << is_functional(res) << "\n" ;
-    if (!(is_cycle_ambiguous(res)) ) {
-        std::cout << has_twins_property(res) << "\n" ;
-    }
-    std::cout << !(is_deterministic(res)) << "\n" ; */ 
+    
  
     return counter_good ; 
 }
@@ -193,7 +200,7 @@ auto create_context() {
     // Labelset (double-tape).
     using labelset_t = tupleset<letterset_t, letterset_t>;
 
-    // Create the double-tape labelset.
+    // Create the double-t!(is_deterministic(res))ape labelset.
     const auto ls = labelset_t{ls1, ls1};
 
     // Context of the automaton: lat<lal_char, lal_char>, b.
@@ -220,7 +227,7 @@ int main() {
     std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ; */ 
     
     auto res = create_context() ; 
-    random_aut(res, 1000, 0.1, 355, 263) ;     
+    random_aut(res, 200, 0.1,90, 80) ;     
 
     return 0 ; 
 }

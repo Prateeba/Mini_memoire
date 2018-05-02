@@ -160,7 +160,6 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
         if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) &&  !(is_deterministic(res)) ) {
             found = true ; 
             counter_good += 1 ; 
-            
             vcsn::dot(res, std::cout) << '\n';
             info(res) ; 
         }
@@ -203,7 +202,7 @@ auto create_context() {
 int main() {
     
     auto res = create_context() ; 
-    random_aut(res, 3000, 0.1, 355, 263) ;     
+    random_aut(res, 1000, 0.1, 500, 450) ;     
 
     return 0 ; 
 }

@@ -1,0 +1,69 @@
+digraph
+{
+  vcsn_context = "lat<letterset<char_letters(abc)>, letterset<char_letters(abc)>>, b"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I4
+    I4
+    I5
+    I5
+    I9
+    Fpost
+    Fpost
+    F1
+    F2
+    F4
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+  }
+  I4 -> 4 [label = "a|b, "]
+  I5 -> 5 [label = "b|c, c|a"]
+  I9 -> 9
+  post -> pre [label = "b|b"]
+  post -> Fpost [label = "b|a, c|a"]
+  post -> 2 [label = "c|a"]
+  post -> 9 [label = "[a|aa|cb|c]"]
+  0 -> 0 [label = "b|c"]
+  0 -> 4 [label = "a|b, c|a"]
+  1 -> pre [label = "b|a"]
+  1 -> F1
+  1 -> 2 [label = "b|c"]
+  1 -> 5 [label = "b|a"]
+  1 -> 6 [label = "a|c, c|c"]
+  1 -> 7 [label = "c|c"]
+  1 -> 9 [label = "a|a"]
+  2 -> pre [label = "b|b, b|c"]
+  2 -> F2
+  2 -> 1 [label = "a|c"]
+  2 -> 7 [label = "a|a"]
+  2 -> 8 [label = "a|c"]
+  2 -> 9 [label = "a|c"]
+  3 -> pre [label = "c|b"]
+  3 -> 5 [label = "a|c, b|a"]
+  3 -> 8 [label = "a|c"]
+  4 -> F4 [label = "b|c"]
+  5 -> 0 [label = "a|a, b|c"]
+  5 -> 9 [label = "a|a"]
+  6 -> 3 [label = "c|b, c|c"]
+  6 -> 7 [label = "c|b, c|c"]
+  7 -> pre [label = "b|a, c|b"]
+  7 -> 6 [label = "c|a"]
+  8 -> pre [label = "a|c"]
+  8 -> 5 [label = "c|a, c|c"]
+  8 -> 9 [label = "a|b"]
+  9 -> 4 [label = "a|b"]
+  9 -> 9 [label = "c|a"]
+}

@@ -24,7 +24,13 @@
 #include <vcsn/algos/has-twins-property.hh>
 #include <vcsn/algos/accessible.hh>
 
-using namespace vcsn ;  
+using namespace vcsn ; 
+
+/* TODO : 
+        1) Enlarge context : DONE 
+        2) Choose initial and finals : DONE 
+        3) Have just one label per transition 
+        4) Verify that it does what the teacher asked : DONE */ 
 
 int uni_rand(int max) {
     /* return a random  number between 1 and max */ 
@@ -78,7 +84,7 @@ auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states,
 }
 
 
-template <typename Ctx> 
+template <typename Ctx> /* mutable_automaton<Ctx> */ 
 int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
                                         unsigned num_initial = 1, unsigned num_final = 1,
                                         unsigned max_labels = 1, const std::string& weights = "") {
@@ -121,50 +127,47 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
     // User to input the density of adding a transition
     require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
 
-    /* Random state selector */ 
     auto select = make_random_selector(make_random_engine()); 
-    
-    /* */ 
     int initial_num_useful_states = 0  ;
-     
-    /* */ 
+    auto all_states = res->all_states() ; 
     int counter_good = 0 ; 
 
+    bool found = false ; 
 
-    while (initial_num_useful_states < num_states ){ 
+    while (!found){ 
 
-        state_t random_state1 = select(states) ;
-        state_t random_state2 = select(states) ;
+        state_t random_state1 = select(all_states) ;
+        state_t random_state2 = select(all_states) ;
+
+    	auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
+        temp_aut = res ;
             
-        int temp = uni_rand(2) ; 
-        //std::cout << temp ;
-        if (temp%2 == 0) {
+        int temp = uni_rand(1000) ; 
+        if (temp <= floor(density*1000)) {
 
-            res->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ;  
+        	auto label = random_label(ls, gen) ;
+            temp_aut->add_transition(random_state1, random_state2, label, random_weight()) ;  
                 
-            if ( is_cycle_ambiguous(res) || (!(is_functional(res)) && !(has_twins_property(res)) && (is_deterministic(res)))  ){ 
-                res->del_transition(random_state1, random_state2, random_label(ls, gen))  ;  
+            if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) && !(is_deterministic(temp_aut)) ){ 
+                res->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ;  
                     
-            }  
+            }
+            else {
+                temp_aut->del_transition(random_state1, random_state2, label)  ;  
+            }    
         }
 
-        initial_num_useful_states = num_useful_states(res) ;
-    }
+        if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
+        	counter_good += 1 ; 
+        	found = true ; 
+        	vcsn::dot(res, std::cout) << '\n';
+        	info(res) ; 
+   	 	}
 
+   	 	else {
+        	initial_num_useful_states = num_useful_states(res) ;
 
-    std::cout << "INFO REAL RES :" << "\n" ;
-    std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
-    std::cout << is_functional(res) << "\n" ;
-    if (!(is_cycle_ambiguous(res)))  {
-        std::cout << has_twins_property(res) << "\n" ;
-    }
-    std::cout << !(is_deterministic(res)) << "\n" ; 
-
-    if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
-        counter_good += 1 ; 
-        
-        vcsn::dot(res, std::cout) << '\n';
-        info(res) ; 
+    	}
     }
 
     //return final_res ;  
@@ -200,21 +203,23 @@ auto create_context() {
 
 int main() {
 
-    int i = 0 ; 
-    int max  = 1000 ; 
+    /*int i = 0 ; 
+    int max  = 100 ; 
     int count = 0 ; 
 
     auto res = create_context() ; 
 
     while (i < max) {
         std::cout << "COUNTER : " << i << "\n" ; 
-        count += random_aut(res, 50, 1, 23, 19) ; 
+        count += random_aut(res, 10, 0.1, 2, 2) ; 
         i += 1 ; 
     }
 
     std::cout << "Number of good example : "<< count << "\n" ; 
-    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  
-         
+    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  */
+    
+    auto res = create_context() ; 
+    random_aut(res, 100, 0.1, 20, 18) ; 
     
     return 0 ; 
 }

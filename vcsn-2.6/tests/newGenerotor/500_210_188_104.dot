@@ -1,0 +1,1808 @@
+digraph
+{
+  vcsn_context = "lat<letterset<char_letters(abc)>, letterset<char_letters(abc)>>, b"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    I1
+    I3
+    I4
+    I7
+    I9
+    I15
+    I16
+    I18
+    I20
+    I21
+    I23
+    I25
+    I26
+    I29
+    I33
+    I34
+    I37
+    I38
+    I40
+    I42
+    I44
+    I48
+    I50
+    I59
+    I64
+    I65
+    I66
+    I69
+    I74
+    I76
+    I78
+    I79
+    I81
+    I84
+    I85
+    I86
+    I87
+    I89
+    I90
+    I92
+    I96
+    I97
+    I98
+    I99
+    I100
+    I101
+    I102
+    I103
+    I104
+    I105
+    I106
+    I107
+    I108
+    I111
+    I112
+    I115
+    I119
+    I122
+    I125
+    I126
+    I128
+    I129
+    I135
+    I136
+    I138
+    I139
+    I141
+    I142
+    I144
+    I148
+    I149
+    I150
+    I151
+    I152
+    I154
+    I155
+    I157
+    I158
+    I159
+    I160
+    I163
+    I164
+    I165
+    I167
+    I168
+    I170
+    I172
+    I173
+    I174
+    I175
+    I181
+    I183
+    I184
+    I186
+    I188
+    I189
+    I190
+    I194
+    I196
+    I197
+    I199
+    I202
+    I206
+    I207
+    I208
+    I209
+    I211
+    I214
+    I216
+    I220
+    I221
+    I222
+    I223
+    I224
+    I225
+    I226
+    I227
+    I228
+    I229
+    I230
+    I231
+    I232
+    I235
+    I236
+    I239
+    I240
+    I241
+    I242
+    I243
+    I244
+    I245
+    I246
+    I248
+    I249
+    I251
+    I253
+    I255
+    I256
+    I258
+    I259
+    I260
+    I261
+    I262
+    I266
+    I267
+    I271
+    I272
+    I273
+    I276
+    I277
+    I278
+    I281
+    I285
+    I290
+    I292
+    I294
+    I295
+    I296
+    I297
+    I302
+    I304
+    I305
+    I306
+    I307
+    I308
+    I311
+    I314
+    I315
+    I317
+    I318
+    I319
+    I321
+    I323
+    I324
+    I326
+    I327
+    I329
+    I331
+    I332
+    I334
+    I338
+    I340
+    I341
+    I345
+    I346
+    I348
+    I349
+    I353
+    I357
+    I358
+    I359
+    I362
+    I364
+    I366
+    I367
+    I369
+    I371
+    I372
+    I376
+    I381
+    I383
+    I384
+    I386
+    I388
+    I389
+    I391
+    I392
+    I393
+    I395
+    F1
+    F3
+    F4
+    F7
+    F10
+    F13
+    F15
+    F16
+    F18
+    F20
+    F21
+    F23
+    F25
+    F28
+    F31
+    F34
+    F37
+    F39
+    F41
+    F42
+    F43
+    F44
+    F45
+    F48
+    F51
+    F52
+    F53
+    F55
+    F56
+    F57
+    F58
+    F60
+    F61
+    F65
+    F67
+    F69
+    F70
+    F71
+    F73
+    F74
+    F78
+    F79
+    F80
+    F81
+    F86
+    F88
+    F90
+    F91
+    F92
+    F93
+    F95
+    F105
+    F109
+    F110
+    F111
+    F116
+    F122
+    F125
+    F127
+    F128
+    F131
+    F132
+    F134
+    F136
+    F139
+    F140
+    F141
+    F142
+    F143
+    F148
+    F149
+    F151
+    F153
+    F154
+    F155
+    F157
+    F160
+    F162
+    F164
+    F166
+    F168
+    F171
+    F172
+    F174
+    F176
+    F178
+    F184
+    F186
+    F187
+    F188
+    F192
+    F193
+    F195
+    F196
+    F197
+    F198
+    F199
+    F200
+    F202
+    F206
+    F207
+    F208
+    F209
+    F210
+    F211
+    F212
+    F213
+    F214
+    F215
+    F219
+    F221
+    F223
+    F224
+    F226
+    F231
+    F232
+    F235
+    F236
+    F242
+    F244
+    F247
+    F248
+    F251
+    F253
+    F257
+    F261
+    F262
+    F263
+    F268
+    F270
+    F271
+    F272
+    F273
+    F275
+    F277
+    F278
+    F280
+    F283
+    F284
+    F285
+    F286
+    F289
+    F290
+    F291
+    F293
+    F296
+    F299
+    F302
+    F306
+    F311
+    F312
+    F313
+    F314
+    F315
+    F316
+    F319
+    F321
+    F322
+    F323
+    F330
+    F336
+    F339
+    F340
+    F341
+    F342
+    F345
+    F347
+    F348
+    F349
+    F352
+    F353
+    F355
+    F356
+    F357
+    F358
+    F359
+    F361
+    F364
+    F365
+    F369
+    F370
+    F371
+    F375
+    F376
+    F378
+    F384
+    F386
+    F387
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0 [color = DimGray]
+    1
+    2 [color = DimGray]
+    3
+    4
+    5 [color = DimGray]
+    6 [color = DimGray]
+    7
+    8 [color = DimGray]
+    9 [color = DimGray]
+    10 [color = DimGray]
+    11 [color = DimGray]
+    12 [color = DimGray]
+    13 [color = DimGray]
+    14 [color = DimGray]
+    15
+    16
+    17 [color = DimGray]
+    18
+    19 [color = DimGray]
+    20
+    21
+    22 [color = DimGray]
+    23
+    24 [color = DimGray]
+    25
+    26 [color = DimGray]
+    27 [color = DimGray]
+    28 [color = DimGray]
+    29 [color = DimGray]
+    30 [color = DimGray]
+    31 [color = DimGray]
+    32 [color = DimGray]
+    33 [color = DimGray]
+    34
+    35 [color = DimGray]
+    36 [color = DimGray]
+    37
+    38 [color = DimGray]
+    39 [color = DimGray]
+    40 [color = DimGray]
+    41 [color = DimGray]
+    42
+    43 [color = DimGray]
+    44
+    45 [color = DimGray]
+    46 [color = DimGray]
+    47 [color = DimGray]
+    48
+    49 [color = DimGray]
+    50 [color = DimGray]
+    51 [color = DimGray]
+    52 [color = DimGray]
+    53 [color = DimGray]
+    54 [color = DimGray]
+    55 [color = DimGray]
+    56 [color = DimGray]
+    57 [color = DimGray]
+    58 [color = DimGray]
+    59 [color = DimGray]
+    60 [color = DimGray]
+    61 [color = DimGray]
+    62 [color = DimGray]
+    63 [color = DimGray]
+    64 [color = DimGray]
+    65
+    66 [color = DimGray]
+    67 [color = DimGray]
+    68 [color = DimGray]
+    69
+    70 [color = DimGray]
+    71 [color = DimGray]
+    72 [color = DimGray]
+    73 [color = DimGray]
+    74
+    75 [color = DimGray]
+    76 [color = DimGray]
+    77 [color = DimGray]
+    78
+    79
+    80 [color = DimGray]
+    81
+    82 [color = DimGray]
+    83 [color = DimGray]
+    84 [color = DimGray]
+    85 [color = DimGray]
+    86
+    87 [color = DimGray]
+    88 [color = DimGray]
+    89 [color = DimGray]
+    90
+    91 [color = DimGray]
+    92
+    93 [color = DimGray]
+    94 [color = DimGray]
+    95 [color = DimGray]
+    96 [color = DimGray]
+    97 [color = DimGray]
+    98 [color = DimGray]
+    99 [color = DimGray]
+    100 [color = DimGray]
+    101 [color = DimGray]
+    102 [color = DimGray]
+    103 [color = DimGray]
+    104 [color = DimGray]
+    105
+    106 [color = DimGray]
+    107 [color = DimGray]
+    108 [color = DimGray]
+    109 [color = DimGray]
+    110 [color = DimGray]
+    111
+    112 [color = DimGray]
+    113 [color = DimGray]
+    114 [color = DimGray]
+    115 [color = DimGray]
+    116 [color = DimGray]
+    117 [color = DimGray]
+    118 [color = DimGray]
+    119 [color = DimGray]
+    120 [color = DimGray]
+    121 [color = DimGray]
+    122
+    123 [color = DimGray]
+    124 [color = DimGray]
+    125
+    126 [color = DimGray]
+    127 [color = DimGray]
+    128
+    129 [color = DimGray]
+    130 [color = DimGray]
+    131 [color = DimGray]
+    132 [color = DimGray]
+    133 [color = DimGray]
+    134 [color = DimGray]
+    135 [color = DimGray]
+    136
+    137 [color = DimGray]
+    138 [color = DimGray]
+    139
+    140 [color = DimGray]
+    141
+    142
+    143 [color = DimGray]
+    144 [color = DimGray]
+    145 [color = DimGray]
+    146 [color = DimGray]
+    147 [color = DimGray]
+    148
+    149
+    150 [color = DimGray]
+    151
+    152 [color = DimGray]
+    153 [color = DimGray]
+    154
+    155
+    156 [color = DimGray]
+    157
+    158 [color = DimGray]
+    159 [color = DimGray]
+    160
+    161 [color = DimGray]
+    162 [color = DimGray]
+    163 [color = DimGray]
+    164
+    165 [color = DimGray]
+    166 [color = DimGray]
+    167 [color = DimGray]
+    168
+    169 [color = DimGray]
+    170 [color = DimGray]
+    171 [color = DimGray]
+    172
+    173 [color = DimGray]
+    174
+    175 [color = DimGray]
+    176 [color = DimGray]
+    177 [color = DimGray]
+    178 [color = DimGray]
+    179 [color = DimGray]
+    180 [color = DimGray]
+    181 [color = DimGray]
+    182 [color = DimGray]
+    183 [color = DimGray]
+    184
+    185 [color = DimGray]
+    186
+    187 [color = DimGray]
+    188
+    189 [color = DimGray]
+    190 [color = DimGray]
+    191 [color = DimGray]
+    192 [color = DimGray]
+    193 [color = DimGray]
+    194 [color = DimGray]
+    195 [color = DimGray]
+    196
+    197
+    198 [color = DimGray]
+    199
+    200 [color = DimGray]
+    201 [color = DimGray]
+    202
+    203 [color = DimGray]
+    204 [color = DimGray]
+    205 [color = DimGray]
+    206
+    207
+    208
+    209
+    210 [color = DimGray]
+    211
+    212 [color = DimGray]
+    213 [color = DimGray]
+    214
+    215 [color = DimGray]
+    216 [color = DimGray]
+    217 [color = DimGray]
+    218 [color = DimGray]
+    219 [color = DimGray]
+    220 [color = DimGray]
+    221
+    222 [color = DimGray]
+    223
+    224
+    225 [color = DimGray]
+    226
+    227 [color = DimGray]
+    228 [color = DimGray]
+    229 [color = DimGray]
+    230 [color = DimGray]
+    231
+    232
+    233 [color = DimGray]
+    234 [color = DimGray]
+    235
+    236
+    237 [color = DimGray]
+    238 [color = DimGray]
+    239 [color = DimGray]
+    240 [color = DimGray]
+    241 [color = DimGray]
+    242
+    243 [color = DimGray]
+    244
+    245 [color = DimGray]
+    246 [color = DimGray]
+    247 [color = DimGray]
+    248
+    249 [color = DimGray]
+    250 [color = DimGray]
+    251
+    252 [color = DimGray]
+    253
+    254 [color = DimGray]
+    255 [color = DimGray]
+    256 [color = DimGray]
+    257 [color = DimGray]
+    258 [color = DimGray]
+    259 [color = DimGray]
+    260 [color = DimGray]
+    261
+    262
+    263 [color = DimGray]
+    264 [color = DimGray]
+    265 [color = DimGray]
+    266 [color = DimGray]
+    267 [color = DimGray]
+    268 [color = DimGray]
+    269 [color = DimGray]
+    270 [color = DimGray]
+    271
+    272
+    273
+    274 [color = DimGray]
+    275 [color = DimGray]
+    276 [color = DimGray]
+    277
+    278
+    279 [color = DimGray]
+    280 [color = DimGray]
+    281 [color = DimGray]
+    282 [color = DimGray]
+    283 [color = DimGray]
+    284 [color = DimGray]
+    285
+    286 [color = DimGray]
+    287 [color = DimGray]
+    288 [color = DimGray]
+    289 [color = DimGray]
+    290
+    291 [color = DimGray]
+    292 [color = DimGray]
+    293 [color = DimGray]
+    294 [color = DimGray]
+    295 [color = DimGray]
+    296
+    297 [color = DimGray]
+    298 [color = DimGray]
+    299 [color = DimGray]
+    300 [color = DimGray]
+    301 [color = DimGray]
+    302
+    303 [color = DimGray]
+    304 [color = DimGray]
+    305 [color = DimGray]
+    306
+    307 [color = DimGray]
+    308 [color = DimGray]
+    309 [color = DimGray]
+    310 [color = DimGray]
+    311
+    312 [color = DimGray]
+    313 [color = DimGray]
+    314
+    315
+    316 [color = DimGray]
+    317 [color = DimGray]
+    318 [color = DimGray]
+    319
+    320 [color = DimGray]
+    321
+    322 [color = DimGray]
+    323
+    324 [color = DimGray]
+    325 [color = DimGray]
+    326 [color = DimGray]
+    327 [color = DimGray]
+    328 [color = DimGray]
+    329 [color = DimGray]
+    330 [color = DimGray]
+    331 [color = DimGray]
+    332 [color = DimGray]
+    333 [color = DimGray]
+    334 [color = DimGray]
+    335 [color = DimGray]
+    336 [color = DimGray]
+    337 [color = DimGray]
+    338 [color = DimGray]
+    339 [color = DimGray]
+    340
+    341
+    342 [color = DimGray]
+    343 [color = DimGray]
+    344 [color = DimGray]
+    345
+    346 [color = DimGray]
+    347 [color = DimGray]
+    348
+    349
+    350 [color = DimGray]
+    351 [color = DimGray]
+    352 [color = DimGray]
+    353
+    354 [color = DimGray]
+    355 [color = DimGray]
+    356 [color = DimGray]
+    357
+    358
+    359
+    360 [color = DimGray]
+    361 [color = DimGray]
+    362 [color = DimGray]
+    363 [color = DimGray]
+    364
+    365 [color = DimGray]
+    366 [color = DimGray]
+    367 [color = DimGray]
+    368 [color = DimGray]
+    369
+    370 [color = DimGray]
+    371
+    372 [color = DimGray]
+    373 [color = DimGray]
+    374 [color = DimGray]
+    375 [color = DimGray]
+    376
+    377 [color = DimGray]
+    378 [color = DimGray]
+    379 [color = DimGray]
+    380 [color = DimGray]
+    381 [color = DimGray]
+    382 [color = DimGray]
+    383 [color = DimGray]
+    384
+    385 [color = DimGray]
+    386
+    387 [color = DimGray]
+    388 [color = DimGray]
+    389 [color = DimGray]
+    390 [color = DimGray]
+    391 [color = DimGray]
+    392 [color = DimGray]
+    393 [color = DimGray]
+    394 [color = DimGray]
+    395 [color = DimGray]
+    396 [color = DimGray]
+    397 [color = DimGray]
+    398 [color = DimGray]
+    399 [color = DimGray]
+    400 [color = DimGray]
+    401 [color = DimGray]
+    402 [color = DimGray]
+    403 [color = DimGray]
+    404 [color = DimGray]
+    405 [color = DimGray]
+    406 [color = DimGray]
+    407 [color = DimGray]
+    408 [color = DimGray]
+    409 [color = DimGray]
+    410 [color = DimGray]
+    411 [color = DimGray]
+    412 [color = DimGray]
+    413 [color = DimGray]
+    414 [color = DimGray]
+    415 [color = DimGray]
+    416 [color = DimGray]
+    417 [color = DimGray]
+    418 [color = DimGray]
+    419 [color = DimGray]
+    420 [color = DimGray]
+    421 [color = DimGray]
+    422 [color = DimGray]
+    423 [color = DimGray]
+    424 [color = DimGray]
+    425 [color = DimGray]
+    426 [color = DimGray]
+    427 [color = DimGray]
+    428 [color = DimGray]
+    429 [color = DimGray]
+    430 [color = DimGray]
+    431 [color = DimGray]
+    432 [color = DimGray]
+    433 [color = DimGray]
+    434 [color = DimGray]
+    435 [color = DimGray]
+    436 [color = DimGray]
+    437 [color = DimGray]
+    438 [color = DimGray]
+    439 [color = DimGray]
+    440 [color = DimGray]
+    441 [color = DimGray]
+    442 [color = DimGray]
+    443 [color = DimGray]
+    444 [color = DimGray]
+    445 [color = DimGray]
+    446 [color = DimGray]
+    447 [color = DimGray]
+    448 [color = DimGray]
+    449 [color = DimGray]
+    450 [color = DimGray]
+    451 [color = DimGray]
+    452 [color = DimGray]
+    453 [color = DimGray]
+    454 [color = DimGray]
+    455 [color = DimGray]
+    456 [color = DimGray]
+    457 [color = DimGray]
+    458 [color = DimGray]
+    459 [color = DimGray]
+    460 [color = DimGray]
+    461 [color = DimGray]
+    462 [color = DimGray]
+    463 [color = DimGray]
+    464 [color = DimGray]
+    465 [color = DimGray]
+    466 [color = DimGray]
+    467 [color = DimGray]
+    468 [color = DimGray]
+    469 [color = DimGray]
+    470 [color = DimGray]
+    471 [color = DimGray]
+    472 [color = DimGray]
+    473 [color = DimGray]
+    474 [color = DimGray]
+    475 [color = DimGray]
+    476 [color = DimGray]
+    477 [color = DimGray]
+    478 [color = DimGray]
+    479 [color = DimGray]
+    480 [color = DimGray]
+    481 [color = DimGray]
+    482 [color = DimGray]
+    483 [color = DimGray]
+    484 [color = DimGray]
+    485 [color = DimGray]
+    486 [color = DimGray]
+    487 [color = DimGray]
+    488 [color = DimGray]
+    489 [color = DimGray]
+    490 [color = DimGray]
+    491 [color = DimGray]
+    492 [color = DimGray]
+    493 [color = DimGray]
+    494 [color = DimGray]
+    495 [color = DimGray]
+    496 [color = DimGray]
+    497 [color = DimGray]
+    498 [color = DimGray]
+    499 [color = DimGray]
+  }
+  I0 -> 0 [color = DimGray]
+  I1 -> 1
+  I3 -> 3
+  I4 -> 4
+  I7 -> 7
+  I9 -> 9 [color = DimGray]
+  I15 -> 15
+  I16 -> 16
+  I18 -> 18
+  I20 -> 20
+  I21 -> 21
+  I23 -> 23
+  I25 -> 25
+  I26 -> 26 [color = DimGray]
+  I29 -> 29 [color = DimGray]
+  I33 -> 33 [color = DimGray]
+  I34 -> 34
+  I37 -> 37
+  I38 -> 38 [color = DimGray]
+  I40 -> 40 [color = DimGray]
+  I42 -> 42
+  I44 -> 44
+  I48 -> 48
+  I50 -> 50 [color = DimGray]
+  I59 -> 59 [color = DimGray]
+  I64 -> 64 [color = DimGray]
+  I65 -> 65
+  I66 -> 66 [color = DimGray]
+  I69 -> 69
+  I74 -> 74
+  I76 -> 76 [color = DimGray]
+  I78 -> 78
+  I79 -> 79
+  I81 -> 81
+  I84 -> 84 [color = DimGray]
+  I85 -> 85 [color = DimGray]
+  I86 -> 86
+  I87 -> 87 [color = DimGray]
+  I89 -> 89 [color = DimGray]
+  I90 -> 90
+  I92 -> 92
+  I96 -> 96 [color = DimGray]
+  I97 -> 97 [color = DimGray]
+  I98 -> 98 [color = DimGray]
+  I99 -> 99 [color = DimGray]
+  I100 -> 100 [color = DimGray]
+  I101 -> 101 [color = DimGray]
+  I102 -> 102 [color = DimGray]
+  I103 -> 103 [color = DimGray]
+  I104 -> 104 [color = DimGray]
+  I105 -> 105
+  I106 -> 106 [color = DimGray]
+  I107 -> 107 [color = DimGray]
+  I108 -> 108 [color = DimGray]
+  I111 -> 111
+  I112 -> 112 [color = DimGray]
+  I115 -> 115 [color = DimGray]
+  I119 -> 119 [color = DimGray]
+  I122 -> 122
+  I125 -> 125
+  I126 -> 126 [color = DimGray]
+  I128 -> 128
+  I129 -> 129 [color = DimGray]
+  I135 -> 135 [color = DimGray]
+  I136 -> 136
+  I138 -> 138 [color = DimGray]
+  I139 -> 139
+  I141 -> 141
+  I142 -> 142
+  I144 -> 144 [color = DimGray]
+  I148 -> 148
+  I149 -> 149
+  I150 -> 150 [color = DimGray]
+  I151 -> 151
+  I152 -> 152 [color = DimGray]
+  I154 -> 154
+  I155 -> 155
+  I157 -> 157
+  I158 -> 158 [color = DimGray]
+  I159 -> 159 [color = DimGray]
+  I160 -> 160
+  I163 -> 163 [color = DimGray]
+  I164 -> 164
+  I165 -> 165 [color = DimGray]
+  I167 -> 167 [color = DimGray]
+  I168 -> 168
+  I170 -> 170 [color = DimGray]
+  I172 -> 172
+  I173 -> 173 [color = DimGray]
+  I174 -> 174
+  I175 -> 175 [color = DimGray]
+  I181 -> 181 [color = DimGray]
+  I183 -> 183 [color = DimGray]
+  I184 -> 184
+  I186 -> 186
+  I188 -> 188
+  I189 -> 189 [color = DimGray]
+  I190 -> 190 [color = DimGray]
+  I194 -> 194 [color = DimGray]
+  I196 -> 196
+  I197 -> 197
+  I199 -> 199
+  I202 -> 202
+  I206 -> 206
+  I207 -> 207
+  I208 -> 208
+  I209 -> 209
+  I211 -> 211
+  I214 -> 214
+  I216 -> 216 [color = DimGray]
+  I220 -> 220 [color = DimGray]
+  I221 -> 221
+  I222 -> 222 [color = DimGray]
+  I223 -> 223
+  I224 -> 224
+  I225 -> 225 [color = DimGray]
+  I226 -> 226
+  I227 -> 227 [color = DimGray]
+  I228 -> 228 [color = DimGray]
+  I229 -> 229 [color = DimGray]
+  I230 -> 230 [color = DimGray]
+  I231 -> 231
+  I232 -> 232
+  I235 -> 235
+  I236 -> 236
+  I239 -> 239 [color = DimGray]
+  I240 -> 240 [color = DimGray]
+  I241 -> 241 [color = DimGray]
+  I242 -> 242
+  I243 -> 243 [color = DimGray]
+  I244 -> 244
+  I245 -> 245 [color = DimGray]
+  I246 -> 246 [color = DimGray]
+  I248 -> 248
+  I249 -> 249 [color = DimGray]
+  I251 -> 251
+  I253 -> 253
+  I255 -> 255 [color = DimGray]
+  I256 -> 256 [color = DimGray]
+  I258 -> 258 [color = DimGray]
+  I259 -> 259 [color = DimGray]
+  I260 -> 260 [color = DimGray]
+  I261 -> 261
+  I262 -> 262
+  I266 -> 266 [color = DimGray]
+  I267 -> 267 [color = DimGray]
+  I271 -> 271
+  I272 -> 272
+  I273 -> 273
+  I276 -> 276 [color = DimGray]
+  I277 -> 277
+  I278 -> 278
+  I281 -> 281 [color = DimGray]
+  I285 -> 285
+  I290 -> 290
+  I292 -> 292 [color = DimGray]
+  I294 -> 294 [color = DimGray]
+  I295 -> 295 [color = DimGray]
+  I296 -> 296
+  I297 -> 297 [color = DimGray]
+  I302 -> 302
+  I304 -> 304 [color = DimGray]
+  I305 -> 305 [color = DimGray]
+  I306 -> 306
+  I307 -> 307 [color = DimGray]
+  I308 -> 308 [color = DimGray]
+  I311 -> 311
+  I314 -> 314
+  I315 -> 315
+  I317 -> 317 [color = DimGray]
+  I318 -> 318 [color = DimGray]
+  I319 -> 319
+  I321 -> 321
+  I323 -> 323
+  I324 -> 324 [color = DimGray]
+  I326 -> 326 [color = DimGray]
+  I327 -> 327 [color = DimGray]
+  I329 -> 329 [color = DimGray]
+  I331 -> 331 [color = DimGray]
+  I332 -> 332 [color = DimGray]
+  I334 -> 334 [color = DimGray]
+  I338 -> 338 [color = DimGray]
+  I340 -> 340
+  I341 -> 341
+  I345 -> 345
+  I346 -> 346 [color = DimGray]
+  I348 -> 348
+  I349 -> 349
+  I353 -> 353
+  I357 -> 357
+  I358 -> 358
+  I359 -> 359
+  I362 -> 362 [color = DimGray]
+  I364 -> 364
+  I366 -> 366 [color = DimGray]
+  I367 -> 367 [color = DimGray]
+  I369 -> 369
+  I371 -> 371
+  I372 -> 372 [color = DimGray]
+  I376 -> 376
+  I381 -> 381 [color = DimGray]
+  I383 -> 383 [color = DimGray]
+  I384 -> 384
+  I386 -> 386
+  I388 -> 388 [color = DimGray]
+  I389 -> 389 [color = DimGray]
+  I391 -> 391 [color = DimGray]
+  I392 -> 392 [color = DimGray]
+  I393 -> 393 [color = DimGray]
+  I395 -> 395 [color = DimGray]
+  1 -> F1
+  3 -> F3
+  4 -> F4
+  7 -> F7
+  10 -> F10 [color = DimGray]
+  13 -> F13 [color = DimGray]
+  15 -> F15
+  16 -> F16
+  18 -> F18
+  20 -> F20
+  21 -> F21
+  23 -> F23
+  25 -> F25
+  28 -> F28 [color = DimGray]
+  31 -> F31 [color = DimGray]
+  34 -> F34
+  37 -> F37
+  39 -> F39 [color = DimGray]
+  41 -> F41 [color = DimGray]
+  42 -> F42
+  43 -> F43 [color = DimGray]
+  44 -> F44
+  45 -> F45 [color = DimGray]
+  48 -> F48
+  51 -> F51 [color = DimGray]
+  52 -> F52 [color = DimGray]
+  53 -> F53 [color = DimGray]
+  55 -> F55 [color = DimGray]
+  56 -> F56 [color = DimGray]
+  57 -> F57 [color = DimGray]
+  58 -> F58 [color = DimGray]
+  60 -> F60 [color = DimGray]
+  61 -> F61 [color = DimGray]
+  65 -> F65
+  67 -> F67 [color = DimGray]
+  69 -> F69
+  70 -> F70 [color = DimGray]
+  71 -> F71 [color = DimGray]
+  73 -> F73 [color = DimGray]
+  74 -> F74
+  78 -> F78
+  79 -> F79
+  80 -> F80 [color = DimGray]
+  81 -> F81
+  86 -> F86
+  88 -> F88 [color = DimGray]
+  90 -> F90
+  91 -> F91 [color = DimGray]
+  92 -> F92
+  93 -> F93 [color = DimGray]
+  95 -> F95 [color = DimGray]
+  105 -> F105
+  109 -> F109 [color = DimGray]
+  110 -> F110 [color = DimGray]
+  111 -> F111
+  116 -> F116 [color = DimGray]
+  122 -> F122
+  125 -> F125
+  127 -> F127 [color = DimGray]
+  128 -> F128
+  131 -> F131 [color = DimGray]
+  132 -> F132 [color = DimGray]
+  134 -> F134 [color = DimGray]
+  136 -> F136
+  139 -> F139
+  140 -> F140 [color = DimGray]
+  141 -> F141
+  142 -> F142
+  143 -> F143 [color = DimGray]
+  148 -> F148
+  149 -> F149
+  151 -> F151
+  153 -> F153 [color = DimGray]
+  154 -> F154
+  155 -> F155
+  157 -> F157
+  160 -> F160
+  162 -> F162 [color = DimGray]
+  164 -> F164
+  166 -> F166 [color = DimGray]
+  168 -> F168
+  171 -> F171 [color = DimGray]
+  172 -> F172
+  174 -> F174
+  176 -> F176 [color = DimGray]
+  178 -> F178 [color = DimGray]
+  184 -> F184
+  186 -> F186
+  187 -> F187 [color = DimGray]
+  188 -> F188
+  192 -> F192 [color = DimGray]
+  193 -> F193 [color = DimGray]
+  195 -> F195 [color = DimGray]
+  196 -> F196
+  197 -> F197
+  198 -> F198 [color = DimGray]
+  199 -> F199
+  200 -> F200 [color = DimGray]
+  200 -> 0 [label = "c|a, c|c", color = DimGray]
+  200 -> 1 [label = "c|a, c|c", color = DimGray]
+  200 -> 2 [label = "c|a", color = DimGray]
+  200 -> 3 [label = "a|c, b|c", color = DimGray]
+  200 -> 4 [label = "a|a, c|b", color = DimGray]
+  200 -> 5 [label = "a|b, c|c", color = DimGray]
+  200 -> 6 [label = "b|b", color = DimGray]
+  200 -> 7 [label = "b|a, c|c", color = DimGray]
+  200 -> 8 [label = "b|a, b|c", color = DimGray]
+  200 -> 9 [label = "b|c, c|a", color = DimGray]
+  200 -> 10 [label = "a|a, a|b", color = DimGray]
+  200 -> 11 [label = "c|b, c|c", color = DimGray]
+  200 -> 12 [label = "b|a, c|c", color = DimGray]
+  200 -> 13 [label = "a|b, b|c", color = DimGray]
+  200 -> 14 [label = "a|c, b|c", color = DimGray]
+  200 -> 15 [label = "b|c, c|c", color = DimGray]
+  200 -> 16 [label = "a|b, b|c", color = DimGray]
+  200 -> 17 [label = "b|c", color = DimGray]
+  200 -> 18 [label = "b|b, c|b", color = DimGray]
+  200 -> 19 [label = "a|a, a|c", color = DimGray]
+  200 -> 20 [label = "a|a, a|c", color = DimGray]
+  200 -> 21 [label = "a|a, c|c", color = DimGray]
+  200 -> 22 [label = "b|c, c|a", color = DimGray]
+  200 -> 23 [label = "a|c, b|a", color = DimGray]
+  200 -> 24 [label = "a|c, b|c", color = DimGray]
+  200 -> 25 [label = "b|b, b|c", color = DimGray]
+  200 -> 26 [label = "b|b, c|b", color = DimGray]
+  200 -> 27 [label = "b|a, c|b", color = DimGray]
+  200 -> 28 [label = "a|a, b|b", color = DimGray]
+  200 -> 29 [label = "a|b, b|b", color = DimGray]
+  200 -> 30 [label = "a|a, c|b", color = DimGray]
+  200 -> 31 [label = "a|a, a|b", color = DimGray]
+  200 -> 32 [label = "a|a, a|b", color = DimGray]
+  200 -> 33 [label = "b|b, c|a", color = DimGray]
+  200 -> 34 [label = "c|b", color = DimGray]
+  200 -> 35 [label = "a|a, b|c", color = DimGray]
+  200 -> 36 [label = "b|a, c|c", color = DimGray]
+  200 -> 37 [label = "a|a, b|b", color = DimGray]
+  200 -> 38 [label = "b|a, c|c", color = DimGray]
+  200 -> 39 [label = "c|b, c|c", color = DimGray]
+  200 -> 40 [label = "a|b, a|c", color = DimGray]
+  200 -> 41 [label = "a|c, b|b", color = DimGray]
+  200 -> 42 [label = "c|b, c|c", color = DimGray]
+  200 -> 43 [label = "a|a, c|b", color = DimGray]
+  200 -> 44 [label = "b|a, b|b", color = DimGray]
+  200 -> 45 [label = "a|c, c|a", color = DimGray]
+  200 -> 46 [label = "c|a, c|b", color = DimGray]
+  200 -> 47 [label = "a|b, b|c", color = DimGray]
+  200 -> 48 [label = "a|b", color = DimGray]
+  200 -> 49 [label = "b|c, c|c", color = DimGray]
+  200 -> 50 [label = "a|a, b|b", color = DimGray]
+  200 -> 51 [label = "c|a, c|c", color = DimGray]
+  200 -> 52 [label = "a|b, b|c", color = DimGray]
+  200 -> 53 [label = "b|a, b|b", color = DimGray]
+  200 -> 54 [label = "a|c, b|a", color = DimGray]
+  200 -> 55 [label = "b|c, c|b", color = DimGray]
+  200 -> 56 [label = "a|a, b|c", color = DimGray]
+  200 -> 57 [label = "a|b, b|b", color = DimGray]
+  200 -> 58 [label = "c|b, c|c", color = DimGray]
+  200 -> 59 [label = "c|b, c|c", color = DimGray]
+  200 -> 60 [label = "b|c, c|a", color = DimGray]
+  200 -> 61 [label = "a|a, a|c", color = DimGray]
+  200 -> 62 [label = "b|a, c|a", color = DimGray]
+  200 -> 63 [label = "c|b, c|c", color = DimGray]
+  200 -> 64 [label = "c|b", color = DimGray]
+  200 -> 65 [label = "a|c, c|b", color = DimGray]
+  200 -> 66 [label = "a|a, c|c", color = DimGray]
+  200 -> 67 [label = "a|b, a|c", color = DimGray]
+  200 -> 68 [label = "a|b, b|b", color = DimGray]
+  200 -> 69 [label = "a|c", color = DimGray]
+  200 -> 70 [label = "b|a, b|b", color = DimGray]
+  200 -> 71 [label = "a|a, c|c", color = DimGray]
+  200 -> 72 [label = "a|a, a|b", color = DimGray]
+  200 -> 73 [label = "b|c, c|c", color = DimGray]
+  200 -> 74 [label = "a|c, c|c", color = DimGray]
+  200 -> 75 [label = "a|c, b|b", color = DimGray]
+  200 -> 76 [label = "c|a, c|c", color = DimGray]
+  200 -> 77 [label = "a|b", color = DimGray]
+  200 -> 78 [label = "a|b", color = DimGray]
+  200 -> 79 [label = "a|a, c|a", color = DimGray]
+  200 -> 80 [label = "b|c, c|a", color = DimGray]
+  200 -> 81 [label = "c|a, c|b", color = DimGray]
+  200 -> 82 [label = "a|b, b|a", color = DimGray]
+  200 -> 83 [label = "c|c", color = DimGray]
+  200 -> 84 [label = "c|b, c|c", color = DimGray]
+  200 -> 85 [label = "a|b, b|c", color = DimGray]
+  200 -> 86 [label = "c|b", color = DimGray]
+  200 -> 87 [label = "a|c, c|c", color = DimGray]
+  200 -> 88 [label = "b|b, c|c", color = DimGray]
+  200 -> 89 [label = "b|a, c|a", color = DimGray]
+  200 -> 90 [label = "b|c, c|c", color = DimGray]
+  200 -> 91 [label = "c|b, c|c", color = DimGray]
+  200 -> 92 [label = "a|c, b|b", color = DimGray]
+  200 -> 93 [label = "a|a, b|b", color = DimGray]
+  200 -> 94 [label = "b|a, c|c", color = DimGray]
+  200 -> 95 [label = "a|a, b|a", color = DimGray]
+  200 -> 96 [label = "c|a, c|c", color = DimGray]
+  200 -> 97 [label = "c|a, c|b", color = DimGray]
+  200 -> 98 [label = "b|c, c|c", color = DimGray]
+  200 -> 99 [label = "c|a", color = DimGray]
+  200 -> 100 [label = "a|a, a|b", color = DimGray]
+  200 -> 101 [label = "a|b, a|c", color = DimGray]
+  200 -> 102 [label = "b|c, c|c", color = DimGray]
+  200 -> 103 [label = "b|a, c|c", color = DimGray]
+  200 -> 104 [label = "c|a, c|c", color = DimGray]
+  200 -> 105 [label = "b|a, c|b", color = DimGray]
+  200 -> 106 [label = "b|a, c|c", color = DimGray]
+  200 -> 107 [label = "a|a, a|b", color = DimGray]
+  200 -> 108 [label = "b|b, b|c", color = DimGray]
+  200 -> 109 [label = "c|b", color = DimGray]
+  200 -> 110 [label = "a|b", color = DimGray]
+  200 -> 111 [label = "b|b", color = DimGray]
+  200 -> 112 [label = "a|b, b|a", color = DimGray]
+  200 -> 113 [label = "b|b, c|b", color = DimGray]
+  200 -> 114 [label = "c|a, c|b", color = DimGray]
+  200 -> 115 [label = "b|a, c|b", color = DimGray]
+  200 -> 116 [label = "a|b, a|c", color = DimGray]
+  200 -> 117 [label = "b|c, c|b", color = DimGray]
+  200 -> 118 [label = "a|b, c|a", color = DimGray]
+  200 -> 119 [label = "a|a, b|a", color = DimGray]
+  200 -> 120 [label = "b|b, c|a", color = DimGray]
+  200 -> 121 [label = "c|a, c|b", color = DimGray]
+  200 -> 122 [label = "b|a, c|a", color = DimGray]
+  200 -> 123 [label = "b|a", color = DimGray]
+  200 -> 124 [label = "a|b, b|c", color = DimGray]
+  200 -> 125 [label = "b|b, c|c", color = DimGray]
+  200 -> 126 [label = "a|a, c|b", color = DimGray]
+  200 -> 127 [label = "a|a, c|b", color = DimGray]
+  200 -> 128 [label = "b|a, c|a", color = DimGray]
+  200 -> 129 [label = "c|a", color = DimGray]
+  200 -> 130 [label = "a|b, c|a", color = DimGray]
+  200 -> 131 [label = "a|b, c|c", color = DimGray]
+  200 -> 132 [label = "b|c", color = DimGray]
+  200 -> 133 [label = "b|c, c|b", color = DimGray]
+  200 -> 134 [label = "c|b", color = DimGray]
+  200 -> 135 [label = "a|a, a|c", color = DimGray]
+  200 -> 136 [label = "c|c", color = DimGray]
+  200 -> 137 [label = "a|b, b|c", color = DimGray]
+  200 -> 138 [label = "a|a, c|a", color = DimGray]
+  200 -> 139 [label = "c|b, c|c", color = DimGray]
+  200 -> 140 [label = "b|b, c|a", color = DimGray]
+  200 -> 141 [label = "b|c, c|a", color = DimGray]
+  200 -> 142 [label = "b|b, c|c", color = DimGray]
+  200 -> 143 [label = "c|b", color = DimGray]
+  200 -> 144 [label = "a|c, c|c", color = DimGray]
+  200 -> 145 [label = "a|b, a|c", color = DimGray]
+  200 -> 146 [label = "a|a, b|a", color = DimGray]
+  200 -> 147 [label = "b|a, c|a", color = DimGray]
+  200 -> 148 [label = "a|c, c|b", color = DimGray]
+  200 -> 149 [label = "a|b, c|b", color = DimGray]
+  200 -> 150 [label = "a|c, c|b", color = DimGray]
+  200 -> 151 [label = "a|a, c|c", color = DimGray]
+  200 -> 152 [label = "b|c", color = DimGray]
+  200 -> 153 [label = "a|b, c|c", color = DimGray]
+  200 -> 154 [label = "b|c, c|a", color = DimGray]
+  200 -> 155 [label = "a|b, a|c", color = DimGray]
+  200 -> 156 [label = "c|a", color = DimGray]
+  200 -> 157 [label = "a|b, b|c", color = DimGray]
+  200 -> 158 [label = "b|b, c|a", color = DimGray]
+  200 -> 159 [label = "a|a, c|b", color = DimGray]
+  200 -> 160 [label = "b|b, c|b", color = DimGray]
+  200 -> 161 [label = "a|b, a|c", color = DimGray]
+  200 -> 162 [label = "a|c, b|b", color = DimGray]
+  200 -> 163 [label = "a|c, b|b", color = DimGray]
+  200 -> 164 [label = "a|a, c|b", color = DimGray]
+  200 -> 165 [label = "c|b, c|c", color = DimGray]
+  200 -> 166 [label = "b|b", color = DimGray]
+  200 -> 167 [label = "c|a, c|b", color = DimGray]
+  200 -> 168 [label = "b|b, c|c", color = DimGray]
+  200 -> 169 [label = "a|c, c|a", color = DimGray]
+  200 -> 170 [label = "a|c, c|b", color = DimGray]
+  200 -> 171 [label = "a|b, c|c", color = DimGray]
+  200 -> 172 [label = "a|a, b|b", color = DimGray]
+  200 -> 173 [label = "a|b", color = DimGray]
+  200 -> 174 [label = "a|c, b|b", color = DimGray]
+  200 -> 175 [label = "a|a, c|c", color = DimGray]
+  200 -> 176 [label = "b|c", color = DimGray]
+  200 -> 177 [label = "a|b, b|b", color = DimGray]
+  200 -> 178 [label = "a|b, b|c", color = DimGray]
+  200 -> 179 [label = "a|c, c|a", color = DimGray]
+  200 -> 180 [label = "a|c, c|a", color = DimGray]
+  200 -> 181 [label = "a|b, c|a", color = DimGray]
+  200 -> 182 [label = "a|c, c|c", color = DimGray]
+  200 -> 183 [label = "a|a, b|b", color = DimGray]
+  200 -> 184 [label = "a|c, b|c", color = DimGray]
+  200 -> 185 [label = "b|b", color = DimGray]
+  200 -> 186 [label = "b|c, c|a", color = DimGray]
+  200 -> 187 [label = "a|b, c|b", color = DimGray]
+  200 -> 188 [label = "a|c", color = DimGray]
+  200 -> 189 [label = "b|a, c|b", color = DimGray]
+  200 -> 190 [label = "a|b, c|c", color = DimGray]
+  200 -> 191 [label = "b|b, b|c", color = DimGray]
+  200 -> 192 [label = "c|a, c|b", color = DimGray]
+  200 -> 193 [label = "a|c, c|a", color = DimGray]
+  200 -> 194 [label = "a|c, b|a", color = DimGray]
+  200 -> 195 [label = "c|b", color = DimGray]
+  200 -> 196 [label = "c|b, c|c", color = DimGray]
+  200 -> 197 [label = "a|a, b|a", color = DimGray]
+  200 -> 198 [label = "a|a, a|c", color = DimGray]
+  200 -> 199 [label = "b|b, c|a", color = DimGray]
+  200 -> 200 [label = "b|b, c|a", color = DimGray]
+  200 -> 201 [label = "b|a, c|c", color = DimGray]
+  200 -> 202 [label = "a|c, b|a", color = DimGray]
+  200 -> 203 [label = "a|a, c|c", color = DimGray]
+  200 -> 204 [label = "a|c, c|a", color = DimGray]
+  200 -> 205 [label = "b|a, b|b", color = DimGray]
+  200 -> 206 [label = "a|a, c|a", color = DimGray]
+  200 -> 207 [label = "b|a, c|b", color = DimGray]
+  200 -> 208 [label = "a|a, c|c", color = DimGray]
+  200 -> 209 [label = "b|c, c|c", color = DimGray]
+  200 -> 210 [label = "a|a", color = DimGray]
+  200 -> 211 [label = "a|a, b|a", color = DimGray]
+  200 -> 212 [label = "b|a, c|a", color = DimGray]
+  200 -> 213 [label = "b|c, c|c", color = DimGray]
+  200 -> 214 [label = "a|a, b|c", color = DimGray]
+  200 -> 215 [label = "b|b, c|b", color = DimGray]
+  200 -> 216 [label = "a|b, c|b", color = DimGray]
+  200 -> 217 [label = "c|a", color = DimGray]
+  200 -> 218 [label = "a|c, b|a", color = DimGray]
+  200 -> 219 [label = "a|a, a|c", color = DimGray]
+  200 -> 220 [label = "a|a, c|b", color = DimGray]
+  200 -> 221 [label = "b|a, c|c", color = DimGray]
+  200 -> 222 [label = "a|c, b|a", color = DimGray]
+  200 -> 223 [label = "a|a, c|a", color = DimGray]
+  200 -> 224 [label = "a|c, c|a", color = DimGray]
+  200 -> 225 [label = "b|c, c|a", color = DimGray]
+  200 -> 226 [label = "a|b, c|c", color = DimGray]
+  200 -> 227 [label = "a|a, a|c", color = DimGray]
+  200 -> 228 [label = "b|a, b|b", color = DimGray]
+  200 -> 229 [label = "c|a, c|b", color = DimGray]
+  200 -> 230 [label = "b|b", color = DimGray]
+  200 -> 231 [label = "b|a, c|a", color = DimGray]
+  200 -> 232 [label = "b|c, c|c", color = DimGray]
+  200 -> 233 [label = "c|a, c|b", color = DimGray]
+  200 -> 234 [label = "b|b, c|c", color = DimGray]
+  200 -> 235 [label = "b|b, c|b", color = DimGray]
+  200 -> 236 [label = "a|c, c|b", color = DimGray]
+  200 -> 237 [label = "a|a, c|a", color = DimGray]
+  200 -> 238 [label = "a|a, b|c", color = DimGray]
+  200 -> 239 [label = "a|b, c|a", color = DimGray]
+  200 -> 240 [label = "a|c, b|c", color = DimGray]
+  200 -> 241 [label = "a|c, b|a", color = DimGray]
+  200 -> 242 [label = "a|c, b|a", color = DimGray]
+  200 -> 243 [label = "a|c", color = DimGray]
+  200 -> 244 [label = "b|a, c|b", color = DimGray]
+  200 -> 245 [label = "a|c", color = DimGray]
+  200 -> 246 [label = "a|c, c|c", color = DimGray]
+  200 -> 247 [label = "a|a, a|b", color = DimGray]
+  200 -> 248 [label = "b|c, c|c", color = DimGray]
+  200 -> 249 [label = "b|b, c|c", color = DimGray]
+  200 -> 250 [label = "a|a, b|a", color = DimGray]
+  200 -> 251 [label = "a|c, c|b", color = DimGray]
+  200 -> 252 [label = "b|c", color = DimGray]
+  200 -> 253 [label = "a|a, c|a", color = DimGray]
+  200 -> 254 [label = "a|a, b|c", color = DimGray]
+  200 -> 255 [label = "a|a, a|b", color = DimGray]
+  200 -> 256 [label = "a|b, c|a", color = DimGray]
+  200 -> 257 [label = "a|a, c|a", color = DimGray]
+  200 -> 258 [label = "a|c", color = DimGray]
+  200 -> 259 [label = "a|a, c|c", color = DimGray]
+  200 -> 260 [label = "b|a, b|b", color = DimGray]
+  200 -> 261 [label = "a|a", color = DimGray]
+  200 -> 262 [label = "a|a, c|c", color = DimGray]
+  200 -> 263 [label = "b|c, c|a", color = DimGray]
+  200 -> 264 [label = "b|a, c|b", color = DimGray]
+  200 -> 265 [label = "b|a, c|b", color = DimGray]
+  200 -> 266 [label = "a|c, b|c", color = DimGray]
+  200 -> 267 [label = "b|a, c|b", color = DimGray]
+  200 -> 268 [label = "a|a, b|b", color = DimGray]
+  200 -> 269 [label = "a|b, b|a", color = DimGray]
+  200 -> 270 [label = "a|a, b|a", color = DimGray]
+  200 -> 271 [label = "c|a, c|c", color = DimGray]
+  200 -> 272 [label = "a|b, a|c", color = DimGray]
+  200 -> 273 [label = "a|c, c|a", color = DimGray]
+  200 -> 274 [label = "a|b, c|c", color = DimGray]
+  200 -> 275 [label = "a|b, a|c", color = DimGray]
+  200 -> 276 [label = "b|a, b|c", color = DimGray]
+  200 -> 277 [label = "c|a, c|b", color = DimGray]
+  200 -> 278 [label = "a|b, a|c", color = DimGray]
+  200 -> 279 [label = "a|a, c|c", color = DimGray]
+  200 -> 280 [label = "b|c, c|b", color = DimGray]
+  200 -> 281 [label = "a|b", color = DimGray]
+  200 -> 282 [label = "b|b, c|c", color = DimGray]
+  200 -> 283 [label = "b|c, c|c", color = DimGray]
+  200 -> 284 [label = "a|c, b|c", color = DimGray]
+  200 -> 285 [label = "c|a, c|b", color = DimGray]
+  200 -> 286 [label = "c|a, c|c", color = DimGray]
+  200 -> 287 [label = "b|c, c|c", color = DimGray]
+  200 -> 288 [label = "a|c, b|b", color = DimGray]
+  200 -> 289 [label = "a|a, b|b", color = DimGray]
+  200 -> 290 [label = "c|a, c|b", color = DimGray]
+  200 -> 291 [label = "a|b, b|b", color = DimGray]
+  200 -> 292 [label = "a|a, c|b", color = DimGray]
+  200 -> 293 [label = "b|b", color = DimGray]
+  200 -> 294 [label = "b|b", color = DimGray]
+  200 -> 295 [label = "a|b, c|c", color = DimGray]
+  200 -> 296 [label = "b|a, c|b", color = DimGray]
+  200 -> 297 [label = "a|c, c|a", color = DimGray]
+  200 -> 298 [label = "a|c, b|b", color = DimGray]
+  200 -> 299 [label = "c|a, c|b", color = DimGray]
+  200 -> 300 [label = "a|b, c|a", color = DimGray]
+  200 -> 301 [label = "a|b, b|c", color = DimGray]
+  200 -> 302 [label = "b|b, b|c", color = DimGray]
+  200 -> 303 [label = "a|a, c|a", color = DimGray]
+  200 -> 304 [label = "a|c, b|b", color = DimGray]
+  200 -> 305 [label = "a|b, c|b", color = DimGray]
+  200 -> 306 [label = "b|c, c|c", color = DimGray]
+  200 -> 307 [label = "a|a", color = DimGray]
+  200 -> 308 [label = "a|a, b|b", color = DimGray]
+  200 -> 309 [label = "a|a, b|b", color = DimGray]
+  200 -> 310 [label = "b|c", color = DimGray]
+  200 -> 311 [label = "b|a, c|c", color = DimGray]
+  200 -> 312 [label = "b|b, c|b", color = DimGray]
+  200 -> 313 [label = "a|a, b|c", color = DimGray]
+  200 -> 314 [label = "a|b, b|b", color = DimGray]
+  200 -> 315 [label = "a|a, b|a", color = DimGray]
+  200 -> 316 [label = "c|a, c|b", color = DimGray]
+  200 -> 317 [label = "a|a, c|b", color = DimGray]
+  200 -> 318 [label = "b|c", color = DimGray]
+  200 -> 319 [label = "a|b", color = DimGray]
+  200 -> 320 [label = "a|b", color = DimGray]
+  200 -> 321 [label = "a|a, a|b", color = DimGray]
+  200 -> 322 [label = "a|b, b|b", color = DimGray]
+  200 -> 323 [label = "a|c, c|a", color = DimGray]
+  200 -> 324 [label = "a|b", color = DimGray]
+  200 -> 325 [label = "b|c", color = DimGray]
+  200 -> 326 [label = "b|a, b|b", color = DimGray]
+  200 -> 327 [label = "a|c, c|c", color = DimGray]
+  200 -> 328 [label = "c|a, c|c", color = DimGray]
+  200 -> 329 [label = "a|b, a|c", color = DimGray]
+  200 -> 330 [label = "b|a, c|c", color = DimGray]
+  200 -> 331 [label = "a|a, c|a", color = DimGray]
+  200 -> 332 [label = "a|c, b|b", color = DimGray]
+  200 -> 333 [label = "a|a, c|b", color = DimGray]
+  200 -> 334 [label = "b|b, c|b", color = DimGray]
+  200 -> 335 [label = "b|a, c|c", color = DimGray]
+  200 -> 336 [label = "a|a, c|c", color = DimGray]
+  200 -> 337 [label = "b|b, b|c", color = DimGray]
+  200 -> 338 [label = "a|a, c|a", color = DimGray]
+  200 -> 339 [label = "a|b, c|a", color = DimGray]
+  200 -> 340 [label = "a|a, a|b", color = DimGray]
+  200 -> 341 [label = "a|a, b|b", color = DimGray]
+  200 -> 342 [label = "b|a, b|b", color = DimGray]
+  200 -> 343 [label = "a|b, c|b", color = DimGray]
+  200 -> 344 [label = "b|b, b|c", color = DimGray]
+  200 -> 345 [label = "a|a, b|b", color = DimGray]
+  200 -> 346 [label = "a|a, b|b", color = DimGray]
+  200 -> 347 [label = "b|c, c|c", color = DimGray]
+  200 -> 348 [label = "b|c, c|a", color = DimGray]
+  200 -> 349 [label = "a|c, b|b", color = DimGray]
+  200 -> 350 [label = "b|c, c|c", color = DimGray]
+  200 -> 351 [label = "a|a", color = DimGray]
+  200 -> 352 [label = "a|c, c|b", color = DimGray]
+  200 -> 353 [label = "c|b", color = DimGray]
+  200 -> 354 [label = "b|a, c|c", color = DimGray]
+  200 -> 355 [label = "a|c, b|a", color = DimGray]
+  200 -> 356 [label = "a|b, c|c", color = DimGray]
+  200 -> 357 [label = "a|a, b|b", color = DimGray]
+  200 -> 358 [label = "a|a, b|b", color = DimGray]
+  200 -> 359 [label = "b|b, b|c", color = DimGray]
+  200 -> 360 [label = "a|b, a|c", color = DimGray]
+  200 -> 361 [label = "a|a, c|c", color = DimGray]
+  200 -> 362 [label = "a|c, b|c", color = DimGray]
+  200 -> 363 [label = "b|b, c|a", color = DimGray]
+  200 -> 364 [label = "a|a, b|a", color = DimGray]
+  200 -> 365 [label = "a|c, b|c", color = DimGray]
+  200 -> 366 [label = "c|a", color = DimGray]
+  200 -> 367 [label = "a|b, a|c", color = DimGray]
+  200 -> 368 [label = "a|b, a|c", color = DimGray]
+  200 -> 369 [label = "a|a, b|c", color = DimGray]
+  200 -> 370 [label = "b|c, c|c", color = DimGray]
+  200 -> 371 [label = "a|a, b|b", color = DimGray]
+  200 -> 372 [label = "a|c", color = DimGray]
+  200 -> 373 [label = "a|b, c|a", color = DimGray]
+  200 -> 374 [label = "b|a, c|b", color = DimGray]
+  200 -> 375 [label = "a|a, c|c", color = DimGray]
+  200 -> 376 [label = "a|c, b|c", color = DimGray]
+  200 -> 377 [label = "a|c, b|b", color = DimGray]
+  200 -> 378 [label = "a|b, a|c", color = DimGray]
+  200 -> 379 [label = "a|a, a|c", color = DimGray]
+  200 -> 380 [label = "a|a, c|b", color = DimGray]
+  200 -> 381 [label = "a|b, b|a", color = DimGray]
+  200 -> 382 [label = "b|a, c|b", color = DimGray]
+  200 -> 383 [label = "a|a", color = DimGray]
+  200 -> 384 [label = "a|c, b|c", color = DimGray]
+  200 -> 385 [label = "a|b, b|a", color = DimGray]
+  200 -> 386 [label = "a|b, b|b", color = DimGray]
+  200 -> 387 [label = "b|a, c|b", color = DimGray]
+  200 -> 388 [label = "a|c, c|c", color = DimGray]
+  200 -> 389 [label = "a|b, c|c", color = DimGray]
+  200 -> 390 [label = "a|b", color = DimGray]
+  200 -> 391 [label = "c|a, c|c", color = DimGray]
+  200 -> 392 [label = "c|a, c|c", color = DimGray]
+  200 -> 393 [label = "b|a, b|b", color = DimGray]
+  200 -> 394 [label = "a|a, b|b", color = DimGray]
+  200 -> 395 [label = "a|c, c|c", color = DimGray]
+  200 -> 396 [label = "b|c", color = DimGray]
+  200 -> 397 [label = "b|a, c|c", color = DimGray]
+  200 -> 398 [label = "a|b, b|b", color = DimGray]
+  200 -> 399 [label = "a|a, b|c", color = DimGray]
+  200 -> 400 [label = "a|b, b|b", color = DimGray]
+  200 -> 401 [label = "a|a, b|c", color = DimGray]
+  200 -> 402 [label = "a|c, b|b", color = DimGray]
+  200 -> 403 [label = "a|a, c|c", color = DimGray]
+  200 -> 404 [label = "c|a, c|c", color = DimGray]
+  200 -> 405 [label = "a|a, b|b", color = DimGray]
+  200 -> 406 [label = "a|c, c|c", color = DimGray]
+  200 -> 407 [label = "a|b, b|c", color = DimGray]
+  200 -> 408 [label = "a|c, c|b", color = DimGray]
+  200 -> 409 [label = "b|a, c|c", color = DimGray]
+  200 -> 410 [label = "a|a, b|c", color = DimGray]
+  200 -> 411 [label = "a|a, b|c", color = DimGray]
+  200 -> 412 [label = "c|a", color = DimGray]
+  200 -> 413 [label = "a|c, b|c", color = DimGray]
+  200 -> 414 [label = "a|b, c|b", color = DimGray]
+  200 -> 415 [label = "b|b, c|c", color = DimGray]
+  200 -> 416 [label = "a|c, c|c", color = DimGray]
+  200 -> 417 [label = "a|a, a|c", color = DimGray]
+  200 -> 418 [label = "a|c, b|b", color = DimGray]
+  200 -> 419 [label = "a|b, b|b", color = DimGray]
+  200 -> 420 [label = "a|b, c|b", color = DimGray]
+  200 -> 421 [label = "a|c, c|a", color = DimGray]
+  200 -> 422 [label = "c|a, c|b", color = DimGray]
+  200 -> 423 [label = "b|a, b|c", color = DimGray]
+  200 -> 424 [label = "a|c, c|b", color = DimGray]
+  200 -> 425 [label = "a|b, c|a", color = DimGray]
+  200 -> 426 [label = "b|b, c|a", color = DimGray]
+  200 -> 427 [label = "b|a, b|c", color = DimGray]
+  200 -> 428 [label = "a|c, b|b", color = DimGray]
+  200 -> 429 [label = "c|b, c|c", color = DimGray]
+  200 -> 430 [label = "a|c, c|b", color = DimGray]
+  200 -> 431 [label = "b|a, b|c", color = DimGray]
+  200 -> 432 [label = "a|a, c|c", color = DimGray]
+  200 -> 433 [label = "b|c, c|c", color = DimGray]
+  200 -> 434 [label = "a|c, c|b", color = DimGray]
+  200 -> 435 [label = "a|c, c|b", color = DimGray]
+  200 -> 436 [label = "b|a, b|c", color = DimGray]
+  200 -> 437 [label = "a|a, c|c", color = DimGray]
+  200 -> 438 [label = "a|b, c|b", color = DimGray]
+  200 -> 439 [label = "b|c, c|b", color = DimGray]
+  200 -> 440 [label = "b|c, c|b", color = DimGray]
+  200 -> 441 [label = "a|a", color = DimGray]
+  200 -> 442 [label = "c|a, c|b", color = DimGray]
+  200 -> 443 [label = "b|a, b|c", color = DimGray]
+  200 -> 444 [label = "a|c, b|c", color = DimGray]
+  200 -> 445 [label = "a|b, c|a", color = DimGray]
+  200 -> 446 [label = "a|b, b|b", color = DimGray]
+  200 -> 447 [label = "a|b, a|c", color = DimGray]
+  200 -> 448 [label = "b|b", color = DimGray]
+  200 -> 449 [label = "c|a, c|b", color = DimGray]
+  200 -> 450 [label = "b|b, b|c", color = DimGray]
+  200 -> 451 [label = "b|b, c|a", color = DimGray]
+  200 -> 452 [label = "a|c, c|c", color = DimGray]
+  200 -> 453 [label = "b|a, c|a", color = DimGray]
+  200 -> 454 [label = "a|b, a|c", color = DimGray]
+  200 -> 455 [label = "a|c, c|c", color = DimGray]
+  200 -> 456 [label = "b|a, c|a", color = DimGray]
+  200 -> 457 [label = "b|a, b|c", color = DimGray]
+  200 -> 458 [label = "a|c, c|c", color = DimGray]
+  200 -> 459 [label = "b|b", color = DimGray]
+  200 -> 460 [label = "a|c, c|a", color = DimGray]
+  200 -> 461 [label = "a|c, c|c", color = DimGray]
+  200 -> 462 [label = "b|a, b|c", color = DimGray]
+  200 -> 463 [label = "a|a, a|c", color = DimGray]
+  200 -> 464 [label = "a|c, c|c", color = DimGray]
+  200 -> 465 [label = "a|b, b|b", color = DimGray]
+  200 -> 466 [label = "a|a", color = DimGray]
+  200 -> 467 [label = "b|a, c|a", color = DimGray]
+  200 -> 468 [label = "b|c, c|b", color = DimGray]
+  200 -> 469 [label = "b|a, c|b", color = DimGray]
+  200 -> 470 [label = "a|c, b|a", color = DimGray]
+  200 -> 471 [label = "a|b, b|b", color = DimGray]
+  200 -> 472 [label = "c|a, c|c", color = DimGray]
+  200 -> 473 [label = "c|b, c|c", color = DimGray]
+  200 -> 474 [label = "a|b, b|a", color = DimGray]
+  200 -> 475 [label = "a|b, b|c", color = DimGray]
+  200 -> 476 [label = "b|c, c|b", color = DimGray]
+  200 -> 477 [label = "a|a, b|b", color = DimGray]
+  200 -> 478 [label = "b|b, c|b", color = DimGray]
+  200 -> 479 [label = "b|c, c|a", color = DimGray]
+  200 -> 480 [label = "c|a, c|b", color = DimGray]
+  200 -> 481 [label = "b|b, c|b", color = DimGray]
+  200 -> 482 [label = "a|b, b|c", color = DimGray]
+  200 -> 483 [label = "b|a", color = DimGray]
+  200 -> 484 [label = "a|b, c|a", color = DimGray]
+  200 -> 485 [label = "b|b, c|c", color = DimGray]
+  200 -> 486 [label = "a|c", color = DimGray]
+  200 -> 487 [label = "a|a, c|a", color = DimGray]
+  200 -> 488 [label = "a|a, c|b", color = DimGray]
+  200 -> 489 [label = "a|b, b|c", color = DimGray]
+  200 -> 490 [label = "a|a, c|b", color = DimGray]
+  200 -> 491 [label = "b|a, c|a", color = DimGray]
+  200 -> 492 [label = "b|a, b|c", color = DimGray]
+  200 -> 493 [label = "b|c, c|a", color = DimGray]
+  200 -> 494 [label = "a|a, c|a", color = DimGray]
+  200 -> 495 [label = "a|b, c|b", color = DimGray]
+  200 -> 496 [label = "a|c, c|b", color = DimGray]
+  200 -> 497 [label = "a|a, c|c", color = DimGray]
+  200 -> 498 [label = "a|c, b|a", color = DimGray]
+  200 -> 499 [label = "a|a, c|a", color = DimGray]
+  202 -> F202
+  206 -> F206
+  207 -> F207
+  208 -> F208
+  209 -> F209
+  210 -> F210 [color = DimGray]
+  211 -> F211
+  212 -> F212 [color = DimGray]
+  213 -> F213 [color = DimGray]
+  214 -> F214
+  215 -> F215 [color = DimGray]
+  219 -> F219 [color = DimGray]
+  221 -> F221
+  223 -> F223
+  224 -> F224
+  226 -> F226
+  231 -> F231
+  232 -> F232
+  235 -> F235
+  236 -> F236
+  242 -> F242
+  244 -> F244
+  247 -> F247 [color = DimGray]
+  248 -> F248
+  251 -> F251
+  253 -> F253
+  257 -> F257 [color = DimGray]
+  261 -> F261
+  262 -> F262
+  263 -> F263 [color = DimGray]
+  268 -> F268 [color = DimGray]
+  270 -> F270 [color = DimGray]
+  271 -> F271
+  272 -> F272
+  273 -> F273
+  275 -> F275 [color = DimGray]
+  277 -> F277
+  278 -> F278
+  280 -> F280 [color = DimGray]
+  283 -> F283 [color = DimGray]
+  284 -> F284 [color = DimGray]
+  285 -> F285
+  286 -> F286 [color = DimGray]
+  289 -> F289 [color = DimGray]
+  290 -> F290
+  291 -> F291 [color = DimGray]
+  293 -> F293 [color = DimGray]
+  296 -> F296
+  299 -> F299 [color = DimGray]
+  302 -> F302
+  306 -> F306
+  311 -> F311
+  312 -> F312 [color = DimGray]
+  313 -> F313 [color = DimGray]
+  314 -> F314
+  315 -> F315
+  316 -> F316 [color = DimGray]
+  319 -> F319
+  321 -> F321
+  322 -> F322 [color = DimGray]
+  323 -> F323
+  330 -> F330 [color = DimGray]
+  336 -> F336 [color = DimGray]
+  339 -> F339 [color = DimGray]
+  340 -> F340
+  341 -> F341
+  342 -> F342 [color = DimGray]
+  345 -> F345
+  347 -> F347 [color = DimGray]
+  348 -> F348
+  349 -> F349
+  352 -> F352 [color = DimGray]
+  353 -> F353
+  355 -> F355 [color = DimGray]
+  356 -> F356 [color = DimGray]
+  357 -> F357
+  358 -> F358
+  359 -> F359
+  361 -> F361 [color = DimGray]
+  364 -> F364
+  365 -> F365 [color = DimGray]
+  369 -> F369
+  370 -> F370 [color = DimGray]
+  371 -> F371
+  375 -> F375 [color = DimGray]
+  376 -> F376
+  378 -> F378 [color = DimGray]
+  384 -> F384
+  386 -> F386
+  387 -> F387 [color = DimGray]
+}
