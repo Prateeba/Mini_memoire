@@ -149,7 +149,7 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
             temp_aut->add_transition(random_state1, random_state2, label, random_weight()) ;  
                 
             if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) && !(is_deterministic(temp_aut)) ){ 
-                res->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ;  
+                res->add_transition(random_state1, random_state2, label, random_weight()) ;  
                     
             }
             else {
@@ -219,7 +219,7 @@ int main() {
     std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  */
     
     auto res = create_context() ; 
-    random_aut(res, 100, 0.1, 20, 18) ; 
+    random_aut(res, 10, 0.1, 1, 1) ; 
     
     return 0 ; 
 }
