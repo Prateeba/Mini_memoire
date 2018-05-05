@@ -1,3 +1,9 @@
+/* Create a transducer of 100 useful states : 
+	- Create 100 states and place them in a list
+	- Choose 10 states randomly and connect them with a ramdom tansition
+	- Property check : 
+		if not ok  : pop the transtions till property check ok */ 
+
 #include <iostream> //std::cout
 #include <random>
 
@@ -25,12 +31,6 @@
 #include <vcsn/algos/accessible.hh>
 
 using namespace vcsn ; 
-
-/* TODO : 
-        1) Enlarge context : DONE 
-        2) Choose initial and finals : DONE 
-        3) Have just one label per transition 
-        4) Verify that it does what the teacher asked : DONE */ 
 
 int uni_rand(int max) {
     /* return a random  number between 1 and max */ 
@@ -84,7 +84,7 @@ auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states,
 }
 
 
-template <typename Ctx> /* mutable_automaton<Ctx> */ 
+template <typename Ctx>
 int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
                                         unsigned num_initial = 1, unsigned num_final = 1,
                                         unsigned max_labels = 1, const std::string& weights = "") {
@@ -92,6 +92,12 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
     using detail::irange;
     using automaton_t = mutable_automaton<Ctx>;
     using state_t = state_t_of<automaton_t>;
+    using label_t = label_t_of<automaton_t> ; 
+
+    // User to input the density of adding a transition
+    require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
+
+    /* pointer to transducer */ 
     auto res = make_shared_ptr<automaton_t>(ctx);
     
     auto& gen = make_random_engine();
@@ -106,72 +112,62 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
     const auto& gens = ls.generators();
 
     // create states and store them in vector 
-    auto states = std::vector<state_t>{};
-
+    auto all_states = std::vector<state_t>{};
     for (unsigned i: detail::irange(num_states)){
-        states.emplace_back(res->new_state());
+        all_states.emplace_back(res->new_state());
     }
 
     // Choose and assign Initial States  
-    std::vector<state_t> initial_states =  choose_initial_final(ctx, states, num_states, num_initial) ; 
+    std::vector<state_t> initial_states =  choose_initial_final(ctx, all_states, num_states, num_initial) ; 
     for (unsigned i: detail::irange(initial_states.size())){
         res->set_initial(initial_states[i]) ;     
     }
     
     // Choose and assign Final States  
-    std::vector<state_t> final_states =  choose_initial_final(ctx, states, num_states, num_final) ; 
+    std::vector<state_t> final_states =  choose_initial_final(ctx, all_states, num_states, num_final) ; 
     for (unsigned i: detail::irange(final_states.size())){
         res->set_final(final_states[i]) ;     
     }
 
-    // User to input the density of adding a transition
-    require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
-
+    /* Random states selector */ 
     auto select = make_random_selector(make_random_engine()); 
-    int initial_num_useful_states = 0  ;
-    int counter_good = 0 ; 
-
-    bool found = false ; 
-
-    while (!found){ 
-
-        state_t random_state1 = select(states) ;
-        state_t random_state2 = select(states) ;
-
-    	auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
-        temp_aut = res ;
-            
-        int temp = uni_rand(1000) ; 
-        if (temp <= floor(density*1000)) {
-
-        	auto label = random_label(ls, gen) ;
-            temp_aut->add_transition(random_state1, random_state2, label, random_weight()) ;  
-                
-            if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) && !(is_deterministic(temp_aut)) ){ 
-                res->add_transition(random_state1, random_state2, label, random_weight()) ;  
-                    
-            }
-            else {
-                temp_aut->del_transition(random_state1, random_state2, label)  ;  
-            }    
-        }
-
-        if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
-        	counter_good += 1 ; 
-        	found = true ; 
-        	vcsn::dot(res, std::cout) << '\n';
-        	info(res) ; 
-   	 	}
-
-   	 	else {
-        	initial_num_useful_states = num_useful_states(res) ;
-
-    	}
+    
+    // Choose x random states and connect them 
+    for (unsigned i: detail::irange(num_states)){
+    	state_t random_state1 = select(all_states) ;
+        state_t random_state2 = select(all_states) ;
+        res->add_transition(random_state1, random_state2,  random_label(ls, gen) , random_weight()) ;  
+        
     }
+    
+    bool found = false ; 
+    auto t_list = res->all_transitions() ; 
+    int size_transition =  t_list.size() ; 
+    int initial_num_useful_states = 0  ;
 
-    //return final_res ;  
-    return counter_good ; 
+    while (size_transition > 0 && !found){ 
+		
+		/* Test if the random transducer generated respect the properties */ 
+		if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
+			found = true ; 
+			vcsn::dot(res, std::cout) << '\n';
+			info(res) ; 
+		}
+
+		else {
+			/* Pruning */
+			/* Choose a random transition t and Test if Transducer - t respect the properties  */ 
+			auto t = select(t_list);
+			res->del_transition(t) ;
+			size_transition -- ;   
+			std::cout << "size_transition" << size_transition << "\n" ; 
+			initial_num_useful_states = num_useful_states(res) ; 	
+		}
+	} 
+	   
+    return found ; 
 }
+
 auto create_context() {
     using namespace vcsn;
 
@@ -217,8 +213,11 @@ int main() {
     std::cout << "Number of good example : "<< count << "\n" ; 
     std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  */
     
-    auto res = create_context() ; 
-    random_aut(res, 10, 0.1, 1, 1) ; 
+    auto res = create_context() ;
+    bool result = random_aut(res, 5, 0.1, 1, 1) ; 
+    while (!result) {
+    	result = random_aut(res, 5, 0.1, 1, 1) ; 
+    }
     
     return 0 ; 
 }

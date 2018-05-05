@@ -1,6 +1,0 @@
-Algo à implémenter : 
-
-Creer un pointeur de transducteur : 
-rajoute x arrêtes au hasard 
-Prune tant qu'il y a des transitions à enlever, 
-Tant qu'on a pas atteint l'objectif on continue les alsos 

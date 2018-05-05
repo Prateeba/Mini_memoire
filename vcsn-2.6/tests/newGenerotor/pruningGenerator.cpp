@@ -57,7 +57,7 @@ bool random_generator(int num_states, int num_initial_states, int num_final_stat
 	auto ctx = create_context() ; 
 	
 	/* Generate a near complete automata/transducer */ 
-	auto res = random_automaton(ctx, num_states, 1, num_initial_states, num_final_states, 1) ; 
+	auto res = random_automaton(ctx, num_states, 0.001, num_initial_states, num_final_states, 1) ; 
 	
 	/* Get all transitions of the automata */ 
 	auto t_list = all_transitions(res) ; 
@@ -91,9 +91,9 @@ bool random_generator(int num_states, int num_initial_states, int num_final_stat
 }
 
 int main() {
-	bool result = random_generator(1000,90,76) ; 
+	bool result = random_generator(1000,110,93) ; 
 	while (!result) { 
-		result = random_generator(1000,90,76) ; 
+		result = random_generator(1000,110,93) ; 
 	}
 
 	return 0 ;
