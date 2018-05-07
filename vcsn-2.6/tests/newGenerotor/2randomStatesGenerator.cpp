@@ -218,7 +218,7 @@ int main() {
     std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  */
     
     auto res = create_context() ; 
-    random_aut(res, 10, 0.1, 1, 1) ; 
+    random_aut(res, 5, 0.1, 1, 1) ; 
     
     return 0 ; 
 }
