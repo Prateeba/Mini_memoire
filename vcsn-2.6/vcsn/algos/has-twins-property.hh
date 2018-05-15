@@ -131,8 +131,8 @@ namespace vcsn
   template <Automaton Aut>
   bool has_twins_property(const Aut& aut)
   {
-    require(!is_cycle_ambiguous(aut),
-            "has_twins_property: requires a cycle-unambiguous automaton");
+    /*require(!is_cycle_ambiguous(aut),
+            "has_twins_property: requires a cycle-unambiguous automaton"); */ 
 
     // Create new weightset lat<ws, ws> from weightset ws of aut.
     auto ws = *aut->weightset();
