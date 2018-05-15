@@ -58,7 +58,7 @@ bool in_state_list(auto states_list, auto state, int num_states) {
 template <typename Ctx>
 auto choose_initial_final(const Ctx& ctx, auto states_list, unsigned num_states, unsigned num_s) {
     /* Choose randomly the Initial and Final states */ 
-	
+    
     using automaton_t = mutable_automaton<Ctx>;
     using state_t = state_t_of<automaton_t>;
 
@@ -129,45 +129,55 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
 
     auto select = make_random_selector(make_random_engine()); 
     int initial_num_useful_states = 0  ;
+    auto all_states = res->all_states() ; 
     int counter_good = 0 ; 
-
     bool found = false ; 
 
-    std::cout << "BEFORE TRANSDUCER " << "\n" ; 
+    std::cout << "BEFORE TRANSDUCER" << "\n" ; 
     vcsn::dot(res, std::cout) << '\n';
 
-    while ( initial_num_useful_states <  num_states){ 
+    while (initial_num_useful_states < num_states ){ 
 
-        state_t random_state1 = select(states) ;
-        state_t random_state2 = select(states) ;
+        state_t random_state1 = select(all_states) ;
+        state_t random_state2 = select(all_states) ;
+        state_t random_state3 = select(all_states) ;
 
-    	auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
+        auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
         temp_aut = res ;
-            
+            https://gitlab.com/INFOF307-1718/Groupe06/tree/master/src/be/ac/ulb/infof307/g06/database
         int temp = uni_rand(1000) ; 
+        //std::cout << temp ;
         if (temp <= floor(density*1000)) {
 
-        	auto label = random_label(ls, gen) ;
-            temp_aut->add_transition(random_state1, random_state2, label, random_weight()) ;  
+            temp_aut->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ; 
+            temp_aut->add_transition(random_state2, random_state3, random_label(ls, gen), random_weight()) ; 
+            temp_aut->add_transition(random_state3, random_state1, random_label(ls, gen), random_weight()) ;
+            
+
                 
-            if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) && !(is_deterministic(temp_aut)) ){ 
-                res->add_transition(random_state1, random_state2, label, random_weight()) ;  
-                    
+            if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) ){ 
+                res->add_transition(random_state1, random_state2, random_label(ls, gen), random_weight()) ; 
+                res->add_transition(random_state2, random_state3, random_label(ls, gen), random_weight()) ; 
+                res->add_transition(random_state3, random_state1, random_label(ls, gen), random_weight()) ;
+                std::cout << "3 TRANSITIONS ADDED " << "\n" ;
+                vcsn::dot(res, std::cout) << '\n'; 
             }
             else {
-                temp_aut->del_transition(random_state1, random_state2, label)  ;  
+                temp_aut->del_transition(random_state1, random_state2, random_label(ls, gen)) ; 
+                temp_aut->del_transition(random_state2, random_state3, random_label(ls, gen)) ; 
+                temp_aut->del_transition(random_state3, random_state1, random_label(ls, gen)) ;
+
             }    
         }
 
         initial_num_useful_states = num_useful_states(res) ;
     }
 
-
-    if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
-            counter_good += 1 ; 
-            found = true ; 
-            std::cout << "AFTER TRANSDUCER " << "\n" ; 
-            vcsn::dot(res, std::cout) << '\n';
+    if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
+        counter_good += 1 ; 
+        found = true ; 
+        std::cout << "AFTER TRANSDUCER" << "\n" ; 
+        vcsn::dot(res, std::cout) << '\n';
     }
 
     return found ; 
@@ -182,7 +192,7 @@ auto create_context() {
     using letterset_t = letterset<alphabet_t>;
 
     // Create the letterset.
-    auto ls1 = letterset_t{'a', 'b', 'c'};
+    auto ls1 = letterset_t{'a', 'b', 'c', 'd', 'e'};
 
     // Labelset (double-tape).
     using labelset_t = tupleset<letterset_t, letterset_t>;
@@ -202,30 +212,14 @@ auto create_context() {
 
 int main() {
 
-    /*int i = 0 ; 
-    int max  = 100 ; 
-    int count = 0 ; 
-
     auto res = create_context() ; 
 
-    while (i < max) {
-        std::cout << "COUNTER : " << i << "\n" ; 
-        count += random_aut(res, 10, 0.1, 2, 2) ; 
-        i += 1 ; 
+    bool result = random_aut(res, 5, 1, 1, 1) ; 
+
+    while (!result ) {
+        result = random_aut(res, 5, 1, 1, 1) ; 
+
     }
-
-    std::cout << "Number of good example : "<< count << "\n" ; 
-    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  */
     
-    auto res = create_context() ;
-    int i = 0; 
-
-    bool result = random_aut(res, 5, 0.1, 1, 1) ; 
-    while (!result) { 
-        result = random_aut(res, 5, 0.1, 1, 1) ; 
-        std::cout << "REPEAT " << i << "\n" ; 
-        i++ ; 
-    } 
-
     return 0 ; 
 }

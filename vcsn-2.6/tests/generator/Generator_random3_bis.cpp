@@ -131,7 +131,10 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
     int initial_num_useful_states = 0  ;
     auto all_states = res->all_states() ; 
     int counter_good = 0 ; 
+    bool found = false ; 
 
+    std::cout << "BEFORE TRANSDUCER" << "\n" ; 
+    vcsn::dot(res, std::cout) << '\n';
 
     while (initial_num_useful_states < num_states ){ 
 
@@ -140,7 +143,7 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
 
     	auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
         temp_aut = res ;
-            
+            https://gitlab.com/INFOF307-1718/Groupe06/tree/master/src/be/ac/ulb/infof307/g06/database
         int temp = uni_rand(1000) ; 
         //std::cout << temp ;
         if (temp <= floor(density*1000)) {
@@ -159,22 +162,14 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
         initial_num_useful_states = num_useful_states(res) ;
     }
 
-    /*std::cout << "INFO REAL RES :" << "\n" ;
-    std::cout << !(is_cycle_ambiguous(res)) << "\n" ;
-    std::cout << is_functional(res) << "\n" ;
-    if (!(is_cycle_ambiguous(res)))  {
-        std::cout << has_twins_property(res) << "\n" ;
-    }
-    std::cout << !(is_deterministic(res)) << "\n" ; */
-
     if (( !(is_cycle_ambiguous(res)) && (is_functional(res)) && (has_twins_property(res)) ) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
         counter_good += 1 ; 
-        
+        found = true ; 
+        std::cout << "AFTER TRANSDUCER" << "\n" ; 
         vcsn::dot(res, std::cout) << '\n';
     }
 
-    //return final_res ;  
-    return counter_good ; 
+    return found ; 
 }
 auto create_context() {
     using namespace vcsn;
@@ -186,7 +181,7 @@ auto create_context() {
     using letterset_t = letterset<alphabet_t>;
 
     // Create the letterset.
-    auto ls1 = letterset_t{'a', 'b', 'c'};
+    auto ls1 = letterset_t{'a', 'b', 'c', 'd', 'e'};
 
     // Labelset (double-tape).
     using labelset_t = tupleset<letterset_t, letterset_t>;
@@ -206,21 +201,14 @@ auto create_context() {
 
 int main() {
 
-    int i = 0 ; 
-    int max  = 100 ; 
-    int count = 0 ; 
-
     auto res = create_context() ; 
 
-    while (i < max) {
-        std::cout << "COUNTER : " << i << "\n" ; 
-        count += random_aut(res, 10, 0.1, 1, 1) ; 
-        i += 1 ; 
-    }
+    bool result = random_aut(res, 5, 1, 1, 1) ; 
 
-    std::cout << "Number of good example : "<< count << "\n" ; 
-    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  
-         
+    while (!result ) {
+        result = random_aut(res, 5, 1, 1, 1) ; 
+
+    }
     
     return 0 ; 
 }

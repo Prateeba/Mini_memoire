@@ -95,9 +95,9 @@ bool random_generator(int num_states, int num_initial_states, int num_final_stat
 }
 
 int main() {
-	bool result = random_generator(5,1,1) ; 
+	bool result = random_generator(15,1,1) ; 
 	while (!result) { 
-		result = random_generator(5,1,1) ; 
+		result = random_generator(15,1,1) ; 
 	}
 
 	return 0 ;

@@ -157,10 +157,16 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
             }
         }
 
-        if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) &&  !(is_deterministic(res)) ) {
+        if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) &&  !(is_deterministic(res)) && num_useful_states(res) > (num_states/4) ) {
             found = true ; 
             counter_good += 1 ; 
+
+            std::cout << "------------WHOLE THING---------------------- " << "\n" ; 
             vcsn::dot(res, std::cout) << '\n';
+            std::cout<< "-----------------------TRIM----------------------------" << "\n" ; 
+            auto aut = trim(res) ; 
+            vcsn::dot(aut, std::cout) << '\n';
+            std::cout<< "-----------------------INFO----------------------------" << "\n" ; 
             info(res) ; 
         }
 
@@ -202,7 +208,7 @@ auto create_context() {
 int main() {
     
     auto res = create_context() ; 
-    random_aut(res, 1000, 0.1, 500, 450) ;     
+    random_aut(res, 1000, 0.01, 300, 250) ;     
 
     return 0 ; 
 }

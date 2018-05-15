@@ -2,6 +2,7 @@
 #include <iostream>
  
 /* rm $(ls -I "*.cpp" ) */ 
+/* dot -Tpng 200_50_30_13.dot -o 200_50_30_13.png */
 
 int main()
 {

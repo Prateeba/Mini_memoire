@@ -127,50 +127,55 @@ int random_aut(const Ctx& ctx, unsigned num_states, float density = 0.1,
     // User to input the density of adding a transition
     require(0 <= density && density <= 1, "random_automaton: density must be in [0,1]");
 
+    int counter_good = 0 ; 
     auto select = make_random_selector(make_random_engine()); 
     int initial_num_useful_states = 0  ;
-    int counter_good = 0 ; 
-
     bool found = false ; 
 
-    std::cout << "BEFORE TRANSDUCER " << "\n" ; 
-    vcsn::dot(res, std::cout) << '\n';
-
-    while ( initial_num_useful_states <  num_states){ 
-
+    while (initial_num_useful_states < num_states && !found ){ 
+    	
         state_t random_state1 = select(states) ;
-        state_t random_state2 = select(states) ;
-
-    	auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
+    	
+        auto temp_aut = make_shared_ptr<automaton_t>(ctx); // temporary automaton
         temp_aut = res ;
+        for (unsigned j: detail::irange(num_states)){
             
-        int temp = uni_rand(1000) ; 
-        if (temp <= floor(density*1000)) {
+            int temp = uni_rand(1000) ; 
+            //std::cout << temp ;
+            if (temp <= floor(density*1000)) {
 
-        	auto label = random_label(ls, gen) ;
-            temp_aut->add_transition(random_state1, random_state2, label, random_weight()) ;  
+            	temp_aut->add_transition(random_state1, states[j], random_label(ls, gen), random_weight()) ;  
                 
-            if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) && !(is_deterministic(temp_aut)) ){ 
-                res->add_transition(random_state1, random_state2, label, random_weight()) ;  
+                if ( !(is_cycle_ambiguous(temp_aut)) && (is_functional(temp_aut)) && (has_twins_property(temp_aut)) && !(is_deterministic(temp_aut)) ){ 
+                	res->add_transition(random_state1, states[j], random_label(ls, gen), random_weight()) ;  
                     
+                }
+                else {
+                	temp_aut->del_transition(random_state1, states[j], random_label(ls, gen))  ;  
+                }
+            
             }
-            else {
-                temp_aut->del_transition(random_state1, random_state2, label)  ;  
-            }    
         }
+
+        if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) &&  !(is_deterministic(res)) ) {
+            found = true ; 
+            counter_good += 1 ; 
+
+            std::cout << "------------WHOLE THING---------------------- " << "\n" ; 
+            vcsn::dot(res, std::cout) << '\n';
+            std::cout<< "-----------------------TRIM----------------------------" << "\n" ; 
+            auto aut = trim(res) ; 
+            vcsn::dot(aut, std::cout) << '\n';
+            std::cout<< "-----------------------INFO----------------------------" << "\n" ; 
+            info(res) ; 
+        }
+
 
         initial_num_useful_states = num_useful_states(res) ;
     }
 
-
-    if ( !(is_cycle_ambiguous(res)) && is_functional(res) && has_twins_property(res) && !(is_deterministic(res)) && num_useful_states(res) == num_states ) {
-            counter_good += 1 ; 
-            found = true ; 
-            std::cout << "AFTER TRANSDUCER " << "\n" ; 
-            vcsn::dot(res, std::cout) << '\n';
-    }
-
-    return found ; 
+ 
+    return counter_good ; 
 }
 auto create_context() {
     using namespace vcsn;
@@ -201,31 +206,9 @@ auto create_context() {
 
 
 int main() {
-
-    /*int i = 0 ; 
-    int max  = 100 ; 
-    int count = 0 ; 
-
-    auto res = create_context() ; 
-
-    while (i < max) {
-        std::cout << "COUNTER : " << i << "\n" ; 
-        count += random_aut(res, 10, 0.1, 2, 2) ; 
-        i += 1 ; 
-    }
-
-    std::cout << "Number of good example : "<< count << "\n" ; 
-    std::cout << "Good example ratio : "<< double(count) /double(max) << "\n" ;  */
     
-    auto res = create_context() ;
-    int i = 0; 
-
-    bool result = random_aut(res, 5, 0.1, 1, 1) ; 
-    while (!result) { 
-        result = random_aut(res, 5, 0.1, 1, 1) ; 
-        std::cout << "REPEAT " << i << "\n" ; 
-        i++ ; 
-    } 
+    auto res = create_context() ; 
+    random_aut(res, 500, 1, 100, 100) ;     
 
     return 0 ; 
 }
