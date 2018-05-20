@@ -1,4 +1,4 @@
-## Mini_memoire
+## INFO-F308 : Mini_memoire
 Ce travail propose un générateur d'automate transducteur satisfaisant certaines propriétés. Le générateur 
 prend en entrée le nombre d'états, la densité, le nombre d'états initiaux et finaux, ainsi que les différentes propriétés à 
 satisfaire et génère un transducteur satisfaisant ces propriétés.
