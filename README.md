@@ -6,6 +6,7 @@ satisfaire et génère un transducteur satisfaisant ces propriétés.
 ## Utilisation 
 cd vcsn-2.6/ <br />
 cd Generateur/<br />
+
 Le dossier generateurNotStop/ contient les générateurs qui ne s'arrêtent 
 que lorsqu'ils ont généré un transducteur respectant les différents et ayant
 autant d'états utiles que passé en paramètres.
@@ -17,6 +18,6 @@ généré un transducteur respectant les différentes propriétés.
 vcsn compile nomDuFichier.cpp <br />
 ./nomDuFichier nbEtatsTotaux Densité nbEtatsFinaux nbEtatsFinaux > nomDuFichierPourSauvegarderLeResultat.dot <br />
 
-##Exemple 
+## Exemple 
 vcsn compile branchingGenerator.cpp  <br />
 ./branchingGenerator 5 1 1 1 > exemple.dot  <br />
