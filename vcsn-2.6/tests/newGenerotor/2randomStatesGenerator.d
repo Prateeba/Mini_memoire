@@ -1,1 +1,0 @@
-2randomStatesGenerator: 2randomStatesGenerator.cpp

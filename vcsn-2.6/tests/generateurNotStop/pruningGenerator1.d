@@ -1,1 +1,0 @@
-pruningGenerator1: pruningGenerator1.cpp

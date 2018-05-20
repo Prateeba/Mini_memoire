@@ -1,0 +1,263 @@
+digraph
+{
+  vcsn_context = "lat<letterset<char_letters(abcde)>, letterset<char_letters(abcde)>>, b"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    I1
+    I2
+    I3
+    I6
+    I7
+    I8
+    I10
+    I11
+    I13
+    F0
+    F2
+    F3
+    F4
+    F6
+    F7
+    F8
+    F9
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31
+    32
+    33
+    34
+    35
+    36
+    37
+    38
+    39
+    40
+    41
+    42
+    43
+    44
+    45
+    46
+    47
+    48
+    49
+  }
+  I0 -> 0
+  I1 -> 1
+  I2 -> 2
+  I3 -> 3
+  I6 -> 6
+  I7 -> 7
+  I8 -> 8
+  I10 -> 10
+  I11 -> 11
+  I13 -> 13
+  0 -> F0
+  1 -> 29 [label = "b|e, c|d"]
+  1 -> 38 [label = "a|d"]
+  2 -> F2
+  2 -> 3 [label = "e|e"]
+  2 -> 13 [label = "c|e"]
+  2 -> 43 [label = "a|a"]
+  2 -> 46 [label = "a|b"]
+  3 -> F3
+  4 -> F4
+  4 -> 3 [label = "c|b"]
+  4 -> 44 [label = "a|e"]
+  4 -> 48 [label = "b|b"]
+  5 -> 5 [label = "a|c"]
+  5 -> 25 [label = "c|b"]
+  6 -> F6
+  6 -> 17 [label = "d|e"]
+  6 -> 23 [label = "a|a"]
+  6 -> 27 [label = "d|d"]
+  6 -> 35 [label = "c|b"]
+  7 -> F7
+  7 -> 27 [label = "e|c"]
+  8 -> F8
+  8 -> 4 [label = "d|a, d|d"]
+  8 -> 8 [label = "c|d"]
+  8 -> 13 [label = "b|d"]
+  8 -> 17 [label = "c|c"]
+  8 -> 28 [label = "b|c"]
+  9 -> F9
+  9 -> 0 [label = "b|b, c|c"]
+  9 -> 5 [label = "b|b"]
+  9 -> 13 [label = "d|d"]
+  9 -> 32 [label = "b|e"]
+  9 -> 36 [label = "a|d"]
+  9 -> 41 [label = "c|c"]
+  9 -> 47 [label = "b|a"]
+  10 -> 30 [label = "a|c"]
+  11 -> 24 [label = "c|b"]
+  11 -> 30 [label = "b|a"]
+  12 -> 2 [label = "a|e"]
+  12 -> 20 [label = "c|b, c|c"]
+  12 -> 23 [label = "[b|ad|ae|a]"]
+  13 -> 30 [label = "c|e"]
+  14 -> 31 [label = "e|b"]
+  14 -> 44 [label = "a|b"]
+  14 -> 46 [label = "a|d"]
+  15 -> 48 [label = "e|e"]
+  16 -> 0 [label = "d|a, d|d"]
+  16 -> 36 [label = "b|c"]
+  17 -> 33 [label = "d|d"]
+  17 -> 44 [label = "d|a"]
+  18 -> 4 [label = "d|e"]
+  18 -> 18 [label = "[a|db|ad|c]"]
+  18 -> 19 [label = "a|a, e|d"]
+  18 -> 20 [label = "d|b"]
+  18 -> 30 [label = "c|e"]
+  18 -> 38 [label = "e|b"]
+  18 -> 46 [label = "a|e"]
+  18 -> 49 [label = "b|a, e|d"]
+  19 -> 15 [label = "e|b"]
+  20 -> 8 [label = "a|a"]
+  20 -> 14 [label = "d|a"]
+  21 -> 38 [label = "a|c"]
+  22 -> 8 [label = "b|e"]
+  22 -> 18 [label = "b|c"]
+  22 -> 24 [label = "b|e, c|c"]
+  22 -> 25 [label = "d|b"]
+  22 -> 29 [label = "c|d"]
+  22 -> 31 [label = "a|e, c|a"]
+  22 -> 38 [label = "e|d"]
+  23 -> 14 [label = "a|d"]
+  23 -> 43 [label = "a|b"]
+  24 -> 0 [label = "b|a"]
+  24 -> 11 [label = "a|c"]
+  24 -> 19 [label = "e|c"]
+  24 -> 22 [label = "c|e, e|c"]
+  25 -> 33 [label = "d|e"]
+  25 -> 34 [label = "a|b"]
+  25 -> 42 [label = "b|d"]
+  26 -> 8 [label = "c|e"]
+  26 -> 24 [label = "b|e"]
+  26 -> 29 [label = "d|c"]
+  26 -> 48 [label = "a|e"]
+  27 -> 4 [label = "c|b"]
+  27 -> 9 [label = "d|a"]
+  27 -> 17 [label = "c|c"]
+  27 -> 34 [label = "d|a"]
+  27 -> 44 [label = "b|a"]
+  28 -> 16 [label = "c|d"]
+  28 -> 28 [label = "d|a"]
+  28 -> 30 [label = "e|e"]
+  28 -> 40 [label = "b|b"]
+  29 -> 0 [label = "b|b"]
+  29 -> 9 [label = "c|d, e|b"]
+  29 -> 20 [label = "e|e"]
+  29 -> 32 [label = "d|a"]
+  29 -> 34 [label = "b|b"]
+  29 -> 43 [label = "b|b"]
+  30 -> 34 [label = "c|b"]
+  31 -> 11 [label = "e|b"]
+  31 -> 16 [label = "b|e"]
+  31 -> 22 [label = "a|d"]
+  31 -> 42 [label = "a|d, b|e"]
+  31 -> 44 [label = "d|b"]
+  32 -> 18 [label = "a|b"]
+  32 -> 27 [label = "c|e"]
+  32 -> 28 [label = "c|e"]
+  32 -> 38 [label = "d|b"]
+  33 -> 17 [label = "c|b"]
+  33 -> 42 [label = "c|b"]
+  33 -> 46 [label = "a|d"]
+  33 -> 47 [label = "c|d"]
+  33 -> 49 [label = "b|d"]
+  34 -> 15 [label = "c|c"]
+  34 -> 25 [label = "d|b"]
+  34 -> 39 [label = "a|c"]
+  34 -> 43 [label = "d|d"]
+  35 -> 2 [label = "b|d"]
+  35 -> 36 [label = "a|b"]
+  35 -> 46 [label = "d|c"]
+  35 -> 48 [label = "b|b"]
+  36 -> 2 [label = "c|c, e|b"]
+  36 -> 8 [label = "c|b"]
+  36 -> 16 [label = "e|c"]
+  36 -> 19 [label = "d|e"]
+  37 -> 5 [label = "b|d"]
+  37 -> 9 [label = "d|c"]
+  37 -> 21 [label = "c|a"]
+  37 -> 47 [label = "c|a"]
+  38 -> 0 [label = "b|e, d|c"]
+  38 -> 1 [label = "d|d"]
+  38 -> 9 [label = "e|b"]
+  38 -> 46 [label = "e|e"]
+  39 -> 7 [label = "c|c"]
+  39 -> 11 [label = "a|c"]
+  39 -> 45 [label = "c|d"]
+  40 -> 19 [label = "c|e"]
+  40 -> 39 [label = "c|a"]
+  41 -> 3 [label = "a|a"]
+  41 -> 28 [label = "d|d"]
+  41 -> 32 [label = "d|e"]
+  41 -> 33 [label = "e|a"]
+  41 -> 38 [label = "b|d"]
+  42 -> 2 [label = "a|b"]
+  42 -> 37 [label = "d|b"]
+  42 -> 41 [label = "e|e"]
+  42 -> 44 [label = "d|d"]
+  43 -> 16 [label = "c|a"]
+  43 -> 40 [label = "c|a"]
+  43 -> 44 [label = "b|a"]
+  44 -> 0 [label = "d|a"]
+  44 -> 3 [label = "d|e"]
+  44 -> 4 [label = "d|e, e|c"]
+  44 -> 10 [label = "c|c"]
+  44 -> 15 [label = "b|d"]
+  44 -> 24 [label = "a|d"]
+  44 -> 25 [label = "b|b"]
+  44 -> 36 [label = "a|e"]
+  45 -> 1 [label = "d|c"]
+  45 -> 2 [label = "d|c"]
+  45 -> 4 [label = "a|d"]
+  45 -> 35 [label = "c|a"]
+  45 -> 36 [label = "c|d"]
+  46 -> 38 [label = "e|e"]
+  47 -> 33 [label = "c|d"]
+  48 -> 12 [label = "c|b"]
+  48 -> 39 [label = "b|c"]
+  49 -> 12 [label = "c|b"]
+  49 -> 19 [label = "e|a"]
+  49 -> 26 [label = "a|b"]
+  49 -> 34 [label = "d|d"]
+  49 -> 48 [label = "d|a"]
+  49 -> 49 [label = "b|e, e|c"]
+}

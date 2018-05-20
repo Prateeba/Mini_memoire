@@ -1,0 +1,130 @@
+digraph
+{
+  vcsn_context = "lat<letterset<char_letters(abc)>, letterset<char_letters(abc)>>, b"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    I1
+    I2
+    I3
+    I4
+    F15
+    F24
+    F33
+    F39
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31
+    32
+    33
+    34
+    35
+    36
+    37
+    38
+    39
+    40
+    41
+    42
+    43
+    44
+    45
+    46
+    47
+    48
+    49
+  }
+  I0 -> 0
+  I1 -> 1
+  I2 -> 2
+  I3 -> 3
+  I4 -> 4
+  0 -> 46 [label = "b|b"]
+  1 -> 25 [label = "c|a"]
+  2 -> 48 [label = "c|a"]
+  3 -> 23 [label = "a|a"]
+  4 -> 40 [label = "c|b"]
+  5 -> 37 [label = "a|a"]
+  6 -> 29 [label = "a|c"]
+  7 -> 18 [label = "b|c"]
+  8 -> 44 [label = "a|b"]
+  9 -> 27 [label = "b|b"]
+  10 -> 6 [label = "c|b"]
+  11 -> 19 [label = "c|b"]
+  12 -> 8 [label = "b|b"]
+  13 -> 31 [label = "c|a"]
+  14 -> 17 [label = "b|c"]
+  15 -> F15
+  15 -> 14 [label = "c|c"]
+  16 -> 30 [label = "c|b"]
+  17 -> 1 [label = "c|a"]
+  18 -> 16 [label = "c|a"]
+  19 -> 38 [label = "a|b"]
+  20 -> 32 [label = "a|b"]
+  21 -> 42 [label = "b|a"]
+  22 -> 28 [label = "b|a"]
+  23 -> 41 [label = "c|a"]
+  24 -> F24
+  24 -> 34 [label = "c|b"]
+  25 -> 33 [label = "a|a"]
+  26 -> 3 [label = "c|c"]
+  27 -> 43 [label = "a|c"]
+  28 -> 35 [label = "a|a"]
+  29 -> 47 [label = "b|b"]
+  30 -> 36 [label = "a|b"]
+  31 -> 21 [label = "a|b"]
+  32 -> 13 [label = "c|b"]
+  33 -> F33
+  33 -> 11 [label = "b|c"]
+  34 -> 12 [label = "a|c"]
+  35 -> 24 [label = "a|a"]
+  36 -> 5 [label = "c|c"]
+  37 -> 2 [label = "a|a"]
+  38 -> 49 [label = "a|a"]
+  39 -> F39
+  39 -> 45 [label = "c|c"]
+  40 -> 22 [label = "a|b"]
+  41 -> 9 [label = "a|a"]
+  42 -> 10 [label = "b|c"]
+  43 -> 7 [label = "b|c"]
+  44 -> 20 [label = "b|b"]
+  45 -> 15 [label = "c|a"]
+  46 -> 29 [label = "b|b"]
+  47 -> 26 [label = "b|c"]
+  48 -> 39 [label = "c|a"]
+  49 -> 4 [label = "b|c"]
+}

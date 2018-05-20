@@ -1,0 +1,578 @@
+digraph
+{
+  vcsn_context = "lat<letterset<char_letters(abcde)>, letterset<char_letters(abcde)>>, b"
+  rankdir = LR
+  edge [arrowhead = vee, arrowsize = .6]
+  {
+    node [shape = point, width = 0]
+    I0
+    I1
+    I3
+    I4
+    I5
+    I6
+    I7
+    I8
+    I11
+    I12
+    I15
+    I19
+    F0
+    F3
+    F7
+    F9
+    F10
+    F13
+    F15
+    F17
+    F18
+    F22
+  }
+  {
+    node [shape = circle, style = rounded, width = 0.5]
+    0
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31
+    32
+    33
+    34
+    35
+    36
+    37
+    38
+    39
+    40
+    41
+    42
+    43
+    44
+    45
+    46
+    47
+    48
+    49
+    50
+    51
+    52
+    53
+    54
+    55
+    56
+    57
+    58
+    59
+    60
+    61
+    62
+    63
+    64
+    65
+    66
+    67
+    68
+    69
+    70
+    71
+    72
+    73
+    74
+    75
+    76
+    77
+    78
+    79
+    80
+    81
+    82
+    83
+    84
+    85
+    86
+    87
+    88
+    89
+    90
+    91
+    92
+    93
+    94
+    95
+    96
+    97
+    98
+    99
+  }
+  I0 -> 0
+  I1 -> 1
+  I3 -> 3
+  I4 -> 4
+  I5 -> 5
+  I6 -> 6
+  I7 -> 7
+  I8 -> 8
+  I11 -> 11
+  I12 -> 12
+  I15 -> 15
+  I19 -> 19
+  0 -> F0
+  0 -> 3 [label = "c|a"]
+  0 -> 39 [label = "a|d"]
+  0 -> 49 [label = "e|e"]
+  0 -> 51 [label = "a|d"]
+  0 -> 89 [label = "c|c"]
+  1 -> 12 [label = "d|b, d|c"]
+  1 -> 36 [label = "e|a"]
+  2 -> 43 [label = "d|c"]
+  2 -> 65 [label = "c|d"]
+  2 -> 69 [label = "e|b"]
+  3 -> F3
+  3 -> 1 [label = "a|c"]
+  3 -> 27 [label = "b|a, e|a"]
+  3 -> 35 [label = "d|a"]
+  3 -> 89 [label = "e|a"]
+  4 -> 44 [label = "b|c"]
+  4 -> 45 [label = "a|a, a|d"]
+  4 -> 50 [label = "d|e"]
+  5 -> 29 [label = "b|b"]
+  5 -> 49 [label = "a|e"]
+  5 -> 60 [label = "d|b"]
+  5 -> 70 [label = "e|e"]
+  5 -> 91 [label = "b|b, e|d"]
+  6 -> 28 [label = "b|c"]
+  6 -> 32 [label = "c|b"]
+  6 -> 44 [label = "a|c"]
+  7 -> F7
+  7 -> 23 [label = "d|d"]
+  7 -> 43 [label = "d|b"]
+  7 -> 80 [label = "b|b"]
+  8 -> 25 [label = "a|b"]
+  8 -> 30 [label = "e|c"]
+  8 -> 64 [label = "d|c"]
+  8 -> 74 [label = "c|c"]
+  8 -> 95 [label = "a|c"]
+  9 -> F9
+  9 -> 43 [label = "d|b"]
+  9 -> 49 [label = "d|d"]
+  9 -> 58 [label = "c|a"]
+  9 -> 94 [label = "e|e"]
+  10 -> F10
+  10 -> 12 [label = "d|e"]
+  10 -> 17 [label = "e|e"]
+  10 -> 62 [label = "e|e"]
+  10 -> 65 [label = "b|d"]
+  10 -> 88 [label = "e|e"]
+  11 -> 9 [label = "a|b, a|c"]
+  11 -> 14 [label = "e|e"]
+  11 -> 16 [label = "d|d"]
+  11 -> 28 [label = "a|c"]
+  11 -> 30 [label = "e|d"]
+  11 -> 47 [label = "e|e"]
+  11 -> 84 [label = "a|a"]
+  11 -> 95 [label = "a|b"]
+  12 -> 26 [label = "c|d"]
+  12 -> 40 [label = "a|d"]
+  12 -> 42 [label = "a|c"]
+  12 -> 48 [label = "b|c, d|e"]
+  12 -> 84 [label = "a|d"]
+  12 -> 91 [label = "c|a"]
+  13 -> F13
+  13 -> 11 [label = "b|d"]
+  13 -> 34 [label = "e|c"]
+  13 -> 40 [label = "b|b"]
+  14 -> 44 [label = "a|b, b|c"]
+  14 -> 53 [label = "b|c"]
+  14 -> 75 [label = "b|d"]
+  14 -> 87 [label = "d|b"]
+  15 -> F15
+  15 -> 16 [label = "b|e"]
+  15 -> 22 [label = "a|e"]
+  15 -> 32 [label = "e|d"]
+  15 -> 47 [label = "b|c"]
+  15 -> 52 [label = "c|e"]
+  15 -> 60 [label = "c|b"]
+  15 -> 63 [label = "b|b"]
+  15 -> 64 [label = "a|a, c|e"]
+  16 -> 24 [label = "b|d"]
+  16 -> 42 [label = "c|d"]
+  16 -> 83 [label = "e|a"]
+  17 -> F17
+  17 -> 17 [label = "a|b"]
+  17 -> 28 [label = "e|e"]
+  17 -> 75 [label = "d|d"]
+  17 -> 83 [label = "e|c"]
+  18 -> F18
+  18 -> 21 [label = "e|a"]
+  18 -> 77 [label = "b|e, e|a"]
+  18 -> 79 [label = "a|e"]
+  18 -> 82 [label = "d|a"]
+  18 -> 87 [label = "c|d"]
+  18 -> 92 [label = "b|b"]
+  18 -> 93 [label = "d|a"]
+  19 -> 66 [label = "c|c, c|d"]
+  19 -> 81 [label = "c|c"]
+  19 -> 91 [label = "d|e"]
+  20 -> 67 [label = "b|e"]
+  20 -> 89 [label = "d|c"]
+  20 -> 90 [label = "e|a"]
+  21 -> 4 [label = "e|e"]
+  21 -> 6 [label = "e|c"]
+  21 -> 57 [label = "a|a"]
+  22 -> F22
+  22 -> 32 [label = "b|d"]
+  22 -> 64 [label = "c|a"]
+  22 -> 65 [label = "a|b, c|c"]
+  22 -> 71 [label = "c|e"]
+  22 -> 96 [label = "c|a"]
+  23 -> 12 [label = "b|a"]
+  23 -> 32 [label = "e|e"]
+  23 -> 76 [label = "e|c"]
+  23 -> 82 [label = "b|d, d|b"]
+  24 -> 59 [label = "e|b"]
+  24 -> 66 [label = "a|e"]
+  24 -> 72 [label = "c|d"]
+  24 -> 86 [label = "a|b"]
+  25 -> 2 [label = "b|a"]
+  25 -> 9 [label = "b|e"]
+  25 -> 18 [label = "c|c"]
+  25 -> 47 [label = "e|c"]
+  25 -> 57 [label = "c|b"]
+  25 -> 87 [label = "b|a"]
+  26 -> 24 [label = "b|d, e|a"]
+  26 -> 59 [label = "d|c"]
+  27 -> 21 [label = "c|a"]
+  27 -> 36 [label = "e|d"]
+  27 -> 69 [label = "e|d"]
+  27 -> 86 [label = "a|b"]
+  28 -> 58 [label = "d|a"]
+  28 -> 89 [label = "c|e"]
+  28 -> 90 [label = "d|b"]
+  29 -> 3 [label = "c|a"]
+  29 -> 14 [label = "c|e"]
+  29 -> 56 [label = "e|c"]
+  29 -> 84 [label = "c|b"]
+  30 -> 3 [label = "e|d"]
+  30 -> 5 [label = "e|d, e|e"]
+  30 -> 86 [label = "c|a"]
+  30 -> 89 [label = "c|b"]
+  31 -> 39 [label = "c|d"]
+  31 -> 73 [label = "a|a"]
+  31 -> 98 [label = "e|d"]
+  32 -> 20 [label = "b|a, d|a"]
+  32 -> 27 [label = "c|c"]
+  32 -> 31 [label = "d|b"]
+  32 -> 56 [label = "c|b"]
+  32 -> 79 [label = "c|d"]
+  33 -> 39 [label = "d|b"]
+  33 -> 46 [label = "c|a"]
+  33 -> 97 [label = "d|a, e|d"]
+  34 -> 13 [label = "e|c"]
+  34 -> 81 [label = "d|e"]
+  34 -> 92 [label = "e|b"]
+  35 -> 3 [label = "c|e"]
+  35 -> 6 [label = "c|d"]
+  35 -> 29 [label = "e|e"]
+  35 -> 59 [label = "a|d"]
+  35 -> 68 [label = "e|d"]
+  36 -> 63 [label = "a|e"]
+  36 -> 97 [label = "d|e"]
+  37 -> 4 [label = "b|a"]
+  37 -> 73 [label = "b|e, e|e"]
+  38 -> 24 [label = "c|b"]
+  38 -> 27 [label = "c|d"]
+  38 -> 41 [label = "c|c"]
+  38 -> 46 [label = "c|e"]
+  38 -> 61 [label = "a|e"]
+  38 -> 75 [label = "c|c"]
+  38 -> 95 [label = "a|b"]
+  39 -> 11 [label = "c|e"]
+  39 -> 52 [label = "a|b"]
+  39 -> 63 [label = "e|d"]
+  39 -> 99 [label = "c|c"]
+  40 -> 83 [label = "a|c, c|e"]
+  40 -> 92 [label = "e|a"]
+  41 -> 45 [label = "c|e"]
+  41 -> 48 [label = "c|a"]
+  41 -> 69 [label = "a|d"]
+  41 -> 84 [label = "d|e, e|d"]
+  41 -> 92 [label = "a|e"]
+  42 -> 26 [label = "e|d"]
+  42 -> 35 [label = "d|b"]
+  42 -> 49 [label = "e|a"]
+  42 -> 78 [label = "e|c"]
+  43 -> 25 [label = "b|c"]
+  43 -> 27 [label = "b|b"]
+  43 -> 36 [label = "c|a"]
+  43 -> 51 [label = "c|a"]
+  44 -> 1 [label = "c|a, d|a"]
+  44 -> 16 [label = "b|c"]
+  44 -> 58 [label = "d|c"]
+  44 -> 82 [label = "b|b"]
+  45 -> 2 [label = "d|e"]
+  45 -> 65 [label = "b|b, b|e"]
+  46 -> 4 [label = "a|a"]
+  46 -> 11 [label = "b|a"]
+  46 -> 32 [label = "a|e, b|d"]
+  46 -> 81 [label = "e|a"]
+  47 -> 15 [label = "d|a"]
+  47 -> 24 [label = "d|a"]
+  47 -> 51 [label = "a|c, d|b"]
+  47 -> 68 [label = "a|d"]
+  48 -> 9 [label = "c|e"]
+  48 -> 28 [label = "b|d"]
+  48 -> 34 [label = "b|c"]
+  48 -> 97 [label = "b|b"]
+  49 -> 17 [label = "d|b"]
+  49 -> 41 [label = "e|a"]
+  49 -> 48 [label = "b|b"]
+  49 -> 66 [label = "d|a"]
+  49 -> 92 [label = "d|d"]
+  49 -> 98 [label = "c|c"]
+  50 -> 36 [label = "b|d, e|a"]
+  51 -> 10 [label = "a|a, c|b"]
+  51 -> 15 [label = "c|e"]
+  51 -> 23 [label = "e|a"]
+  51 -> 26 [label = "c|d"]
+  51 -> 57 [label = "b|a"]
+  51 -> 61 [label = "a|e"]
+  51 -> 82 [label = "b|d"]
+  51 -> 92 [label = "b|a"]
+  52 -> 13 [label = "a|a"]
+  52 -> 15 [label = "a|c"]
+  53 -> 42 [label = "b|a, e|e"]
+  53 -> 46 [label = "a|b"]
+  53 -> 66 [label = "c|c"]
+  54 -> 52 [label = "d|b"]
+  55 -> 1 [label = "e|d"]
+  55 -> 4 [label = "c|e"]
+  55 -> 50 [label = "c|b"]
+  55 -> 52 [label = "a|e"]
+  55 -> 59 [label = "b|c"]
+  55 -> 61 [label = "b|d"]
+  55 -> 63 [label = "b|c"]
+  55 -> 88 [label = "d|d"]
+  56 -> 1 [label = "c|a"]
+  56 -> 52 [label = "e|d"]
+  56 -> 60 [label = "c|d"]
+  56 -> 73 [label = "b|b, e|e"]
+  57 -> 66 [label = "c|e"]
+  58 -> 5 [label = "b|d"]
+  58 -> 15 [label = "b|a"]
+  58 -> 27 [label = "c|c"]
+  58 -> 46 [label = "d|c"]
+  58 -> 88 [label = "e|a"]
+  58 -> 97 [label = "e|c"]
+  59 -> 21 [label = "a|b"]
+  59 -> 48 [label = "b|d"]
+  59 -> 53 [label = "e|b"]
+  60 -> 39 [label = "d|c"]
+  60 -> 66 [label = "a|d"]
+  60 -> 78 [label = "a|c, c|e"]
+  60 -> 91 [label = "c|d"]
+  61 -> 6 [label = "b|c"]
+  61 -> 54 [label = "a|c"]
+  61 -> 58 [label = "e|d"]
+  61 -> 81 [label = "d|b"]
+  61 -> 82 [label = "c|c, e|a"]
+  61 -> 97 [label = "d|d"]
+  62 -> 57 [label = "a|e"]
+  63 -> 45 [label = "b|a"]
+  63 -> 61 [label = "b|c"]
+  63 -> 87 [label = "b|b"]
+  64 -> 5 [label = "a|a"]
+  64 -> 16 [label = "c|b"]
+  64 -> 24 [label = "b|e, d|d"]
+  64 -> 32 [label = "b|b"]
+  64 -> 40 [label = "a|d"]
+  64 -> 68 [label = "b|b"]
+  64 -> 92 [label = "b|d"]
+  65 -> 18 [label = "c|d"]
+  65 -> 67 [label = "c|b"]
+  65 -> 87 [label = "c|e"]
+  65 -> 91 [label = "c|a"]
+  66 -> 9 [label = "c|b"]
+  66 -> 57 [label = "e|c"]
+  66 -> 61 [label = "a|a"]
+  66 -> 62 [label = "d|c"]
+  67 -> 31 [label = "c|d"]
+  67 -> 60 [label = "d|e"]
+  67 -> 80 [label = "d|b"]
+  68 -> 50 [label = "a|a"]
+  68 -> 56 [label = "e|d"]
+  68 -> 72 [label = "a|d"]
+  68 -> 78 [label = "d|e"]
+  69 -> 1 [label = "c|a"]
+  69 -> 3 [label = "c|c"]
+  70 -> 44 [label = "c|a"]
+  70 -> 54 [label = "e|d"]
+  70 -> 69 [label = "b|d"]
+  70 -> 76 [label = "d|a"]
+  71 -> 11 [label = "a|b"]
+  71 -> 23 [label = "b|a"]
+  71 -> 30 [label = "e|e"]
+  71 -> 31 [label = "a|c, b|c"]
+  71 -> 51 [label = "d|a"]
+  71 -> 74 [label = "b|c"]
+  71 -> 88 [label = "d|b"]
+  72 -> 9 [label = "d|c"]
+  72 -> 17 [label = "d|c"]
+  72 -> 24 [label = "d|e"]
+  72 -> 66 [label = "a|c"]
+  72 -> 89 [label = "d|a"]
+  73 -> 17 [label = "d|a"]
+  73 -> 70 [label = "e|a"]
+  73 -> 98 [label = "e|c"]
+  74 -> 3 [label = "b|a"]
+  74 -> 61 [label = "d|c"]
+  74 -> 69 [label = "c|e"]
+  75 -> 23 [label = "c|d, d|d"]
+  75 -> 31 [label = "b|e"]
+  75 -> 36 [label = "c|b"]
+  75 -> 45 [label = "d|e"]
+  75 -> 47 [label = "e|b"]
+  75 -> 73 [label = "d|b"]
+  75 -> 75 [label = "a|e"]
+  76 -> 6 [label = "e|e"]
+  76 -> 13 [label = "a|b"]
+  76 -> 18 [label = "b|b, c|e"]
+  76 -> 25 [label = "b|e"]
+  76 -> 59 [label = "c|c"]
+  76 -> 70 [label = "c|b"]
+  76 -> 90 [label = "d|c"]
+  77 -> 19 [label = "c|b"]
+  77 -> 21 [label = "c|d, e|d"]
+  77 -> 39 [label = "b|a"]
+  77 -> 90 [label = "a|c, c|b"]
+  77 -> 94 [label = "e|b"]
+  77 -> 96 [label = "b|a"]
+  78 -> 37 [label = "e|c"]
+  78 -> 43 [label = "c|d"]
+  78 -> 46 [label = "c|a"]
+  78 -> 66 [label = "c|a"]
+  78 -> 67 [label = "d|b, e|c"]
+  78 -> 75 [label = "b|d"]
+  79 -> 41 [label = "c|b"]
+  79 -> 68 [label = "c|e"]
+  79 -> 86 [label = "d|d"]
+  80 -> 3 [label = "b|e"]
+  80 -> 15 [label = "c|d"]
+  80 -> 55 [label = "e|c"]
+  80 -> 63 [label = "d|b"]
+  80 -> 77 [label = "c|d"]
+  80 -> 88 [label = "a|b"]
+  81 -> 7 [label = "a|d"]
+  81 -> 27 [label = "b|b, d|e"]
+  81 -> 71 [label = "e|e"]
+  81 -> 73 [label = "c|d"]
+  81 -> 95 [label = "c|a"]
+  82 -> 2 [label = "e|d"]
+  82 -> 27 [label = "b|a"]
+  82 -> 51 [label = "e|a"]
+  82 -> 65 [label = "d|c"]
+  82 -> 68 [label = "d|e"]
+  82 -> 78 [label = "d|d"]
+  82 -> 83 [label = "a|b"]
+  83 -> 5 [label = "c|a"]
+  83 -> 15 [label = "d|e"]
+  83 -> 46 [label = "c|d"]
+  83 -> 56 [label = "a|e, e|a"]
+  83 -> 68 [label = "a|b"]
+  84 -> 18 [label = "d|b, e|b"]
+  84 -> 46 [label = "e|b, e|c"]
+  84 -> 80 [label = "d|b"]
+  85 -> 45 [label = "e|d"]
+  85 -> 57 [label = "d|b"]
+  85 -> 63 [label = "d|b"]
+  86 -> 45 [label = "e|d"]
+  86 -> 46 [label = "d|e, e|c"]
+  86 -> 55 [label = "c|d"]
+  86 -> 57 [label = "[a|eb|de|e]"]
+  86 -> 67 [label = "c|a"]
+  86 -> 82 [label = "d|e"]
+  86 -> 87 [label = "e|a"]
+  87 -> 16 [label = "b|a"]
+  87 -> 33 [label = "c|e"]
+  87 -> 73 [label = "e|d"]
+  87 -> 79 [label = "c|d"]
+  87 -> 90 [label = "b|b, d|b"]
+  88 -> 36 [label = "e|d"]
+  88 -> 54 [label = "e|b"]
+  88 -> 81 [label = "a|a"]
+  88 -> 95 [label = "d|b"]
+  89 -> 33 [label = "a|d"]
+  89 -> 55 [label = "b|b"]
+  89 -> 58 [label = "b|b, c|c"]
+  89 -> 66 [label = "c|c, e|e"]
+  90 -> 5 [label = "e|d"]
+  90 -> 15 [label = "d|e"]
+  90 -> 19 [label = "e|c"]
+  90 -> 31 [label = "d|a"]
+  90 -> 55 [label = "e|b"]
+  90 -> 83 [label = "c|a"]
+  91 -> 49 [label = "e|b"]
+  91 -> 50 [label = "a|e"]
+  92 -> 2 [label = "e|d"]
+  92 -> 13 [label = "a|a"]
+  92 -> 52 [label = "c|c"]
+  93 -> 46 [label = "b|b"]
+  93 -> 90 [label = "c|e"]
+  93 -> 95 [label = "a|e"]
+  93 -> 97 [label = "c|b"]
+  94 -> 33 [label = "b|d"]
+  94 -> 85 [label = "a|d, e|e"]
+  95 -> 20 [label = "a|d"]
+  95 -> 38 [label = "a|a"]
+  95 -> 45 [label = "a|d"]
+  95 -> 81 [label = "a|d"]
+  96 -> 55 [label = "d|c"]
+  96 -> 57 [label = "e|c, e|d"]
+  96 -> 72 [label = "b|d"]
+  96 -> 91 [label = "d|e"]
+  97 -> 6 [label = "a|e"]
+  97 -> 24 [label = "c|a, d|e"]
+  97 -> 34 [label = "e|c"]
+  97 -> 37 [label = "b|e"]
+  97 -> 58 [label = "a|a"]
+  97 -> 62 [label = "a|d"]
+  97 -> 65 [label = "c|b"]
+  97 -> 88 [label = "a|d"]
+  97 -> 91 [label = "c|b"]
+  98 -> 12 [label = "a|b"]
+  98 -> 23 [label = "d|c"]
+  98 -> 44 [label = "d|d"]
+  98 -> 74 [label = "a|a, c|a"]
+  99 -> 21 [label = "d|e"]
+  99 -> 24 [label = "b|c"]
+  99 -> 51 [label = "a|d"]
+  99 -> 55 [label = "d|c"]
+  99 -> 64 [label = "b|e"]
+  99 -> 89 [label = "c|e"]
+}
