@@ -16,3 +16,7 @@ généré un transducteur respectant les différentes propriétés.
 ## Compilation
 vcsn compile nomDuFichier.cpp <br />
 ./nomDuFichier nbEtatsTotaux Densité nbEtatsFinaux nbEtatsFinaux > nomDuFichierPourSauvegarderLeResultat.dot <br />
+
+##Exemple 
+vcsn compile branchingGenerator.cpp  <br />
+./branchingGenerator 5 1 1 1 > exemple.dot  <br />
